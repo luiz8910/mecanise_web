@@ -314,3 +314,29 @@ input:checked + .slider:before {
     text-decoration: none;
     color: grey;
 }
+
+.loading-input{
+    background-color: #ffffff;
+    background-image: url("../images/loading-input.gif");
+    background-size: 25px 25px;
+    background-position:right center;
+    background-repeat: no-repeat;
+}
+
+.select-style{
+    display: flex;
+    align-items: center;
+    background-color: transparent;
+    border: none;
+    height: 40px;
+    outline: none;
+    position: relative;
+}
+
+.div_alert{
+    display: block;
+    width: 70%;
+    position: absolute;
+    top: 2%;
+    left: 15%;
+}

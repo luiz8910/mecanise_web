@@ -9,7 +9,7 @@ $(function () {
 
         $(".js-select2").each(function(){
             $(this).on('select2:close', function (e){
-                if($(this).val() == "Please chooses") {
+                if($(this).val() == "Selecione um valor") {
                     $('.js-show-service').slideUp();
                 }
                 else {

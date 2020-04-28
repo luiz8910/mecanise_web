@@ -29,7 +29,7 @@ class CarController extends Controller
      */
     public function index()
     {
-        $cars = $this->repository->all();
+        $cars = $this->repository->orderBy('model')->all();
 
         //dd($cars);
         $route = 'cars.index';
@@ -103,7 +103,7 @@ class CarController extends Controller
 
             $request->session()->flash('success.msg', 'O carro foi cadastrado com sucesso');
 
-            return redirect()->route('cars.create');
+            return redirect()->route('cars.index');
 
         }catch (\Exception $e){
 

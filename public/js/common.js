@@ -266,7 +266,10 @@ function sweet_alert($data, $ajax)
                     });
 
                     setTimeout(function () {
-                        location.reload();
+                        if($data.reload)
+                            location.reload();
+                        else
+                            $("#model_" + $data.id).remove();
                     }, 3000);
                 }
                 else{
@@ -380,21 +383,21 @@ function spinner_input($function, $id, $class)
     {
         if($id)
         {
-            $("#"+$id).addClass("kt-spinner kt-spinner--sm kt-spinner--success kt-spinner--right kt-spinner--input");
+            $("#"+$id).addClass("loading-input");
         }
         else if($class)
         {
-            $("."+$class).addClass("kt-spinner kt-spinner--sm kt-spinner--success kt-spinner--right kt-spinner--input");
+            $("."+$class).addClass("loading-input");
         }
     }
     else{
         if($id)
         {
-            $("#"+$id).removeClass("kt-spinner kt-spinner--sm kt-spinner--success kt-spinner--right kt-spinner--input");
+            $("#"+$id).removeClass("loading-input");
         }
         else if($class)
         {
-            $("."+$class).removeClass("kt-spinner kt-spinner--sm kt-spinner--success kt-spinner--right kt-spinner--input");
+            $("."+$class).removeClass("loading-input");
         }
     }
 

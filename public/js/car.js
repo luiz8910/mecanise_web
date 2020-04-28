@@ -12,7 +12,7 @@ $(function () {
 
         if(model.val() !== "")
         {
-            spinner_input(1, 'spinner_model');
+            spinner_input(1, 'model');
 
             var id = null;
 
@@ -30,7 +30,7 @@ $(function () {
                 if(e.status)
                 {
                     model.addClass('is-valid');
-                    spinner_input(0, 'spinner_model');
+                    spinner_input(0, 'model');
 
                     if(!e.id)
                         span_valid.css('display', 'block');
@@ -38,7 +38,7 @@ $(function () {
                 }
                 else{
                     model.addClass('is-invalid');
-                    spinner_input(0, 'spinner_model');
+                    spinner_input(0, 'model');
                     span_invalid.css('display', 'block').text(e.msg);
                 }
 
@@ -48,7 +48,7 @@ $(function () {
                 console.log('fail');
                 console.log(e);
 
-                spinner_input(0, 'spinner_model');
+                spinner_input(0, 'model');
                 span_invalid.css('display', 'block').text('Um erro ocorreu, tente novamente mais tarde');
             })
         }
@@ -60,7 +60,7 @@ $(function () {
         var end = $("#end_year").val();
         var start = $(this).val();
 
-        if(start.length == 4)
+        if(start.length === 4)
         {
             var today = new Date();
 
@@ -72,15 +72,15 @@ $(function () {
                 $("#span_start_year_status").css('display', 'none').text('Insira um ano válido');
 
                 if(end !== "" && end < start)
-                {
                     $("#span_end_year_status").css('display', 'block').text('Insira um ano final de fabricação maior que o ano de início');
-                }
+
+                else
+                    $("#end_year").focus();
             }
         }
-        else{
 
+        else
             $("#span_start_year_status").css('display', 'block').text('Insira mais ' + (4 - ($(this).val().length)) + ' caracteres');
-        }
     });
 
     $("#end_year").keyup(function (e) {
@@ -89,7 +89,7 @@ $(function () {
         var start = $("#start_year").val();
 
 
-        if(end.length == 4)
+        if(end.length === 4)
         {
             var today = new Date();
 
@@ -122,7 +122,9 @@ function delete_car($id)
         text: 'Deseja excluir este carro?',
         icon: 'warning',
         button: 'Excluir',
-        success_msg: 'O Carro foi excluído'
+        success_msg: 'O Carro foi excluído',
+        reload: false,
+        id: $id
     }
 
     var ajax = {
