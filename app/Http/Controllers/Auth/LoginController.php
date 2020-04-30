@@ -61,7 +61,7 @@ class LoginController extends Controller
 
             auth()->loginUsingId($user->id);
 
-            return redirect()->intended('/');
+            return redirect()->intended('/carros');
         }
 
         $request->session()->flash('wrong-login', 'Email ou senha inválidas');

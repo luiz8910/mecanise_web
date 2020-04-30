@@ -70,8 +70,9 @@
                     Entrar <i class="fas fa-arrow-right" style="display:none; margin-left: 10px;"></i>
                 </button>
             </div>
-
         </form>
+
+        <form>
 
             <div class="text-center p-t-57 p-b-20">
                 <span class="txt1">

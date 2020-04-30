@@ -1,4 +1,3 @@
-
 <div class="container-contact100">
     <div class="wrap-contact100">
         @if($edit)
@@ -7,12 +6,11 @@
         @else
             <form class="contact100-form validate-form" id="form" method="POST" action="{{ route('cars.store') }}">
         @endif
-                @csrf
+            @csrf
 
             <span class="contact100-form-title">
                 @if($edit) Editar @else Novo @endif Carro
             </span>
-
 
             <div class="wrap-input100 validate-input bg1" data-validate="Insira um valor válido">
                 <span class="label-input100">Modelo</span>
