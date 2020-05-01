@@ -28,7 +28,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/carros';
+    protected $redirectTo = '/home';
     /**
      * @var UserRepository
      */
@@ -61,7 +61,7 @@ class LoginController extends Controller
 
             auth()->loginUsingId($user->id);
 
-            return redirect()->intended('/carros');
+            return redirect()->intended('/');
         }
 
         $request->session()->flash('wrong-login', 'Email ou senha inválidas');

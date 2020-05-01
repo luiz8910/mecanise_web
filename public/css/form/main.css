@@ -275,6 +275,10 @@ iframe {
     width: calc((100% - 30px) / 2);
 }
 
+.rs1-wrap-input90 {
+    width: calc((100% - 200px)) !important;
+}
+
 .label-input100 {
     font-family: Montserrat-SemiBold;
     font-size: 10px;

@@ -153,6 +153,10 @@
                 </li>
 
                 <li>
+                    <a href="{{ route('vehicle.index') }}"><i class="fas fa-list"></i> Lista de Veículos</a>
+                </li>
+
+                <li>
                     <a href="{{ route('cars.index') }}">
                         <i class="fas fa-database"></i>
                         Base de Dados

@@ -27,6 +27,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(\App\Repositories\ChecklistRepository::class, \App\Repositories\ChecklistRepositoryEloquent::class);
         $this->app->bind(\App\Repositories\StatesRepository::class, \App\Repositories\StatesRepositoryEloquent::class);
         $this->app->bind(\App\Repositories\FuelRepository::class, \App\Repositories\FuelRepositoryEloquent::class);
+        $this->app->bind(\App\Repositories\ColorsRepository::class, \App\Repositories\ColorsRepositoryEloquent::class);
     }
 
     /**

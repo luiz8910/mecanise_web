@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Repositories\CarRepository;
+use App\Repositories\ColorsRepository;
 use App\Repositories\PersonRepository;
 use App\Repositories\StatesRepository;
 use App\Repositories\VehicleRepository;
@@ -31,10 +32,14 @@ class VehicleController extends Controller
      * @var StatesRepository
      */
     private $statesRepository;
+    /**
+     * @var ColorsRepository
+     */
+    private $colorsRepository;
 
     public function __construct(VehicleRepository $repository, PersonRepository $personRepository,
                                 CarRepository $carRepository, WorkshopRepository $workshopRepository,
-                                StatesRepository $statesRepository)
+                                StatesRepository $statesRepository, ColorsRepository $colorsRepository)
     {
 
         $this->repository = $repository;
@@ -42,6 +47,7 @@ class VehicleController extends Controller
         $this->carRepository = $carRepository;
         $this->workshopRepository = $workshopRepository;
         $this->statesRepository = $statesRepository;
+        $this->colorsRepository = $colorsRepository;
     }
 
     /**
@@ -56,16 +62,9 @@ class VehicleController extends Controller
 
         if($workshop)
         {
-            $scripts[] = '../../js/data-vehicle.js';
+            $scripts[] = '../../js/vehicle.js';
 
             $route = 'vehicles.index';
-
-            if (!file_exists("json/".$workshop->name))
-            {
-                mkdir('json/'.$workshop->name);
-            }
-
-            $file = fopen("json/".$workshop->name."/vehicles.json","w");
 
             foreach ($vehicles as $vehicle)
             {
@@ -78,21 +77,10 @@ class VehicleController extends Controller
                     $vehicle->brand = $car->brand;
 
                     $vehicle->owner_name = $this->personRepository->findByField('id', $vehicle->owner_id)->first()->name;
-
-                    $vehicle->Status = 1;
-
-                    $vehicle->Actions = null;
                 }
             }
 
-            fwrite($file, json_encode($vehicles));
-
-            fclose($file);
-
-            $file_location = '../../json/'.$workshop->name.'/vehicles.json';
-            //$file_location = '../../json/Oficina_Admin/vehicles.json';
-
-            return view('index', compact('vehicles', 'route', 'scripts', 'file_location'));
+            return view('index', compact('vehicles', 'route', 'scripts'));
         }
 
 
@@ -135,17 +123,14 @@ class VehicleController extends Controller
 
         $states = $this->statesRepository->orderBy('state')->all();
 
-        $links[] = '../../assets/css/pages/wizard/wizard-4.css';
+        $colors = $this->colorsRepository->orderBy('name')->all();
 
-        //$scripts[] = '../../assets/js/pages/custom/user/add-user.js';
         $scripts[] = '../../js/vehicle.js';
-        $scripts[] = '../../assets/js/pages/crud/forms/widgets/bootstrap-maxlength.js';
-        $scripts[] = '../../assets/js/pages/crud/forms/widgets/select2.js';
         $scripts[] = '../../js/zipcode.js';
         $scripts[] = '../../js/mask.js';
 
-        return view('index', compact('cars', 'route', 'links', 'scripts',
-            'edit', 'brands', 'states', 'owners'));
+        return view('index', compact('cars', 'route', 'scripts',
+            'edit', 'brands', 'states', 'owners', 'colors'));
     }
 
     /**
