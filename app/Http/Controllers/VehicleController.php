@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Repositories\CarBrandsRepository;
 use App\Repositories\CarRepository;
 use App\Repositories\ColorsRepository;
 use App\Repositories\PersonRepository;
@@ -36,10 +37,15 @@ class VehicleController extends Controller
      * @var ColorsRepository
      */
     private $colorsRepository;
+    /**
+     * @var CarBrandsRepository
+     */
+    private $brandsRepository;
 
     public function __construct(VehicleRepository $repository, PersonRepository $personRepository,
                                 CarRepository $carRepository, WorkshopRepository $workshopRepository,
-                                StatesRepository $statesRepository, ColorsRepository $colorsRepository)
+                                StatesRepository $statesRepository, ColorsRepository $colorsRepository,
+                                CarBrandsRepository $brandsRepository)
     {
 
         $this->repository = $repository;
@@ -48,6 +54,7 @@ class VehicleController extends Controller
         $this->workshopRepository = $workshopRepository;
         $this->statesRepository = $statesRepository;
         $this->colorsRepository = $colorsRepository;
+        $this->brandsRepository = $brandsRepository;
     }
 
     /**
@@ -63,6 +70,7 @@ class VehicleController extends Controller
         if($workshop)
         {
             $scripts[] = '../../js/vehicle.js';
+            $links[] = '../../css/main.css';
 
             $route = 'vehicles.index';
 
@@ -74,13 +82,13 @@ class VehicleController extends Controller
 
                     $vehicle->model = $car->model;
 
-                    $vehicle->brand = $car->brand;
+                    $vehicle->brand = $this->brandsRepository->findByField('id', $car->brand)->first()->name;
 
                     $vehicle->owner_name = $this->personRepository->findByField('id', $vehicle->owner_id)->first()->name;
                 }
             }
 
-            return view('index', compact('vehicles', 'route', 'scripts'));
+            return view('index', compact('vehicles', 'route', 'scripts', 'links'));
         }
 
 
@@ -181,14 +189,15 @@ class VehicleController extends Controller
 
         $data['workshop_id'] = $this->get_user_workshop();
 
+        DB::beginTransaction();
+
         try{
             if($data['car_id'])
             {
                 $car = $this->repository->findByField('id', $data['car_id'])->first();
 
-                if($car){
+                if($car)
                     $this->repository->create($data);
-                }
 
 
             }
@@ -209,6 +218,7 @@ class VehicleController extends Controller
         {
             DB::rollBack();
 
+            dd($e->getMessage());
             $request->session()->flash('error.msg', 'Um erro ocorreu, tente novamente mais tarde');
         }
 
@@ -278,51 +288,5 @@ class VehicleController extends Controller
 
     }
 
-    public function domains(Request $request, $length = null)
-    {
-        $file = fopen("https://registro.br/dominio/lista-processo-liberacao.txt", "r");
-        //$file = fopen("teste.txt", "r");
 
-        while(!feof($file))
-        {
-
-            $stop = false;
-
-            $line = fgets($file);
-
-            if(substr($line, 0, 1) !== "#")
-            {
-                $length = $length ? $length : 3;
-
-                for ($i = 0; $i < $length; $i++)
-                {
-                    $char = substr($line, $i, 1);
-
-                    if(is_numeric($char)) {
-                        $stop = true;
-                    }
-
-                }
-
-                if(!$stop)
-                {
-                    $point = substr($line, $length, 1);
-
-                    if($point === "."){
-
-                        $final = strstr($line, '.com.br');
-
-                        if($final)
-                            echo $line . "<br>";
-
-                    }
-                }
-            }
-
-
-
-        }
-
-        fclose($file);
-    }
 }

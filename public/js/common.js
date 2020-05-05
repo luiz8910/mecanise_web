@@ -151,7 +151,9 @@ $(function () {
 
     $("#chassis").change(function () {
         validate_chassis();
-    })
+    });
+
+    $(".select2").select2();
 
 });
 

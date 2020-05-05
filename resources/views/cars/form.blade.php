@@ -24,8 +24,18 @@
 
             <div class="wrap-input100 validate-input bg1 rs1-wrap-input100" data-validate = "Insira um valor válido">
                 <span class="label-input100">Montadora</span>
-                <input class="input100 tab-info" type="text" name="brand"
-                       id="brand" placeholder="Ex: Fiat, Chevrolet, Volkswagen " required value="@if($edit){{ $car->brand }}@else{{ old('brand') }}@endif">
+                <div>
+                    <select name="brand" id="brand" class="select-style form-control select2" required>
+                        <option value="">Selecione um valor</option>
+                        @foreach($brands as $brand)
+                            @if($edit)
+                                <option value="{{ $brand->id }}" @if($brand->id == $car->brand) selected @endif >{{ $brand->name }}</option>
+                            @else
+                                <option value="{{ $brand->id }}">{{ $brand->name }}</option>
+                            @endif
+                        @endforeach
+                    </select>
+                </div>
 
                 <span class="form-text text-danger" id="span_brand_status" style="display:none;">Insira uma montadora válida.</span>
             </div>
@@ -41,7 +51,7 @@
             <div class="wrap-input100 bg1 rs1-wrap-input100">
                 <span class="label-input100">Ano Final de Fabricação</span>
                 <input class="input100 tab-info number" type="text" name="end_year" maxlength="4"
-                       id="end_year" placeholder="Ex: 2000" required value="@if($edit){{ $car->end_year }}@else {{ old('end_year') }} @endif">
+                       id="end_year" placeholder="Ex: 2000" required value="@if($edit){{ $car->end_year }}@else{{ old('end_year') }}@endif">
 
                 <span id="span_end_year_status" style="color: red; display:none;"></span>
             </div>

@@ -143,6 +143,10 @@ Route::group(['middleware' => 'auth'], function (){
 
     Route::get('/car_details/{id}', 'CarController@car_details');
 
+    /*
+     * Peças / Pastilhas de Freio
+     */
+
 });
 
 Auth::routes();
@@ -152,4 +156,4 @@ Auth::routes();
 
 Route::get('get_session', 'TesteController@get_session');
 
-Route::get('/domains/{length?}', "VehicleController@domains");
+Route::get('/domains/{length?}', "TesteController@domains");

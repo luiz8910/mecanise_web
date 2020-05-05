@@ -31,7 +31,6 @@
     <link rel="stylesheet" type="text/css" href="../../css/form/main.css">
     <!--===============================================================================================-->
     <link rel="stylesheet" type="text/css" href="../../css/util.css">
-    <link rel="stylesheet" type="text/css" href="../../css/main.css">
 
     <!--===============================================================================================-->
     <link rel="stylesheet" href="../../css/common.css">
@@ -45,7 +44,7 @@
 </head>
 
 
-<body>
+<body style="overflow: hidden;">
 
 @include('loading')
 
@@ -149,7 +148,7 @@
 
             <ul id="menu_item_vehicle" class="menu_subitem lvl_2">
                 <li>
-                    <a href="javascript:"><i class="fas fa-plus"></i> Novo Veículo</a>
+                    <a href="{{ route('vehicle.create')}}"><i class="fas fa-plus"></i> Novo Veículo</a>
                 </li>
 
                 <li>
@@ -157,10 +156,7 @@
                 </li>
 
                 <li>
-                    <a href="{{ route('cars.index') }}">
-                        <i class="fas fa-database"></i>
-                        Base de Dados
-                    </a>
+                    <a href="{{ route('cars.index') }}"><i class="fas fa-database"></i> Base de Dados</a>
                 </li>
             </ul>
 
@@ -198,6 +194,8 @@
 <script src="../../js/form/nouislider.js"></script>
 <!--===============================================================================================-->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-23581568-13"></script>
+<!--===============================================================================================-->
+<script type='text/javascript' src='//igorescobar.github.io/jQuery-Mask-Plugin/js/jquery.mask.min.js'></script>
 
 @if(isset($scripts))
     @foreach($scripts as $script)

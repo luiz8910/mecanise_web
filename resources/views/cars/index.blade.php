@@ -28,7 +28,7 @@
                             @foreach($cars as $car)
                                 <tr class="row100 body" id="model_{{ $car->id }}">
                                     <td class="cell100 column1"><a href="{{ route('cars.edit', ['id' => $car->id]) }}">{{ $car->model }}</a></td>
-                                    <td class="cell100 column2">{{ $car->brand }}</td>
+                                    <td class="cell100 column2">{{ $car->brand_name }}</td>
                                     <td class="cell100 column3">{{ $car->version }}</td>
                                     <td class="cell100 column4">{{ $car->start_year }}</td>
                                     <td class="cell100 column5">{{ $car->end_year }}</td>

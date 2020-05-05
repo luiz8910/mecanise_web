@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Repositories\CarBrandsRepository;
 use App\Repositories\CarRepository;
 use App\Repositories\FuelRepository;
 use Illuminate\Http\Request;
@@ -17,11 +18,16 @@ class CarController extends Controller
      * @var FuelRepository
      */
     private $fuelRepository;
+    /**
+     * @var CarBrandsRepository
+     */
+    private $brandsRepository;
 
-    public function __construct(CarRepository $repository, FuelRepository $fuelRepository)
+    public function __construct(CarRepository $repository, FuelRepository $fuelRepository, CarBrandsRepository $brandsRepository)
     {
         $this->repository = $repository;
         $this->fuelRepository = $fuelRepository;
+        $this->brandsRepository = $brandsRepository;
     }
 
     /**
@@ -37,8 +43,13 @@ class CarController extends Controller
         $edit = false;
 
         $scripts[] = '../../js/car.js';
+        $links[] = '../../css/main.css';
 
-        return view('index', compact('cars', 'route', 'scripts', 'edit'));
+        foreach ($cars as $car){
+            $car->brand_name = $this->brandsRepository->findByField('id', $car->brand)->first()->name;
+        }
+
+        return view('index', compact('cars', 'route', 'scripts', 'edit', 'links'));
     }
 
     /**
@@ -54,7 +65,9 @@ class CarController extends Controller
 
         $fuels = $this->fuelRepository->all();
 
-        return view('index', compact('route', 'edit', 'scripts', 'fuels'));
+        $brands = $this->brandsRepository->orderBy('name')->all();
+
+        return view('index', compact('route', 'edit', 'scripts', 'fuels', 'brands'));
     }
 
     /**
@@ -75,7 +88,9 @@ class CarController extends Controller
         {
             $fuels = $this->fuelRepository->all();
 
-            return view('index', compact( 'route', 'edit', 'scripts', 'car', 'fuels'));
+            $brands = $this->brandsRepository->orderBy('name')->all();
+
+            return view('index', compact( 'route', 'edit', 'scripts', 'car', 'fuels', 'brands'));
         }
 
         abort(404);
@@ -205,6 +220,8 @@ class CarController extends Controller
 
         if($car)
         {
+            $car->brand = $this->brandsRepository->findByField('id', $car->brand)->first()->name;
+
             return json_encode(['status' => true, 'car' => $car]);
         }
 

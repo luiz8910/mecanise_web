@@ -1,6 +1,6 @@
 $(function () {
 
-    $(".car_id").change(function () {
+    $("#car_id").change(function () {
 
         const id = $(this).val();
 
@@ -35,6 +35,9 @@ $(function () {
                         for(var i = 0; i < diff + 1; i++)
                         {
                             var year = parseInt(e.car.start_year) + i;
+
+                            if(i === 0)
+                                append += '<option value="">Insira um valor</option>';
 
                             append += '<option value="'+year+'">'+year+'</option>';
                         }
@@ -121,8 +124,6 @@ $(function () {
 
     $("#owner_id").select2();
 
-    $("#car_id").select2();
-
     hide_elements();
 });
 
@@ -179,6 +180,12 @@ function new_owner()
         $("#span_cpf").css('display', 'block');
         return false;
     }
+    else if(cpf.length < 11){
+        sweet_alert_error('CPF deve conter 11 números, você digitou ' + cpf.length);
+        return false;
+    }
+
+
 
     /*var modal = $(".modal_input");
 

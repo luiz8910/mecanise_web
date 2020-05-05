@@ -173,7 +173,88 @@ class PersonController extends Controller
 
         $data['workshop_id'] = $this->get_user_workshop();
 
-        $user = $this->userRepository->findByField('email', $data['email'])->first();
+        $person = $this->repository->findByField('cpf', $data['cpf'])->first();
+
+        DB::beginTransaction();
+
+        try{
+
+            if($data['role_id'] == $this->get_owner_id())
+            {
+                if($person)
+                {
+                    if(isset($data['dateBirth']))
+                        $data['dateBirth'] = date_format(date_create($data['dateBirth']), 'Y-m-d');
+
+                    $this->repository->update($data, $person->id);
+
+                    DB::commit();
+
+                    $request->session()->flash('success.msg', 'O usuário foi cadastrado com sucesso');
+
+                    return isset($data['origin']) ? json_encode(['status' => true, 'id' => $person->id]) : redirect()->route('person.index');
+                }
+                else{
+                    $id = $this->repository->create($data)->id;
+
+                    DB::commit();
+
+                    $request->session()->flash('success.msg', 'O usuário foi cadastrado com sucesso');
+
+                    return isset($data['origin']) ? json_encode(['status' => true, 'id' => $id]) : redirect()->route('person.index');
+
+                }
+            }
+            elseif($data['role_id'] == $this->get_operator_id())
+            {
+                if ($this->repository->findByField('email', $data['email'])->first()) {
+                    $request->session()->flash('error.msg', 'O usuário já existe na base de dados');
+
+                    return isset($data['origin']) ? json_encode(['status' => false, 'msg' => 'O usuário já existe na base de dados']) :
+                        redirect()->back();
+                }
+                else{
+
+                    if(isset($data['dateBirth']))
+                        $data['dateBirth'] = date_format(date_create($data['dateBirth']), 'Y-m-d');
+
+
+                    $person_id = $this->repository->create($data)->id;
+
+
+                    $u['email'] = $data['email'];
+                    $u['password'] = bcrypt($this->random_number());
+                    $u['person_id'] = $person_id;
+                    $u['workshop_id'] = $this->get_user_workshop();
+
+                    $this->userRepository->create($u);
+
+                    DB::commit();
+
+                    $request->session()->flash('success.msg', 'O usuário foi cadastrado com sucesso');
+
+                    return isset($data['origin']) ? json_encode(['status' => true, 'id' => $person_id]) : redirect()->route('person.index');
+
+                }
+            }
+        }catch (\Exception $e){
+            DB::rollBack();
+
+            $request->session()->flash('error.msg', 'Um erro desconhecido ocorreu');
+
+            return isset($data['origin']) ? json_encode(['status' => false, 'msg' => 'Um erro desconhecido ocorreu']) :
+                redirect()->back();
+        }
+
+    }
+
+    public function store_old(Request $request)
+    {
+        $data = $request->all();
+
+        $data['workshop_id'] = $this->get_user_workshop();
+
+        $user = $data['email'] != "" ? $this->userRepository->findByField('email', $data['email'])->first() : false;
 
         if(!$user){
             $person = $this->repository->findByField('cpf', $data['cpf'])->first();
@@ -181,7 +262,6 @@ class PersonController extends Controller
             if($person)
                 $user = $person->user;
         }
-
 
         if($data['role_id'] == $this->get_owner_id())
         {
