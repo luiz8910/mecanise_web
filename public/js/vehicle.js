@@ -263,33 +263,16 @@ function delete_vehicle($id)
         title: 'Atenção',
         text: 'Você deseja excluir este veículo?',
         button: 'Excluir',
-
+        success_msg: 'O veículo foi excluído com sucesso',
+        reload: false,
+        id: $id
     }
 
-    sweet_alert()
-
-
-    var request = $.ajax({
+    var ajax = {
         url: '/vehicle/' + $id,
         method: 'DELETE',
         dataType: 'json'
-    });
+    }
 
-    request.done(function (e) {
-
-        if(e.status)
-        {
-            $("#model_" + $id).remove();
-
-            sweet_alert_success('O veículo foi excluído com sucesso');
-        }
-        else{
-            sweet_alert_error();
-        }
-    });
-
-    request.fail(function (e) {
-        console.log('fail');
-        console.log(e);
-    })
+    sweet_alert(data, ajax);
 }
