@@ -36,7 +36,7 @@
                     <span class="label-input100">Montadora</span>
                     <input class="input100 tab-info" type="text" name="brand"
                            id="brand" placeholder="Ex: Fiat, Chevrolet, Volkswagen " required readonly
-                           value="@if($edit){{ $vehicle->brand }}@else{{ old('brand') }}@endif">
+                           value="@if($edit){{ $vehicle->brand_name }}@else{{ old('brand') }}@endif">
 
                     <span class="form-text text-danger" id="span_brand_status" style="display:none;">Insira uma montadora válida.</span>
                 </div>
@@ -62,7 +62,7 @@
                 <div class="wrap-input100 bg1 rs1-wrap-input100">
                     <span class="label-input100">Placa</span>
                     <input class="input100 tab-info" type="text" name="license_plate" maxlength="8"
-                           id="license_plate" placeholder="Ex: ABC-1234" required value="@if($edit){{ $vehicle->license_plate }}@else{{ old('license_plate') }}@endif">
+                           id="license_plate" placeholder="Ex: ABC-1234" value="@if($edit){{ $vehicle->license_plate }}@else{{ old('license_plate') }}@endif">
 
                     <span id="span_license_plate_status" style="color: red; display:none;"></span>
                 </div>
@@ -70,7 +70,7 @@
                 <div class="wrap-input100 bg1 rs1-wrap-input100">
                     <span class="label-input100">Chassis</span>
                     <input class="input100 tab-info" type="text" name="chassis"
-                           id="chassis" placeholder="Ex: 5jA mM1g5C 3R WG4610" required value="@if($edit){{ $vehicle->chassis }}@else{{ old('chassis') }}@endif">
+                           id="chassis" placeholder="Ex: 5jA mM1g5C 3R WG4610" value="@if($edit){{ $vehicle->chassis }}@else{{ old('chassis') }}@endif">
 
                     <span class="form-text text-danger" id="span_chassis_status" style="display: none;">Insira um valor válido</span>
                 </div>
@@ -78,7 +78,7 @@
                 <div class="wrap-input100 bg1 rs1-wrap-input100">
                     <span class="label-input100">Km</span>
                     <input class="input100 tab-info number" type="text" name="km"
-                           id="km" placeholder="Ex: 150000" required value="@if($edit){{ $vehicle->km }}@else{{ old('km') }}@endif">
+                           id="km" placeholder="Ex: 150000" value="@if($edit){{ $vehicle->km }}@else{{ old('km') }}@endif">
 
                     <span class="form-text text-danger" id="span_km_status" style="display: none;">Insira um valor válido</span>
                 </div>
@@ -88,6 +88,15 @@
                     <div>
                         <select name="year" id="year" class="form-control select-style select2">
                             <option value="">Insira um valor</option>
+                            @if($edit)
+                                @if(count($years) > 1)
+                                    @foreach($years as $year)
+                                        <option value="{{ $year }}" @if($vehicle->year == $year) selected @endif>{{ $year }}</option>
+                                    @endforeach
+                                @else
+                                    <option value="{{ $years[0] }}" selected>{{ $years[0] }}</option>
+                                @endif
+                            @endif
                         </select>
                     </div>
 
@@ -95,13 +104,25 @@
                 </div>
 
                 <div class="wrap-input100 bg1">
+                    @if($edit)
+                        @foreach($owners as $owner)
+                            @if($owner->id == $vehicle->owner->id)
+                                <input type="hidden" value="{{ $owner->id }}" id="owner_id_input" name="owner_id">
+                                @break
+                            @endif
+                        @endforeach
+                    @else
+                        <input type="hidden" value="" id="owner_id_input" name="owner_id">
+                    @endif
+
+
                     <span class="label-input100">Proprietário</span>
                     <div>
-                        <select class="select-style form-control select2" name="owner_id" id="owner_id">
+                        <select class="select-style form-control select2" id="owner_id" required>
                             <option value="">Selecione um valor</option>
                             @foreach($owners as $owner)
                                 @if($edit)
-                                    <option value="{{ $owner->id }}" @if($owner->id == $vehicle->owner->id) selected @endif>{{ $onwer->name }}</option>
+                                    <option value="{{ $owner->id }}" @if($owner->id == $vehicle->owner->id) selected @endif>{{ $owner->name }}</option>
                                 @else
                                     <option value="{{ $owner->id }}">{{ $owner->name }}</option>
                                 @endif
@@ -133,6 +154,8 @@
             </form>
     </div>
 </div>
+
+<br><br><br>
 
 
 
@@ -224,6 +247,7 @@
                     <div class="col-md-6">
                         <label for="state">UF</label>
                         <select name="state" id="state" class="form-control modal_input">
+                            <option value="">Selecione um estado</option>
                             @foreach($states as $state)
                                 <option value="{{ $state->initials }}">{{ $state->state }}</option>
                             @endforeach

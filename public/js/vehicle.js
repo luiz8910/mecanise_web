@@ -120,9 +120,15 @@ $(function () {
         }
     });
 
-    $("#color").select2();
+    $("#owner_id").change(function () {
+        var value = $(this).val();
 
-    $("#owner_id").select2();
+        $("#owner_id_input").val(value);
+    });
+
+    $(".column1").css('width', '24%');
+    $(".column3").css('width', '18%');
+    $(".column4").css('width', '8%');
 
     hide_elements();
 });
@@ -227,6 +233,8 @@ function new_owner()
 
             $("#new_owner").modal('hide');
 
+            $("#owner_id_input").val(e.id);
+
             sweet_alert_success('O proprietário foi cadastrado com sucesso');
         }
         else{
@@ -246,4 +254,42 @@ function new_owner()
 function hide_elements()
 {
     $(".email").css('display', 'none');
+}
+
+function delete_vehicle($id)
+{
+
+    var data = {
+        title: 'Atenção',
+        text: 'Você deseja excluir este veículo?',
+        button: 'Excluir',
+
+    }
+
+    sweet_alert()
+
+
+    var request = $.ajax({
+        url: '/vehicle/' + $id,
+        method: 'DELETE',
+        dataType: 'json'
+    });
+
+    request.done(function (e) {
+
+        if(e.status)
+        {
+            $("#model_" + $id).remove();
+
+            sweet_alert_success('O veículo foi excluído com sucesso');
+        }
+        else{
+            sweet_alert_error();
+        }
+    });
+
+    request.fail(function (e) {
+        console.log('fail');
+        console.log(e);
+    })
 }

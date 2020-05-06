@@ -31,12 +31,35 @@
                                 <td class="cell100 column3">{{ $vehicle->owner_name }}</td>
                                 <td class="cell100 column4">{{ $vehicle->year }}</td>
                                 <td class="cell100 column5">
-                                    <a href="{{ route('vehicle.edit', ['id' => $vehicle->id]) }}" class="btn btn-sm btn-outline-info" title="Editar Veículo">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    <button class="btn btn-sm btn-outline-danger" onclick="delete_car({!! $vehicle->id !!})" title="Excluir Veículo">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
+                                    <div class="row">
+                                        <div class="dropdown">
+                                            <button class="btn btn-default btn-outline-primary btn-sm dropdown-toggle" type="button"
+                                                    id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Status do Veículo">
+                                                <i class="fas fa-filter"></i>
+                                            </button>
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                <a class="dropdown-item" href="#">
+                                                    <i class="fas fa-check"></i>
+                                                    Concluído
+                                                </a>
+                                                <a class="dropdown-item" href="#">
+                                                    <i class="fas fa-clock"></i>
+                                                    Aguardando
+                                                </a>
+                                                <a class="dropdown-item" href="#">
+                                                    <i class="fas fa-backward"></i>
+                                                    Retorno
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <a href="{{ route('vehicle.edit', ['id' => $vehicle->id]) }}" class="btn btn-sm btn-outline-info" title="Editar Veículo">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <button class="btn btn-sm btn-outline-danger" onclick="delete_vehicle({!! $vehicle->id !!})" title="Excluir Veículo">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+
                                 </td>
                             </tr>
                         @endforeach

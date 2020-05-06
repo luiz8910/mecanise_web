@@ -233,7 +233,7 @@ function sweet_alert($data, $ajax)
     swal({
         title: $data.title,
         text: $data.text,
-        icon: $data.icon,
+        icon: $data.icon ? $data.icon : "warning",
         buttons: {
             cancel: {
                 text: $data.cancel ? $data.cancel : "Cancelar",
@@ -299,7 +299,7 @@ function sweet_alert($data, $ajax)
 
 function sweet_alert_error($msg)
 {
-    var msg = $msg ? $msg : 'Um erro ocorreu, tente novamente mais tarde';
+    var msg = $msg ? $msg : 'Um erro desconhecido ocorreu, tente novamente mais tarde';
 
     swal(msg, {
         icon: 'error',

@@ -155,12 +155,8 @@ class VehicleController extends Controller
 
         $states = $this->statesRepository->orderBy('state')->all();
 
-        $links[] = '../../assets/css/pages/wizard/wizard-4.css';
-
         //$scripts[] = '../../assets/js/pages/custom/user/add-user.js';
         $scripts[] = '../../js/vehicle.js';
-        $scripts[] = '../../assets/js/pages/crud/forms/widgets/bootstrap-maxlength.js';
-        $scripts[] = '../../assets/js/pages/crud/forms/widgets/select2.js';
         $scripts[] = '../../js/zipcode.js';
         $scripts[] = '../../js/mask.js';
 
@@ -169,13 +165,26 @@ class VehicleController extends Controller
 
         $owners = $this->personRepository->findWhere(['workshop_id' => $this->get_user_workshop(), 'role_id' => 4]);
 
-        if($vehicle)
+        $colors = $this->colorsRepository->orderBy('name')->all();
+
+        $car = $this->carRepository->findByField('id', $vehicle->car_id)->first();
+
+        for ($i = $car->start_year; $i < ($car->end_year + 1); $i++)
         {
-            return view('index', compact('cars', 'route', 'edit', 'links', 'scripts',
-                'vehicle', 'brands', 'states', 'owners'));
+            $years[] = $i;
         }
 
-        abort(404);
+        if($vehicle)
+        {
+            $brand_id = $this->carRepository->findByField('id', $vehicle->car_id)->first()->brand;
+
+            $vehicle->brand_name = $this->brandsRepository->findByField('id', $brand_id)->first()->name;
+
+            return view('index', compact('cars', 'route', 'edit', 'scripts',
+                'vehicle', 'brands', 'states', 'owners', 'colors', 'years'));
+        }
+
+        return abort(404);
     }
 
     /**
@@ -194,12 +203,10 @@ class VehicleController extends Controller
         try{
             if($data['car_id'])
             {
-                $car = $this->repository->findByField('id', $data['car_id'])->first();
+                $car = $this->carRepository->findByField('id', $data['car_id'])->first();
 
                 if($car)
                     $this->repository->create($data);
-
-
             }
             else{
 
@@ -218,7 +225,6 @@ class VehicleController extends Controller
         {
             DB::rollBack();
 
-            dd($e->getMessage());
             $request->session()->flash('error.msg', 'Um erro ocorreu, tente novamente mais tarde');
         }
 
