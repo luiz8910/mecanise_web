@@ -8,7 +8,7 @@
     <title>Mecanise | Para quem ama carros</title>
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://kit.fontawesome.com/68123c67f0.js" crossorigin="anonymous"></script>
+    <script src="../../js/font-awesome.js"></script>
 
     <!--===============================================================================================-->
     <link rel="stylesheet" type="text/css" href="../../css/animate.css">
@@ -124,8 +124,8 @@
                 <li class="menu_li" id="li_vehicle">
                     <a href="javascript:"><i class="fas fa-car-side"></i> Veículos <span class="drop_icon"> > </span></a>
                 </li>
-                <li class="menu_li">
-                    <a href="javascript:"><i class="fas fa-file-alt"></i> Orçamentos</a>
+                <li class="menu_li" id="li_order">
+                    <a href="javascript:"><i class="fas fa-file-alt"></i> Ordens de Serviço</a>
                 </li>
                 <li class="menu_li">
                     <a href="javascript:"><i class="fas fa-dollar-sign"></i> Pagamentos</a>
@@ -157,6 +157,16 @@
 
                 <li>
                     <a href="{{ route('cars.index') }}"><i class="fas fa-database"></i> Base de Dados</a>
+                </li>
+            </ul>
+
+            <ul id="menu_item_order" class="menu_subitem lvl_2">
+                <li>
+                    <a href="{{ route('order.create') }}"><i class="fas fa-plus"></i> Nova OS</a>
+                </li>
+
+                <li>
+                    <a href="javascript:"><i class="fas fa-list"></i> Lista de OS</a>
                 </li>
             </ul>
 

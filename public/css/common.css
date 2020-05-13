@@ -340,3 +340,55 @@ input:checked + .slider:before {
     top: 2%;
     left: 15%;
 }
+
+.search {
+    width: 130px;
+    -webkit-transition: width 0.4s ease-in-out;
+    transition: width 0.4s ease-in-out;
+    display: none;
+    float: right;
+    margin-top: -30px;
+}
+
+/* When the input field gets focus, change its width to 100% */
+.search:focus {
+    width: 30%;
+}
+
+.search-model{
+    cursor: pointer;
+    width: 50px;
+    float: right;
+    margin-top: -25px;
+}
+
+.search-model:hover{
+    font-size: 3em;
+}
+
+.close-search{
+    cursor: pointer;
+    margin-bottom: 15px;
+    width: 50px;
+    display: none;
+}
+
+.close-search:hover{
+    font-size: 3em;
+}
+
+#remove_filters{
+    margin-top: -17px;
+    margin-left: 10px;
+    display: none;
+}
+
+.btn-right{
+    margin-right: 30%;
+    margin-bottom: 10px;
+}
+
+.btn-left{
+    margin-left: 30%;
+    margin-bottom: 10px;
+}

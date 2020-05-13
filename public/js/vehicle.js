@@ -1,65 +1,7 @@
 $(function () {
 
     $("#car_id").change(function () {
-
-        const id = $(this).val();
-
-
-        if(id)
-        {
-            var request = $.ajax({
-                url: '/car_details/' + id,
-                method: 'GET',
-                dataType: 'json'
-            });
-
-            request.done(function (e) {
-
-                if(e.status)
-                {
-                    console.log(e);
-
-                    $("#brand").val(e.car.brand);
-
-                    $("#version").val(e.car.version);
-
-                    var append = '';
-
-                    var diff = e.car.end_year - e.car.start_year;
-
-                    $("#year option").remove();
-
-                    if(diff > 0)
-                    {
-
-                        for(var i = 0; i < diff + 1; i++)
-                        {
-                            var year = parseInt(e.car.start_year) + i;
-
-                            if(i === 0)
-                                append += '<option value="">Insira um valor</option>';
-
-                            append += '<option value="'+year+'">'+year+'</option>';
-                        }
-
-                    }
-                    else{
-                        append += '<option value="'+e.car.start_year+'" selected>'+e.car.start_year+'</option>';
-                    }
-
-                    $("#year").append(append);
-                }
-                else{
-                    sweet_alert_error(e.msg);
-                }
-            });
-
-            request.fail(function (e) {
-
-                console.log('fail');
-                console.log(e);
-            });
-        }
+        car_change();
     });
 
     $("#license_plate").keydown(function (e) {
@@ -120,18 +62,26 @@ $(function () {
         }
     });
 
-    $("#owner_id").change(function () {
-        var value = $(this).val();
 
-        $("#owner_id_input").val(value);
+
+    $("#search-model").keyup(function () {
+
+        if($(this).val().length > 2)
+            search();
+
     });
 
-    $(".column1").css('width', '24%');
-    $(".column3").css('width', '18%');
-    $(".column4").css('width', '8%');
+    rearrange_columns();
 
     hide_elements();
 });
+
+function rearrange_columns()
+{
+    $(".column1").css('width', '24%');
+    $(".column3").css('width', '18%');
+    $(".column4").css('width', '8%');
+}
 
 function new_owner()
 {
@@ -249,6 +199,9 @@ function new_owner()
 
         sweet_alert_error();
     });
+
+
+
 };
 
 function hide_elements()
@@ -275,4 +228,144 @@ function delete_vehicle($id)
     }
 
     sweet_alert(data, ajax);
+}
+
+
+
+function search()
+{
+    var value = $("#search-model").val();
+
+    localStorage.setItem('filters', true);
+
+    var request = $.ajax({
+        url: '/search-vehicles/' + value,
+        method: 'GET',
+        dataType: 'json'
+    });
+
+    request.done(function (e) {
+
+        console.log(e.result);
+
+        if (e.status)
+        {
+            var append = '';
+
+            $("#tbody-search tr").remove();
+
+            for (var i = 0; i < e.result.length; i++)
+            {
+                append += '<tr class="row100 body" id="model_'+e.result[i].id+'">\n' +
+                    '                                <td class="cell100 column1"><a href="/editar-veiculo/'+e.result[i].id+'">'+e.result[i].model+'</a></td>\n' +
+                    '                                <td class="cell100 column2">'+e.result[i].brand_name+'</td>\n' +
+                    '                                <td class="cell100 column3">'+e.result[i].owner_name+'</td>\n' +
+                    '                                <td class="cell100 column4">'+e.result[i].year+'</td>\n' +
+                    '                                <td class="cell100 column5">\n' +
+                    '                                    <div class="row">\n' +
+                    '                                        <div class="dropdown">\n' +
+                    '                                            <button class="btn btn-default btn-outline-primary btn-sm dropdown-toggle" type="button"\n' +
+                    '                                                    id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Status do Veículo">\n' +
+                    '                                                <i class="fas fa-filter"></i>\n' +
+                    '                                            </button>\n' +
+                    '                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">\n' +
+                    '                                                <a class="dropdown-item" href="#">\n' +
+                    '                                                    <i class="fas fa-check"></i>\n' +
+                    '                                                    Concluído\n' +
+                    '                                                </a>\n' +
+                    '                                                <a class="dropdown-item" href="#">\n' +
+                    '                                                    <i class="fas fa-clock"></i>\n' +
+                    '                                                    Aguardando\n' +
+                    '                                                </a>\n' +
+                    '                                                <a class="dropdown-item" href="#">\n' +
+                    '                                                    <i class="fas fa-backward"></i>\n' +
+                    '                                                    Retorno\n' +
+                    '                                                </a>\n' +
+                    '                                            </div>\n' +
+                    '                                        </div>\n' +
+                    '                                        <a href="javascript:" class="btn btn-sm btn-outline-info" title="Ordem de Serviço">\n' +
+                    '                                            <i class="fas fa-file"></i>\n' +
+                    '                                        </a>\n' +
+                    '                                        <button class="btn btn-sm btn-outline-danger" onclick="delete_vehicle('+e.result[i].id+')" title="Excluir Veículo">\n' +
+                    '                                            <i class="fas fa-trash"></i>\n' +
+                    '                                        </button>\n' +
+                    '                                    </div>\n' +
+                    '\n' +
+                    '                                </td>\n' +
+                    '                            </tr>'
+            }
+
+
+            $("#tbody-main").css('display', 'none');
+
+            $("#tbody-search").css('display', 'block').append(append);
+
+            rearrange_columns();
+        }
+    })
+}
+
+function car_change($input_id)
+{
+    $input_id = $input_id ? $input_id : 'car_id'
+
+    const id = $('#'+$input_id).val();
+
+
+    if(id)
+    {
+        var request = $.ajax({
+            url: '/car_details/' + id,
+            method: 'GET',
+            dataType: 'json'
+        });
+
+        request.done(function (e) {
+
+            if(e.status)
+            {
+
+                $("#brand").val(e.car.brand);
+
+                $("#version").val(e.car.version);
+
+                var append = '';
+
+                var diff = e.car.end_year - e.car.start_year;
+
+                $("#year option").remove();
+
+                if(diff > 0)
+                {
+
+                    for(var i = 0; i < diff + 1; i++)
+                    {
+                        var year = parseInt(e.car.start_year) + i;
+
+                        if(i === 0)
+                            append += '<option value="">Insira um valor</option>';
+
+                        append += '<option value="'+year+'">'+year+'</option>';
+                    }
+
+                }
+                else
+                    append += '<option value="'+e.car.start_year+'" selected>'+e.car.start_year+'</option>';
+
+
+                $("#year").append(append);
+            }
+            else
+                sweet_alert_error(e.msg);
+
+        });
+
+        request.fail(function (e) {
+
+            console.log('fail');
+            console.log(e);
+
+            sweet_alert_error();
+        });
+    }
 }

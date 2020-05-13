@@ -5,14 +5,14 @@ var white_moon = '<i class="far fa-moon"></i>';
 $(function () {
 
     localStorage.removeItem('open_items_menu');
+    localStorage.setItem('filters', false);
 
     setInterval(function () {
         $("#body").css('display', 'none');
         $(".pre-loading").css('display', 'block');
     }, 1000);
 
-    if(localStorage.getItem('night_mode') == true)
-    {
+    if (localStorage.getItem('night_mode') == true) {
         $("#table_list")
             .addClass('ver3')
             .removeClass('ver1')
@@ -22,8 +22,7 @@ $(function () {
         $(".night-mode i").remove();
         $(".night-mode").append(white_moon);
         localStorage.setItem('night_mode', night_mode);
-    }
-    else{
+    } else {
         $("#table_list")
             .removeClass('ver3')
             .addClass('ver1')
@@ -37,8 +36,7 @@ $(function () {
 
         night_mode = !night_mode;
 
-        if(night_mode)
-        {
+        if (night_mode) {
             $("#table_list")
                 .removeClass('ver1')
                 .addClass('ver3');
@@ -49,8 +47,7 @@ $(function () {
             $(".night-mode").append(white_moon);
 
             localStorage.setItem('night_mode', true);
-        }
-        else{
+        } else {
             $("#table_list")
                 .removeClass('ver3')
                 .addClass('ver1');
@@ -63,7 +60,7 @@ $(function () {
     });
 
 
-    $('.plus-btn').click(function(){
+    $('.plus-btn').click(function () {
         $('body').toggleClass('menu-open');
 
         opened_menu = !opened_menu;
@@ -77,10 +74,9 @@ $(function () {
 
         $(".lvl_1").css('display', 'none');
 
-        $("#menu_item_"+id).css('display', 'block');
+        $("#menu_item_" + id).css('display', 'block');
 
-        if(localStorage.getItem('open_items_menu'))
-        {
+        if (localStorage.getItem('open_items_menu')) {
             var levels = localStorage.getItem('open_items_menu');
 
             levels++;
@@ -104,10 +100,10 @@ $(function () {
     });
 
 
-    $('.js-pscroll').each(function(){
+    $('.js-pscroll').each(function () {
         var ps = new PerfectScrollbar(this);
 
-        $(window).on('resize', function(){
+        $(window).on('resize', function () {
             ps.update();
         })
     });
@@ -118,7 +114,7 @@ $(function () {
 
     $(".number").keypress(function (e) {
 
-        if(e.which < 48 || e.which > 57)
+        if (e.which < 48 || e.which > 57)
             return false;
 
     });
@@ -134,7 +130,7 @@ $(function () {
 
     $("input[type=number]").keydown(function (e) {
 
-        if(e.which === 69)
+        if (e.which === 69)
             return false;
     });
 
@@ -155,12 +151,70 @@ $(function () {
 
     $(".select2").select2();
 
+    $(".search-model").click(function () {
+        $(this).css('display', 'none');
+
+        $(".hide-search").css('display', 'none');
+
+        $("#label-search-model").css('display', 'block');
+
+        $("#search-model").css('display', 'block').focus();
+    });
+
+    $("#search-model").blur(function () {
+
+        $(this).css('display', 'none');
+
+        $("#label-search-model").css('display', 'none');
+
+        $(".search-model").css('display', 'block');
+
+        if(localStorage.getItem('filters') == true)
+            $("#remove_filters").css('display', 'inline-block');
+
+    });
+
+    $("#owner_id").change(function () {
+        var value = $(this).val();
+
+        $("#owner_id_input").val(value);
+    });
+
+
+    $(".date").keyup(function (e) {
+
+        var value = $(this).val();
+
+        if(value.length == 2 && e.which != 8)
+        {
+            value += '/';
+
+            $(this).val(value);
+        }
+        else if(value.length == 5 && e.which != 8)
+        {
+            value += '/';
+
+            $(this).val(value);
+        }
+    })
 });
 
-function open_menu($status)
+function remove_filters()
 {
-    if($status)
-    {
+
+    $("#tbody-search").css('display', 'none');
+    $("#tbody-main").css('display', 'block');
+
+    $("#search-model").val('');
+
+    $("#remove_filters").css('display', 'none');
+
+    localStorage.setItem('filters', false);
+}
+
+function open_menu($status) {
+    if ($status) {
 
         $(".menu").css('display', 'block');
         $(".r1").css('display', 'block');
@@ -172,8 +226,7 @@ function open_menu($status)
 
 
         localStorage.setItem('open_items_menu', 1);
-    }
-    else{
+    } else {
 
         $(".menu").css('display', 'none');
         $(".r1").css('display', 'none');
@@ -187,49 +240,42 @@ function open_menu($status)
     }
 }
 
-function back_menu()
-{
+function back_menu() {
     var levels = localStorage.getItem('open_items_menu');
 
-    if(levels == 1)
+    if (levels == 1)
         $(".plus-btn").trigger('click');
 
-    else{
-        $(".lvl_"+levels).css('display', 'none');
+    else {
+        $(".lvl_" + levels).css('display', 'none');
 
         levels--;
 
         localStorage.setItem('open_items_menu', levels);
 
-        if(levels == 1)
-        {
+        if (levels == 1) {
             $(".menu_li").css("display", 'block');
-            $(".lvl_"+levels).css('display', 'block');
+            $(".lvl_" + levels).css('display', 'block');
         }
 
     }
 }
 
-function before_validate_cpf($input)
-{
+function before_validate_cpf($input) {
     $input = $input ? $input : 'cpf';
 
-    if($("#"+$input).val().length == 11)
-    {
-        if(!validate_cpf($input))
-        {
+    if ($("#" + $input).val().length == 11) {
+        if (!validate_cpf($input)) {
             sweet_alert_error('CPF inválido');
 
-            $("#"+$input).addClass('input-error');
-        }
-        else{
-            $("#"+$input).removeClass('input-error');
+            $("#" + $input).addClass('input-error');
+        } else {
+            $("#" + $input).removeClass('input-error');
         }
     }
 }
 
-function sweet_alert($data, $ajax)
-{
+function sweet_alert($data, $ajax) {
     swal({
         title: $data.title,
         text: $data.text,
@@ -250,8 +296,7 @@ function sweet_alert($data, $ajax)
         }
 
     }).then((value) => {
-        if(value)
-        {
+        if (value) {
             var request = $.ajax({
                 url: $ajax.url,
                 method: $ajax.method ? $ajax.method : 'GET',
@@ -259,8 +304,7 @@ function sweet_alert($data, $ajax)
             });
 
             request.done(function (e) {
-                if(e.status)
-                {
+                if (e.status) {
 
                     swal($data.success_msg, {
                         icon: 'success',
@@ -268,13 +312,12 @@ function sweet_alert($data, $ajax)
                     });
 
                     setTimeout(function () {
-                        if($data.reload)
+                        if ($data.reload)
                             location.reload();
                         else
                             $("#model_" + $data.id).remove();
                     }, 3000);
-                }
-                else{
+                } else {
                     sweet_alert_error();
 
                     return false;
@@ -297,8 +340,7 @@ function sweet_alert($data, $ajax)
 
 }
 
-function sweet_alert_error($msg)
-{
+function sweet_alert_error($msg) {
     var msg = $msg ? $msg : 'Um erro desconhecido ocorreu, tente novamente mais tarde';
 
     swal(msg, {
@@ -307,8 +349,7 @@ function sweet_alert_error($msg)
     });
 }
 
-function sweet_alert_success($msg)
-{
+function sweet_alert_success($msg) {
     var msg = $msg ? $msg : 'Sucesso';
 
     swal(msg, {
@@ -317,8 +358,7 @@ function sweet_alert_success($msg)
     });
 }
 
-function clean_fields($class)
-{
+function clean_fields($class) {
     $("." + $class).val('');
 }
 
@@ -329,8 +369,7 @@ function clean_fields($class)
  * $tab indica qual tab deve aparecer
  * $class verifica quais campos são obrigatórios
  */
-function next_tab($tab, $class)
-{
+function next_tab($tab, $class) {
     var fields = $("." + $class);
 
     $(".input-group").removeClass('border-red');
@@ -338,23 +377,20 @@ function next_tab($tab, $class)
 
     console.log($class);
 
-    if(fields.length > 0)
-    {
+    if (fields.length > 0) {
         var i = 0;
         var errors = localStorage.getItem('errors') ? localStorage.getItem('errors') : 0;
 
-        while (i < fields.length)
-        {
-            if(fields[i].value === '' && fields[i].getAttribute('required') !== null)
-            {
+        while (i < fields.length) {
+            if (fields[i].value === '' && fields[i].getAttribute('required') !== null) {
                 var id = fields[i].id;
 
-                $("#input-"+id).addClass('border-red');
+                $("#input-" + id).addClass('border-red');
 
-                $("#span_"+id+"_status").css('display', 'block');
+                $("#span_" + id + "_status").css('display', 'block');
 
                 $('html, body').animate({
-                    scrollTop: $("."+$class+"-title").offset().top
+                    scrollTop: $("." + $class + "-title").offset().top
                 }, 1000);
 
                 errors++;
@@ -363,13 +399,12 @@ function next_tab($tab, $class)
             i++;
         }
 
-        if(errors === 0)
-        {
-            if($tab === 0)
+        if (errors === 0) {
+            if ($tab === 0)
                 $("#form").submit();
 
             else
-                $("#user_edit_tab_"+$tab).trigger('click').removeClass('disabled');
+                $("#user_edit_tab_" + $tab).trigger('click').removeClass('disabled');
 
 
         }
@@ -379,27 +414,18 @@ function next_tab($tab, $class)
 /*
  Add or remove spinner function to element $id or $class
  */
-function spinner_input($function, $id, $class)
-{
-    if($function)
-    {
-        if($id)
-        {
-            $("#"+$id).addClass("loading-input");
+function spinner_input($function, $id, $class) {
+    if ($function) {
+        if ($id) {
+            $("#" + $id).addClass("loading-input");
+        } else if ($class) {
+            $("." + $class).addClass("loading-input");
         }
-        else if($class)
-        {
-            $("."+$class).addClass("loading-input");
-        }
-    }
-    else{
-        if($id)
-        {
-            $("#"+$id).removeClass("loading-input");
-        }
-        else if($class)
-        {
-            $("."+$class).removeClass("loading-input");
+    } else {
+        if ($id) {
+            $("#" + $id).removeClass("loading-input");
+        } else if ($class) {
+            $("." + $class).removeClass("loading-input");
         }
     }
 
@@ -408,13 +434,12 @@ function spinner_input($function, $id, $class)
 /*
  Validate CPF
  */
-function validate_cpf($input_id)
-{
-    var cpf = $input_id ? $("#"+$input_id).val() : $("#cpf").val();
+function validate_cpf($input_id) {
+    var cpf = $input_id ? $("#" + $input_id).val() : $("#cpf").val();
 
-    cpf = cpf.replace(/[^\d]+/g,'');
+    cpf = cpf.replace(/[^\d]+/g, '');
 
-    if(cpf == '')
+    if (cpf == '')
         return false;
 
     // Elimina CPFs invalidos conhecidos
@@ -433,7 +458,7 @@ function validate_cpf($input_id)
 
     // Valida 1o digito
     add = 0;
-    for (i=0; i < 9; i ++)
+    for (i = 0; i < 9; i++)
         add += parseInt(cpf.charAt(i)) * (10 - i);
 
     rev = 11 - (add % 11);
@@ -447,7 +472,7 @@ function validate_cpf($input_id)
     // Valida 2o digito
     add = 0;
 
-    for (i = 0; i < 10; i ++)
+    for (i = 0; i < 10; i++)
         add += parseInt(cpf.charAt(i)) * (11 - i);
 
     rev = 11 - (add % 11);
@@ -464,19 +489,16 @@ function validate_cpf($input_id)
 /*
  Validate chassis number
  */
-function validate_chassis()
-{
+function validate_chassis() {
     var chassis = $("#chassis").val();
 
-    if(chassis.length < 17 && chassis.length > 0)
-    {
+    if (chassis.length < 17 && chassis.length > 0) {
         $("#span_chassis_status").css('display', 'block');
 
         $("#input-chassis").addClass('border-red');
 
         localStorage.getItem('errors') ? localStorage.setItem('errors', localStorage.getItem('errors') + 1) : localStorage.setItem('errors', 1);
-    }
-    else{
+    } else {
         $("#span_chassis_status").css('display', 'none');
 
         $("#input-chassis").removeClass('border-red');
@@ -490,12 +512,10 @@ $(document).on('click', 'button', function () {
 
     var id = $(this)[0].id.replace('model_id_', '');
 
-    if(id && parseInt(id) > 0)
-    {
+    if (id && parseInt(id) > 0) {
         var location = window.location.pathname;
 
-        switch (location)
-        {
+        switch (location) {
             case '/carros':
 
                 delete_car(id);

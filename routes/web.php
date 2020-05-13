@@ -59,6 +59,9 @@ Route::group(['middleware' => 'auth'], function (){
 
     Route::get('/vehicle_by_owner/{id}', 'VehicleController@vehicle_by_owner')->name('vehicle.by.owner');
 
+    Route::get('/search-vehicles/{input}', 'VehicleController@search');
+
+
     /**
      * Crud Products
      */
@@ -142,6 +145,23 @@ Route::group(['middleware' => 'auth'], function (){
     Route::get('/car_exists/{model}/{id?}', 'CarController@car_exists');
 
     Route::get('/car_details/{id}', 'CarController@car_details');
+
+    /*
+     * Ordens de Serviço / Orders
+     */
+    Route::get('/os', 'OrderController@index')->name('order.index');
+
+    Route::get('/criar-os', 'OrderController@create')->name('order.create');
+
+    Route::get('/editar-os/{id}', 'OrderController@edit')->name('order.edit');
+
+    Route::post('/os', 'OrderController@store')->name('order.store');
+
+    Route::put('/os/{id}', 'OrderController@update')->name('order.update');
+
+    Route::delete('/os/{id}', 'OrderController@delete');
+
+    Route::get('/get_vehicles/{owner_id}', 'OrderController@get_vehicles');
 
     /*
      * Peças / Pastilhas de Freio

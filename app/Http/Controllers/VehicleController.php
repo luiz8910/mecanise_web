@@ -88,6 +88,8 @@ class VehicleController extends Controller
                 }
             }
 
+            $vehicles = $vehicles->sortBy('model');
+
             return view('index', compact('vehicles', 'route', 'scripts', 'links'));
         }
 
@@ -206,20 +208,22 @@ class VehicleController extends Controller
                 $car = $this->carRepository->findByField('id', $data['car_id'])->first();
 
                 if($car)
-                    $this->repository->create($data);
+                    $id = $this->repository->create($data)->id;
             }
             else{
 
                 $data['car_id'] = $this->carRepository->create($data)->id;
 
-                $this->repository->create($data);
+                $car = $this->carRepository->findByField('id', $data['car_id'])->first();
+
+                $id = $this->repository->create($data)->id;
             }
 
             DB::commit();
 
             $request->session()->flash('success.msg', 'Veículo cadastrado com sucesso');
 
-            return redirect()->route('vehicle.index');
+            return isset($data['origin']) ? json_encode(['status' => true, 'id' => $id, 'name' => $car->model]) : redirect()->route('vehicle.index');
 
         }catch (\Exception $e)
         {
@@ -228,7 +232,9 @@ class VehicleController extends Controller
             $request->session()->flash('error.msg', 'Um erro ocorreu, tente novamente mais tarde');
         }
 
-        return redirect()->back()->withInput();
+        return isset($data['origin']) ?
+            json_encode(['status' => false, 'msg' => 'Um erro desconhecido ocorreu, tente novamente mais tarde'])
+            : redirect()->back()->withInput();
 
     }
 
@@ -291,6 +297,64 @@ class VehicleController extends Controller
 
             return json_encode(['status' => false, 'msg' => $e->getMessage()]);
         }
+
+    }
+
+    public function search($input)
+    {
+        $owners = DB::table('vehicles')
+                    ->where([
+                        'workshop_id' => $this->get_user_workshop(),
+                        'deleted_at' => null
+
+                    ])
+                    ->select('car_id')
+                    ->get();
+
+
+        foreach ($owners as $owner) {
+            $o[] = $owner->car_id;
+        }
+
+
+        $cars = DB::table('cars')
+                        ->where([
+                            ['model', 'like', '%'.$input."%"],
+                            'deleted_at' => null
+                        ])
+                        //->whereIn('id', $o)
+                        ->orderBy('model')
+                        ->get();
+
+
+        $result = [];
+
+        //dd($cars);
+
+        foreach ($cars as $car)
+        {
+            $car->brand_name = $this->brandsRepository->findByField('id', $car->brand)->first()->name;
+
+            $vehicles = $this->repository->findByField('car_id', $car->id);
+
+            if(count($vehicles) > 0)
+                foreach ($vehicles as $vehicle) {
+                    $vehicle->owner_name = $this->personRepository->findByField('id', $vehicle->owner_id)->first()->name;
+
+                    $car->vehicle = $vehicle;
+
+                    $vehicle->brand_name = $car->brand_name;
+
+                    $vehicle->model = $car->model;
+
+                    $result[] = $vehicle;
+                }
+
+
+
+        }
+
+        return json_encode(['status' => true, 'result' => $result]);
 
     }
 
