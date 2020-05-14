@@ -66,7 +66,6 @@ class OrderController extends Controller
         $orders = $this->repository->findByField('workshop_id', $this->get_user_workshop());
 
 
-
     }
 
 
@@ -111,26 +110,36 @@ class OrderController extends Controller
 
         $order = $this->repository->findByField('id', $id)->first();
 
-        $owners = $this->personRepository->findWhere(['workshop_id' => $this->get_user_workshop(), 'role_id' => 4]);
+        if($order)
+        {
+            $order->done_at = date_format(date_create($order->done_at), 'd/m/Y');
+            $order->conclusion_at = date_format(date_create($order->conclusion_at), 'd/m/Y');
 
-        $states = $this->statesRepository->orderBy('state')->all();
+            $owners = $this->personRepository->findWhere(['workshop_id' => $this->get_user_workshop(), 'role_id' => 4]);
 
-        $cars = $this->carRepository->all();
+            $states = $this->statesRepository->orderBy('state')->all();
 
-        $cars = $cars->sortBy('model');
+            $cars = $this->carRepository->all();
 
-        $colors = $this->colorsRepository->all();
+            $cars = $cars->sortBy('model');
 
-        $colors = $colors->sortBy('name');
+            $colors = $this->colorsRepository->all();
 
-        $vehicles = $this->vehicleRepository->findByField('owner_id', $order->owner_id)->first();
+            $colors = $colors->sortBy('name');
 
-        foreach ($vehicles as $vehicle) {
-            $vehicle->name = $this->carRepository->findByField('id', $vehicle->car_id)->first()->model;
+            $vehicles = $this->vehicleRepository->findByField('owner_id', $order->owner_id);
+
+            foreach ($vehicles as $vehicle) {
+                $vehicle->name = $this->carRepository->findByField('id', $vehicle->car_id)->first()->model;
+            }
+
+
+            return view('index', compact('route', 'edit', 'scripts', 'owners',
+                'states', 'cars', 'colors', 'vehicles', 'order'));
         }
 
-        return view('index', compact('route', 'edit', 'scripts', 'owners',
-            'states', 'cars', 'colors', 'vehicles'));
+        return abort(404);
+
     }
 
     public function store(Request $request)
@@ -138,7 +147,7 @@ class OrderController extends Controller
         DB::beginTransaction();
 
         try {
-            $data = $request->all();dd($data);
+            $data = $request->all();
 
             $data['code'] = $this->random_number(5);
 
@@ -191,7 +200,52 @@ class OrderController extends Controller
 
     public function update(Request $request, $id)
     {
+        DB::beginTransaction();
 
+        try {
+            $data = $request->all();
+
+            $data['workshop_id'] = $this->get_user_workshop();
+
+            $data['done_at'] = str_replace('/', '-', $data['done_at']);
+            $data['conclusion_at'] = str_replace('/', '-', $data['conclusion_at']);
+
+            $data['done_at'] = date_format(date_create($data['done_at']), 'Y-m-d');
+
+            $data['conclusion_at'] = date_format(date_create($data['conclusion_at']), 'Y-m-d');
+
+            $v['owner_id'] = $data['owner_id'];
+
+            $this->vehicleRepository->update($v, $data['vehicle_id']);
+
+            if(!$data['car_id'])
+            {
+                $request->session()->flash('error.msg', 'Escolha um modelo válido');
+
+                return isset($data['origin']) ? json_encode(['status' => false, 'msg' => 'Escolha um modelo válido']) :
+                    redirect()->back();
+            }
+            else{
+                if($this->carRepository->findByField('id', $data['car_id'])->first())
+                    $this->repository->update($data, $id);
+
+                DB::commit();
+
+                $request->session()->flash('success.msg', 'A Ordem de Serviço foi alterada com sucesso');
+
+                return redirect()->back();
+            }
+
+        }catch (\Exception $e)
+        {
+            DB::rollBack();
+
+            $error = $e->getMessage(); //'Um erro desconhecido aconteceu, tente novamente mais tarde';
+
+            $request->session()->flash('error.msg', $error);
+
+            return isset($data['origin']) ? json_encode(['status' => false, 'msg' => $error]):redirect()->back();
+        }
     }
 
     public function delete($id)

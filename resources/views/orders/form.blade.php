@@ -24,7 +24,7 @@
                         @if($edit)
                             <div class="wrap-input100 validate-input bg1 rs1-wrap-input100" data-validate = "Insira um valor válido">
                                 <span class="label-input100">Código OS</span>
-                                <input class="input100 tab-info" type="text" name="code"
+                                <input class="input100 tab-info" type="text"
                                        id="code" required readonly value="{{ $order->code }}">
                             </div>
                         @endif
@@ -32,7 +32,7 @@
                         @if($edit)
                             <div class="wrap-input100 bg1 rs1-wrap-input100">
                                 @foreach($owners as $owner)
-                                    @if($owner->id == $order->owner->id)
+                                    @if($owner->id == $order->owner_id)
                                         <input type="hidden" value="{{ $owner->id }}" id="owner_id_input" name="owner_id">
                                         @break
                                     @endif
@@ -49,7 +49,7 @@
                                     <option value="">Selecione um valor</option>
                                     @foreach($owners as $owner)
                                         @if($edit)
-                                            <option value="{{ $owner->id }}" @if($owner->id == $order->customer_id) selected @endif>{{ $owner->name }}</option>
+                                            <option value="{{ $owner->id }}" @if($owner->id == $order->owner_id) selected @endif>{{ $owner->name }}</option>
                                         @else
                                             <option value="{{ $owner->id }}">{{ $owner->name }}</option>
                                         @endif
@@ -62,7 +62,7 @@
                         </div>
 
                         <input type="hidden" id="car_id_input" name="car_id" value="@if($edit){{ $order->car_id }}@endif">
-                        <input type="hidden" id="vehicle_id_input" value="@if($edit){{ $order->vehicle_id }}@endif">
+                        <input type="hidden" id="vehicle_id_input" value="@if($edit){{ $order->vehicle_id }}@endif" name="vehicle_id">
 
 
                         <div class="wrap-input100 validate-input bg1" data-validate="Insira um valor válido">

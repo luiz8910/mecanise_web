@@ -1,16 +1,20 @@
 $(function () {
 
-    var today = new Date();
+    if(location.pathname.search('editar') == -1)
+    {
+        var today = new Date();
 
-    var month = today.getMonth() + 1 < 10 ? '0' + (today.getMonth() + 1) : today.getMonth() + 1;
+        var month = today.getMonth() + 1 < 10 ? '0' + (today.getMonth() + 1) : today.getMonth() + 1;
 
-    today = today.getDate() + '/' + month + '/' + today.getFullYear();
+        today = today.getDate() + '/' + month + '/' + today.getFullYear();
 
-    $("#done_at").val(today);
-    $("#conclusion_at").val(today);
+        $("#done_at").val(today);
+        $("#conclusion_at").val(today);
+    }
 
     $("#owner_id").change(function () {
 
+        //id = owner id
         var id = $("#owner_id_input").val();
 
         var request = $.ajax({
@@ -25,12 +29,16 @@ $(function () {
             {
                 var append = '';
 
+                $("#car_id_input").val('');
+                $("#vehicle_id_input").val('');
                 $("#car_id option").remove();
 
-                if(e.count === 1)
-                    append += '<option value="'+e.vehicles.car_id+'" selected>'+e.vehicles.car_name+'</option>';
+                if(e.count === 1) {
+                    append += '<option value="' + e.vehicles.car_id + '" selected>' + e.vehicles.car_name + '</option>';
 
-                else{
+                    $("#car_id_input").val(e.vehicles.car_id);
+                    $("#vehicle_id_input").val(e.vehicles.id);
+                }else{
                     for(var i = 0; i < e.count; i++)
                     {
                         append += '<option value="'+e.vehicles[i].car_id+'">'+e.vehicles[i].car_name+'</option>';
@@ -38,6 +46,7 @@ $(function () {
                 }
 
                 $("#car_id").append(append);
+
             }
             else{
                 $("#car_id option").remove();
@@ -58,6 +67,10 @@ $(function () {
     $("#car_id_modal").change(function () {
 
         car_change('car_id_modal');
+    });
+
+    $("#car_id").change(function () {
+        $("#car_id_input").val($(this).val());
     });
 });
 

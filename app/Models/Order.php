@@ -22,7 +22,7 @@ class Order extends Model implements Transformable
      * @var array
      */
     protected $fillable = [
-        'owner_id', 'car_id', 'description', 'done_at', 'conclusion_at', 'workshop_id', 'code'
+        'owner_id', 'car_id', 'description', 'done_at', 'conclusion_at', 'workshop_id', 'code', 'vehicle_id'
     ];
 
     protected $dates = ['deleted_at'];
