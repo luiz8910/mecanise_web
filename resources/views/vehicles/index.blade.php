@@ -4,14 +4,14 @@
     <div class="container-table100">
         <div class="wrap-table100">
 
-            <div>
+            <div class="buttons">
 
-                <a href="{{ route('vehicle.create') }}" class="btn btn-outline-success" style="margin-top: -17px;">
+                <a href="{{ route('vehicle.create') }}" class="btn btn-outline-success action-btn">
                     <i class="fas fa-plus"></i>
                     Novo Veículo
                 </a>
 
-                <button class="btn btn-default btn-outline-info" id="remove_filters"
+                <button class="btn btn-default btn-outline-info action-btn" id="remove_filters"
                         onclick="remove_filters()">
                     <i class="fas fa-times"></i>
                     Remover Filtros

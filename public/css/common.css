@@ -392,3 +392,22 @@ input:checked + .slider:before {
     margin-left: 30%;
     margin-bottom: 10px;
 }
+
+.buttons{
+    min-width: 120px;
+    margin: 0 auto;
+}
+
+.action-btn{
+    display: inline-block;
+    width: calc(15% - 4px);
+    margin: 0 auto;
+}
+
+.list-icon{
+    color: #6c7ae0;
+}
+
+.not-ready{
+    color: red !important;
+}

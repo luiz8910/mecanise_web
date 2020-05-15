@@ -149,7 +149,7 @@ Route::group(['middleware' => 'auth'], function (){
     /*
      * Ordens de Serviço / Orders
      */
-    Route::get('/os', 'OrderController@index')->name('order.index');
+    Route::get('/os/{filter?}', 'OrderController@index')->name('order.index');
 
     Route::get('/criar-os', 'OrderController@create')->name('order.create');
 

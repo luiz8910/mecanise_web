@@ -45,7 +45,7 @@
 
                             <span class="label-input100">Proprietário</span>
                             <div>
-                                <select class="select-style form-control select2" id="owner_id" name="owner_id" required>
+                                <select class="select-style form-control select2 tab-info" id="owner_id" name="owner_id" required>
                                     <option value="">Selecione um valor</option>
                                     @foreach($owners as $owner)
                                         @if($edit)
@@ -68,7 +68,7 @@
                         <div class="wrap-input100 validate-input bg1" data-validate="Insira um valor válido">
                             <span class="label-input100">Veículo</span>
                             <div>
-                                <select id="car_id" class="form-control select-style" required>
+                                <select id="car_id" class="form-control select-style tab-info" required>
                                     <option value="">Selecione um proprietário primeiro</option>
                                     @if($edit)
                                         @foreach($vehicles as $vehicle)
@@ -84,8 +84,8 @@
 
                         <div class="wrap-input100 validate-input bg1 rs1-wrap-input100" data-validate = "Insira um valor válido">
                             <span class="label-input100">Realizado em:</span>
-                            <input class="input100 tab-info date number" type="text" name="done_at"
-                                   id="done_at" required
+                            <input class="input100 tab-info date number tab-info" type="text" name="done_at"
+                                   id="done_at"
                                    value="@if($edit){{ $order->done_at }}@else{{ old('done_at') }}@endif">
 
                             <span class="form-text text-danger" id="span_brand_status" style="display:none;">Insira uma data.</span>
@@ -93,16 +93,16 @@
 
                         <div class="wrap-input100 validate-input bg1 rs1-wrap-input100" data-validate = "Insira um valor válido">
                             <span class="label-input100">Finalizado em:</span>
-                            <input class="input100 tab-info date number" type="text" name="conclusion_at"
-                                   id="conclusion_at" required
+                            <input class="input100 tab-info date number tab-info" type="text" name="conclusion_at"
+                                   id="conclusion_at"
                                    value="@if($edit){{ $order->conclusion_at }}@else{{ old('conclusion_at') }}@endif">
 
-                            <span class="form-text text-danger" id="span_brand_status" style="display:none;">Insira uma data.</span>
+                            <span class="form-text text-danger" id="span_conclusion_at_status" style="display:none;">Insira uma data.</span>
                         </div>
 
                         <div class="wrap-input100 validate-input bg0 rs1-alert-validate" data-validate = "Descreva o serviço executado">
                             <span class="label-input100">Descrição</span>
-                            <textarea class="input100" name="description" placeholder="Descreva o serviço executado">@if($edit){{ $order->description }}@else{{ old('description') }}@endif</textarea>
+                            <textarea class="input100 tab-info" name="description" placeholder="Descreva o serviço executado">@if($edit){{ $order->description }}@else{{ old('description') }}@endif</textarea>
                         </div>
 
 

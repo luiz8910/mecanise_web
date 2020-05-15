@@ -114,9 +114,9 @@
                 </li>
 
                 <li id="li_home" class="menu_li">
-                    <a href="javascript:">
+                    <a href="javascript:" class="not-ready">
                         <i class="fas fa-users"></i>
-                        Usuários
+                        Usuários (Em breve)
                         <span class="drop_icon"> > </span></a>
                 </li>
 
@@ -125,10 +125,10 @@
                     <a href="javascript:"><i class="fas fa-car-side"></i> Veículos <span class="drop_icon"> > </span></a>
                 </li>
                 <li class="menu_li" id="li_order">
-                    <a href="javascript:"><i class="fas fa-file-alt"></i> Ordens de Serviço</a>
+                    <a href="javascript:"><i class="fas fa-file-alt"></i> Ordens de Serviço <span class="drop_icon"> > </span></a>
                 </li>
                 <li class="menu_li">
-                    <a href="javascript:"><i class="fas fa-dollar-sign"></i> Pagamentos</a>
+                    <a href="javascript:" class="not-ready"><i class="fas fa-dollar-sign"></i> Pagamentos (Em breve)</a>
                 </li>
             </ul>
 
@@ -166,8 +166,25 @@
                 </li>
 
                 <li>
-                    <a href="javascript:"><i class="fas fa-list"></i> Lista de OS</a>
+                    <a href="{{ route('order.index') }}"><i class="fas fa-list"></i> Lista de OS</a>
                 </li>
+
+                <li>
+                    <a href="{{ route('order.index', ['filter' => 'opened']) }}">
+                        <i class="fas fa-book-open"></i> Em Aberto
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('order.index', ['filter' => 'closed']) }}">
+                        <i class="fas fa-check"></i> Concluídas
+                    </a>
+                </li>
+                <li>
+                    <a  href="{{ route('order.index', ['filter' => 'deleted']) }}">
+                        <i class="fas fa-trash"></i> Excluídas
+                    </a>
+                </li>
+
             </ul>
 
             <p class="back_menu" onclick="back_menu()">

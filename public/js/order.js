@@ -1,5 +1,7 @@
 $(function () {
 
+    $(".column1").css('width', '10%');
+
     if(location.pathname.search('editar') == -1)
     {
         var today = new Date();
@@ -138,4 +140,24 @@ function new_vehicle()
 
         sweet_alert_error();
     })
+}
+
+function delete_order($id)
+{
+    var data = {
+        title: 'Atenção',
+        text: 'Você deseja excluir esta OS?',
+        button: 'Excluir',
+        success_msg: 'Esta OS foi excluída com sucesso',
+        reload: false,
+        id: $id
+    }
+
+    var ajax = {
+        url: '/os/'+$id,
+        method: 'DELETE',
+        dataType: 'json'
+    }
+
+    sweet_alert(data, ajax);
 }

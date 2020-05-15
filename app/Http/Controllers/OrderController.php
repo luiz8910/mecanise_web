@@ -61,11 +61,55 @@ class OrderController extends Controller
         $this->colorsRepository = $colorsRepository;
     }
 
-    public function index()
+    public function index($filter = null)
     {
-        $orders = $this->repository->findByField('workshop_id', $this->get_user_workshop());
+        if($filter)
+        {
+            if ($filter == "opened")
+            {
+                $orders = $this->repository->findWhere([
+                    'workshop_id' => $this->get_user_workshop(),
+                    'conclusion_at' => null
+                ]);
+            }
+            elseif($filter == 'closed')
+            {
+                $orders = $this->repository->findWhere([
+                    'workshop_id' => $this->get_user_workshop(),
+                    ['conclusion_at', '<>', null]
+                ]);
+            }
+            elseif ($filter == "deleted")
+            {
+
+                $orders = DB::table('orders')
+                                ->where(['workshop_id' => $this->get_user_workshop()])
+                                ->whereNotNull('deleted_at')
+                                ->get();
+            }
+        }
+        else
+            $orders = $this->repository->findByField('workshop_id', $this->get_user_workshop());
 
 
+        $route = 'orders.index';
+
+        $scripts[] = '../../js/order.js';
+        $links[] = '../../css/main.css';
+
+        foreach ($orders as $order)
+        {
+            $order->owner_name = $this->personRepository->findByField('id', $order->owner_id)->first()->name;
+
+            $order->vehicle_name = $this->carRepository->findByField('id', $order->car_id)->first()->model;
+
+            $order->conclusion_at = $order->conclusion_at ?
+                date_format(date_create($order->conclusion_at), 'd/m/Y') : 'Em Aberto';
+        }
+
+        $orders->sortByDesc('created_at');
+
+        return view('index', compact('route', 'orders', 'scripts', 'links'));
     }
 
 
@@ -157,11 +201,12 @@ class OrderController extends Controller
             $data['workshop_id'] = $this->get_user_workshop();
 
             $data['done_at'] = str_replace('/', '-', $data['done_at']);
-            $data['conclusion_at'] = str_replace('/', '-', $data['conclusion_at']);
+            $data['conclusion_at'] = $data['conclusion_at'] != "" ?
+                str_replace('/', '-', $data['conclusion_at']) : null;
 
             $data['done_at'] = date_format(date_create($data['done_at']), 'Y-m-d');
 
-            $data['conclusion_at'] = date_format(date_create($data['conclusion_at']), 'Y-m-d');
+            $data['conclusion_at'] = $data['conclusion_at'] ? date_format(date_create($data['conclusion_at']), 'Y-m-d') : null;
 
             $v['owner_id'] = $data['owner_id'];
 
@@ -182,7 +227,7 @@ class OrderController extends Controller
 
                 $request->session()->flash('success.msg', 'A Ordem de Serviço foi criada com sucesso');
 
-                return redirect()->back();
+                return redirect()->route('order.index');
             }
 
         }catch (\Exception $e)
@@ -208,11 +253,12 @@ class OrderController extends Controller
             $data['workshop_id'] = $this->get_user_workshop();
 
             $data['done_at'] = str_replace('/', '-', $data['done_at']);
-            $data['conclusion_at'] = str_replace('/', '-', $data['conclusion_at']);
+            $data['conclusion_at'] = $data['conclusion_at'] != "" ?
+                str_replace('/', '-', $data['conclusion_at']) : null;
 
             $data['done_at'] = date_format(date_create($data['done_at']), 'Y-m-d');
 
-            $data['conclusion_at'] = date_format(date_create($data['conclusion_at']), 'Y-m-d');
+            $data['conclusion_at'] = $data['conclusion_at'] ? date_format(date_create($data['conclusion_at']), 'Y-m-d') : null;
 
             $v['owner_id'] = $data['owner_id'];
 
@@ -233,7 +279,7 @@ class OrderController extends Controller
 
                 $request->session()->flash('success.msg', 'A Ordem de Serviço foi alterada com sucesso');
 
-                return redirect()->back();
+                return redirect()->route('order.index');
             }
 
         }catch (\Exception $e)
@@ -250,6 +296,22 @@ class OrderController extends Controller
 
     public function delete($id)
     {
+        $order = $this->repository->findByField('id', $id)->first();
+
+        DB::beginTransaction();
+
+        try{
+            if($order)
+                $this->repository->delete($id);
+
+            DB::commit();
+
+            return json_encode(['status' => true]);
+        }catch (\Exception $e){
+            DB::rollBack();
+
+            return json_encode(['status' => false, 'msg' => 'Um erro desconhecido ocorreu']);
+        }
 
     }
 
