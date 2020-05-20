@@ -43,7 +43,7 @@
             <div class="wrap-input100 bg1 rs1-wrap-input100">
                 <span class="label-input100">Ano Inicial de Fabricação</span>
                 <input class="input100 tab-info number" type="text" name="start_year"
-                       id="start_year" placeholder="Ex: 2000" maxlength="4" required value="@if($edit){{ $car->start_year }}@else{{ old('start_year') }}@endif">
+                       id="start_year" placeholder="Ex: 2000" maxlength="4" value="@if($edit){{ $car->start_year }}@else{{ old('start_year') }}@endif">
 
                 <span id="span_start_year_status" style="color: red; display:none;"></span>
             </div>
@@ -51,7 +51,7 @@
             <div class="wrap-input100 bg1 rs1-wrap-input100">
                 <span class="label-input100">Ano Final de Fabricação</span>
                 <input class="input100 tab-info number" type="text" name="end_year" maxlength="4"
-                       id="end_year" placeholder="Ex: 2000" required value="@if($edit){{ $car->end_year }}@else{{ old('end_year') }}@endif">
+                       id="end_year" placeholder="Ex: 2000" value="@if($edit){{ $car->end_year }}@else{{ old('end_year') }}@endif">
 
                 <span id="span_end_year_status" style="color: red; display:none;"></span>
             </div>
@@ -59,7 +59,7 @@
             <div class="wrap-input100 bg1 rs1-wrap-input100">
                 <span class="label-input100">Versão</span>
                 <input class="input100 tab-info" type="text" name="version"
-                       id="version" placeholder="Ex: Fire, GTS Turbo" required value="@if($edit){{ $car->version }}@else{{ old('version') }}@endif">
+                       id="version" placeholder="Ex: Fire, GTS Turbo" value="@if($edit){{ $car->version }}@else{{ old('version') }}@endif">
 
                 <span class="form-text text-danger" id="span_version_status" style="display: none;">Insira uma versão válida</span>
             </div>
@@ -67,7 +67,7 @@
             <div class="wrap-input100 input100-select bg1 tab-info select-input">
                 <span class="label-input100">Combustível</span>
                 <div>
-                    <select class="select-style form-control" name="fuel" required>
+                    <select class="select-style form-control" name="fuel">
                         <option value="">Selecione um valor</option>
                         @foreach($fuels as $fuel)
                             @if($edit)
