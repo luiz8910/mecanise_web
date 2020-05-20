@@ -46,8 +46,7 @@ class CarController extends Controller
         $links[] = '../../css/main.css';
 
         foreach ($cars as $car){
-            $car->brand_name = $this->brandsRepository->findByField('id', $car->brand)->first() ?
-                $this->brandsRepository->findByField('id', $car->brand)->first()->name : 'Montadora não informada';
+            $car->brand_name = $this->brandsRepository->findByField('id', $car->brand)->first()->name;
         }
 
         return view('index', compact('cars', 'route', 'scripts', 'edit', 'links'));
