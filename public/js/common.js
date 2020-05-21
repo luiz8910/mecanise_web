@@ -1,6 +1,8 @@
 var opened_menu = false;
 var black_moon = '<i class="fas fa-moon"></i>';
 var white_moon = '<i class="far fa-moon"></i>';
+var menu_item_open = false;
+var v_hide_menu = false;
 
 $(function () {
 
@@ -197,7 +199,77 @@ $(function () {
 
             $(this).val(value);
         }
-    })
+    });
+
+    $(".main-item").click(function () {
+        var id = this.id;
+        var ul = id.replace('item-', '');
+
+        if (menu_item_open)
+        {
+
+            $('.ul-subitem').css('display', 'none');
+
+            $("#ul-"+ul).css('display', 'none');
+
+            menu_item_open = !menu_item_open;
+        }
+        else{
+            $('.ul-subitem').css('display', 'none');
+
+            $("#ul-"+ul).css('display', 'block');
+
+            menu_item_open = !menu_item_open;
+        }
+
+    });
+
+
+    setTimeout(function () {
+        $("#general-search-icon").css('display', 'inline-block');
+    }, 2000);
+
+    $("#general-search-icon").click(function () {
+
+        $(this).css('display', 'none');
+
+        $("#general-search-input").css("display", "inline-block");
+    });
+
+    $(".icon-profile").click(function () {
+        $(".profile-settings-box").css('display', 'inline-block');
+        $("#config").focus();
+    });
+
+    $("#config").blur(function () {
+        $(".profile-settings-box").css('display', 'none');
+    });
+
+    $(".hide-menu").click(function () {
+
+        v_hide_menu = !v_hide_menu;
+
+        if(v_hide_menu)
+        {
+            $(".menu-topic p").css('display', 'none');
+            $(".span-item-name").css('display', 'none');
+            $(".span-item").css('display', 'none');
+
+            $(".top-menu").css('width', '3%');
+
+            $(".menu").css('width', '3%');
+        }
+        else{
+            $(".menu-topic p").css('display', 'inline-block');
+            $(".span-item-name").css('display', 'inline-block');
+            $(".span-item").css('display', 'inline-block');
+
+            $(".top-menu").css('width', '16%');
+
+            $(".menu").css('width', '16%');
+        }
+
+    });
 });
 
 function remove_filters()

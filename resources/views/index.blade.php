@@ -8,9 +8,11 @@
     <title>Mecanise | Para quem ama carros</title>
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700|Roboto:300,400,500,600,700">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600">
     <script src="../../js/font-awesome.js"></script>
 
-    <!--===============================================================================================-->
+    {{--<!--===============================================================================================-->
     <link rel="stylesheet" type="text/css" href="../../css/animate.css">
     <!--===============================================================================================-->
     <link rel="stylesheet" type="text/css" href="../../css/select2.min.css">
@@ -25,16 +27,17 @@
     <!--===============================================================================================-->
     <link rel="stylesheet" type="text/css" href="../../css/form/daterangepicker.css">
     <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="../../css/form/nouislider.css">
+    <link rel="stylesheet" type="text/css" href="../../css/form/nouislider.css">--}}
     <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="../../css/form/util.css">
+    {{--<link rel="stylesheet" type="text/css" href="../../css/form/util.css">
     <link rel="stylesheet" type="text/css" href="../../css/form/main.css">
     <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="../../css/util.css">
+    <link rel="stylesheet" type="text/css" href="../../css/util.css">--}}
 
     <!--===============================================================================================-->
-    <link rel="stylesheet" href="../../css/common.css">
+    {{--<link rel="stylesheet" href="../../css/common.css">--}}
     <link rel="stylesheet" href="../../css/loading.css">
+    <link rel="stylesheet" href="../../css/menu.css">
 
     @if(isset($links))
         @foreach($links as $link)
@@ -44,157 +47,145 @@
 </head>
 
 
-<body style="overflow: hidden;">
+<body>
 
 @include('loading')
 
 <div class="pre-loading" style="display:none;">
-    <div class="plus-btn-pos">
-        <div class="plus-btn">
-            <i class="fas fa-bars bars"></i>
-            <div class="r1"></div>
-            <div class="r2"></div>
-        </div>
-    </div>
+    <div class="profile-settings-box">
+        <div class="profile-items">
 
-    <div class="options">
-        <div class="night-mode">
-            <i class="fas fa-moon"></i>
-        </div>
-        <div class="photo">
+            <a href="javascript:" id="config">
+                <i class="fas fa-cog fa-lg"></i>
+                Configurações
+            </a>
+
             <a href="javascript:">
-                <img src="../../images/perfil.png" title="Meus Dados">
-                <p class="hidden-xs">Luiz F.</p>
+                <i class="fas fa-user fa-lg"></i>
+                Meus Dados
+            </a>
+            <a href="javascript:">
+                <i class="fas fa-envelope fa-lg"></i>
+                Mensagens
+            </a>
+            <a href="javascript:">
+                <i class="fas fa-lock fa-lg"></i>
+                Bloquear Tela
+            </a>
+            <a href="javascript:">
+                <i class="fas fa-sign-out-alt fa-lg"></i>
+                Sair
             </a>
         </div>
+
     </div>
 
-    @if(\Session::has('success.msg'))
-    <div class="div_alert">
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ \Session::get('success.msg') }}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    </div>
-    @endif
+    <div class="row">
+        <div class="col-md-12">
 
-    @if(\Session::has('error.msg'))
-        <div class="div_alert">
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                {{ \Session::get('error.msg') }}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+            <div class="top">
+                <input type="text" id="general-search-input" class="form-control" placeholder="">
+
+                <div class="search-icon">
+                    <i class="fas fa-search" id="general-search-icon" style="display:none;"></i>
+                </div>
+
+                <div class="icon-profile">
+                    <img src="../../images/perfil.png" alt="">
+                    <p>Luluzão <i class="fas fa-chevron-down"></i></p>
+                </div>
+
+
+                <!-- Local do Logo -->
+                <div class="top-menu">
+                    <span class="hide-menu"><<<</span>
+                </div>
+            </div>
+
+            <div class="menu">
+                <div class="menu-topic">
+                    <p>Início</p>
+                </div>
+
+                <div class="items">
+                    <ul>
+                        <li class="li-items" >
+                            <a href="javascript:" class="a-item main-item" id="item-users">
+                                <i class="fas fa-users"></i>
+                                <span class="span-item-name">Usuários</span> <span class="span-item"> > </span>
+                            </a>
+
+                            <ul id="ul-users" class="ul-subitem">
+                                <li class="li-items"><a href="javascript:" class="a-item">Teste I</a></li>
+                                <li class="li-items"><a href="javascript:" class="a-item">Teste II</a></li>
+                                <li class="li-items"><a href="javascript:" class="a-item">Teste III</a></li>
+                            </ul>
+                        </li>
+
+                        <br>
+
+                        <li class="li-items" >
+                            <a href="javascript:" class="a-item main-item" id="item-os">
+                                <i class="fas fa-file-alt"></i>
+                                <span class="span-item-name">Orçamentos</span> <span class="span-item"> > </span>
+                            </a>
+
+                            <ul id="ul-os" class="ul-subitem">
+                                <li class="li-items">
+                                    <a href="javascript:" class="a-item">
+                                        <i class="fas fa-list"></i> Lista Geral
+                                    </a>
+                                </li>
+                                <li class="li-items">
+                                    <a href="javascript:" class="a-item">
+                                        <i class="fas fa-plus"></i> Nova OS
+                                    </a>
+                                </li>
+                                <li class="li-items">
+                                    <a href="javascript:" class="a-item">
+                                        <i class="fas fa-trash"></i> OS Excluídas
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <br>
+
+                        <li class="li-items" >
+                            <a href="javascript:" class="a-item main-item" id="item-vehicles">
+                                <i class="fas fa-car"></i>
+                                <span class="span-item-name">Veículos</span> <span class="span-item"> > </span>
+                            </a>
+
+                            <ul id="ul-vehicles" class="ul-subitem">
+                                <li class="li-items">
+                                    <a href="javascript:" class="a-item">
+                                        <i class="fas fa-list"></i> Lista Geral
+                                    </a>
+                                </li>
+                                <li class="li-items">
+                                    <a href="javascript:" class="a-item">
+                                        <i class="fas fa-plus"></i> Novo Veículo
+                                    </a>
+                                </li>
+                                <li class="li-items">
+                                    <a href="javascript:" class="a-item">
+                                        <i class="fas fa-trash"></i> Veículos Excluídos
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                </div>
             </div>
         </div>
-    @endif
-
-
-    @include($route)
-
-
-    <div class="content"></div>
-
-
-    <div class="menu-container" style="overflow: hidden;">
-        <div class="menu-sliders"></div>
-        <div class="menu-sliders"></div>
-        <div class="menu-sliders"></div>
-
-        <div class="menu">
-            <ul class="lvl_1">
-
-                <li class="menu_li">
-                    <a href="javascript:">
-                        <i class="fas fa-home"></i> Início
-                    </a>
-
-                </li>
-
-                <li id="li_home" class="menu_li">
-                    <a href="javascript:" class="not-ready">
-                        <i class="fas fa-users"></i>
-                        Usuários (Em breve)
-                        <span class="drop_icon"> > </span></a>
-                </li>
-
-
-                <li class="menu_li" id="li_vehicle">
-                    <a href="javascript:"><i class="fas fa-car-side"></i> Veículos <span class="drop_icon"> > </span></a>
-                </li>
-                <li class="menu_li" id="li_order">
-                    <a href="javascript:"><i class="fas fa-file-alt"></i> Ordens de Serviço <span class="drop_icon"> > </span></a>
-                </li>
-                <li class="menu_li">
-                    <a href="javascript:" class="not-ready"><i class="fas fa-dollar-sign"></i> Pagamentos (Em breve)</a>
-                </li>
-            </ul>
-
-            <ul id="menu_item_home" class="menu_subitem lvl_2">
-                <li>
-                    <a href="javascript:"> Novo <span class="drop_icon"> > </span></a>
-                </li>
-                <li>
-                    <a href="javascript:"> Lista de Funcionários</a>
-                </li>
-
-                <li>
-                    <a href="javascript:"> Lista de Proprietários</a>
-                </li>
-
-            </ul>
-
-            <ul id="menu_item_vehicle" class="menu_subitem lvl_2">
-                <li>
-                    <a href="{{ route('vehicle.create')}}"><i class="fas fa-plus"></i> Novo Veículo</a>
-                </li>
-
-                <li>
-                    <a href="{{ route('vehicle.index') }}"><i class="fas fa-list"></i> Lista de Veículos</a>
-                </li>
-
-                <li>
-                    <a href="{{ route('cars.index') }}"><i class="fas fa-database"></i> Base de Dados</a>
-                </li>
-            </ul>
-
-            <ul id="menu_item_order" class="menu_subitem lvl_2">
-                <li>
-                    <a href="{{ route('order.create') }}"><i class="fas fa-plus"></i> Nova OS</a>
-                </li>
-
-                <li>
-                    <a href="{{ route('order.index') }}"><i class="fas fa-list"></i> Lista de OS</a>
-                </li>
-
-                <li>
-                    <a href="{{ route('order.index', ['filter' => 'opened']) }}">
-                        <i class="fas fa-book-open"></i> Em Aberto
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('order.index', ['filter' => 'closed']) }}">
-                        <i class="fas fa-check"></i> Concluídas
-                    </a>
-                </li>
-                <li>
-                    <a  href="{{ route('order.index', ['filter' => 'deleted']) }}">
-                        <i class="fas fa-trash"></i> Excluídas
-                    </a>
-                </li>
-
-            </ul>
-
-            <p class="back_menu" onclick="back_menu()">
-                <i class="fas fa-arrow-left fa-xs"></i>
-                Voltar
-            </p>
-
-        </div>
-
     </div>
+
+    <div class="custom-container">
+        @include($route)
+    </div>
+
 </div>
 
 

@@ -49,7 +49,7 @@ class CarController extends Controller
             $car->brand_name = $this->brandsRepository->findByField('id', $car->brand)->first()->name;
         }
 
-        return view('index', compact('cars', 'route', 'scripts', 'edit', 'links'));
+        return view('index', compact('cars', 'route', 'scripts', 'edit'));
     }
 
     /**
