@@ -158,7 +158,8 @@
                 <div class="col-md-4 col-xs-6">
                     <div class="form-group">
                         <label for="start_year">Ano Inicial de Fabricação</label>
-                        <input type="text" id="start_year" name="start_year" class="form-control" placeholder="Ex: 2000">
+                        <input type="text" id="start_year" name="start_year" class="form-control"
+                               placeholder="Ex: 2000" value="@if($edit){{ $car->start_year }}@else{{ old('start_year') }}@endif">
                         <span id="span_end_start_status" style="color: red; display:none;"></span>
                     </div>
                 </div>
@@ -168,7 +169,8 @@
                 <div class="col-md-4 col-xs-6">
                     <div class="form-group">
                         <label for="end_year">Ano Final de Fabricação</label>
-                        <input type="text" id="end_year" name="end_year" class="form-control" placeholder="Ex: 2010">
+                        <input type="text" id="end_year" name="end_year" class="form-control"
+                               placeholder="Ex: 2010" value="@if($edit){{ $car->end_year }}@else{{ old('end_year') }}@endif">
                         <span id="span_end_year_status" style="color: red; display:none;"></span>
                     </div>
                 </div>
@@ -176,7 +178,8 @@
                 <div class="col-md-4 col-xs-6">
                     <div class="form-group">
                         <label for="version">Versão</label>
-                        <input type="text" id="version" name="version" class="form-control" placeholder="Ex: GTS Turbo">
+                        <input type="text" id="version" name="version" class="form-control"
+                               placeholder="Ex: GTS Turbo" value="@if($edit){{ $car->version }}@else{{ old('version') }}@endif">
                         <span class="form-text text-danger" id="span_version_status" style="display: none;">Insira uma versão válida</span>
                     </div>
                 </div>
