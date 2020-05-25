@@ -1,5 +1,7 @@
 $(function () {
 
+    reduce_string();
+
     $("#model").change(function () {
 
         var model = $("#model");
@@ -136,5 +138,22 @@ function delete_car($id)
 
 }
 
+function reduce_string()
+{
+    var model = $(".car_model");
+    var version = $(".car_version");
 
+    for (var i = 0; i < model.length; i++)
+    {
+        if(model[i].text.charAt(35) !== "")
+        {
+            var str = model[i].text.slice(0, 35);
+
+            str += '...';
+
+            $(".car_model")[i].text = str;
+            $(".car_version")[i].innerHTML = str;
+        }
+    }
+}
 

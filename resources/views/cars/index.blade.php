@@ -20,9 +20,9 @@
             @foreach($cars as $car)
                 <tr class="row100 body" id="model_{{ $car->id }}">
                     <th scope="row">{{ $car->id }}</th>
-                    <td><a href="{{ route('cars.edit', ['id' => $car->id]) }}">{{ $car->model }}</a></td>
+                    <td><a href="{{ route('cars.edit', ['id' => $car->id]) }}" class="car_model">{{ $car->model }}</a></td>
                     <td>{{ $car->brand_name }}</td>
-                    <td>{{ $car->version }}</td>
+                    <td><span class="car_version">{{ $car->version }}</span></td>
                     <td>{{ $car->start_year }}</td>
                     <td>{{ $car->end_year }}</td>
                     <td>
