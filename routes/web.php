@@ -21,9 +21,9 @@ Route::group(['middleware' => 'auth'], function (){
     /**
      * Dashboard
      */
-    Route::get('/', 'HomeController@index')->name('home.index');
+    Route::get('/', 'CarController@index')->name('home.index');
 
-    Route::get('/home', 'HomeController@index');
+    Route::get('/home', 'CarController@index');
 
     /**
      * Crud Users

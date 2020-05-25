@@ -3,8 +3,8 @@ $(function () {
     $("#model").change(function () {
 
         var model = $("#model");
-        var span_valid = $("#span-valid-model");
-        var span_invalid = $("#span-invalid-model");
+        var span_valid = $("#span_valid_model");
+        var span_invalid = $("#span_invalid_model");
 
         model.removeClass('is-valid is-invalid');
         span_invalid.css('display', 'none');

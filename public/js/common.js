@@ -3,6 +3,7 @@ var black_moon = '<i class="fas fa-moon"></i>';
 var white_moon = '<i class="far fa-moon"></i>';
 var menu_item_open = false;
 var v_hide_menu = false;
+var user_option_item = false;
 
 $(function () {
 
@@ -151,7 +152,6 @@ $(function () {
         validate_chassis();
     });
 
-    $(".select2").select2();
 
     $(".search-model").click(function () {
         $(this).css('display', 'none');
@@ -236,14 +236,14 @@ $(function () {
         $("#general-search-input").css("display", "inline-block");
     });
 
-    $(".icon-profile").click(function () {
+    $(".icon-profile").mouseenter(function () {
         $(".profile-settings-box").css('display', 'inline-block');
-        $("#config").focus();
     });
 
-    $("#config").blur(function () {
-        $(".profile-settings-box").css('display', 'none');
+    $(".profile-settings-box").mouseleave(function () {
+        $(this).css('display', 'none');
     });
+
 
     $(".hide-menu").click(function () {
 
@@ -270,6 +270,7 @@ $(function () {
         }
 
     });
+
 });
 
 function remove_filters()
@@ -578,6 +579,7 @@ function validate_chassis() {
         localStorage.getItem('errors') ? localStorage.setItem('errors', localStorage.getItem('errors') - 1) : localStorage.removeItem('errors');
     }
 }
+
 
 
 $(document).on('click', 'button', function () {

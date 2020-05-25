@@ -12,10 +12,11 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600">
     <script src="../../js/font-awesome.js"></script>
 
+
     {{--<!--===============================================================================================-->
     <link rel="stylesheet" type="text/css" href="../../css/animate.css">
     <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="../../css/select2.min.css">
+
     <!--===============================================================================================-->
     <link rel="stylesheet" type="text/css" href="../../css/perfect-scrollbar.css">
     <!--===============================================================================================-->
@@ -55,27 +56,30 @@
     <div class="profile-settings-box">
         <div class="profile-items">
 
-            <a href="javascript:" id="config">
+            <a href="javascript:" id="config" class="user-option-item">
                 <i class="fas fa-cog fa-lg"></i>
                 Configurações
             </a>
 
-            <a href="javascript:">
+            <a href="javascript:" class="user-option-item">
                 <i class="fas fa-user fa-lg"></i>
                 Meus Dados
             </a>
-            <a href="javascript:">
+            <a href="javascript:" class="user-option-item">
                 <i class="fas fa-envelope fa-lg"></i>
                 Mensagens
             </a>
-            <a href="javascript:">
+            <a href="javascript:" class="user-option-item">
                 <i class="fas fa-lock fa-lg"></i>
                 Bloquear Tela
             </a>
-            <a href="javascript:">
-                <i class="fas fa-sign-out-alt fa-lg"></i>
-                Sair
-            </a>
+
+            <form action="{{ route('logout') }}" method="POST">
+                <button type="submit" class="user-option-item">
+                    <i class="fas fa-sign-out-alt fa-lg"></i>
+                    Sair
+                </button>
+            </form>
         </div>
 
     </div>
@@ -173,7 +177,15 @@
                                         <i class="fas fa-trash"></i> Veículos Excluídos
                                     </a>
                                 </li>
+
                             </ul>
+                        </li>
+
+                        <li class="li-items" style="margin-top: 30px;">
+                            <a href="{{ route('cars.index')}}" class="a-item main-item">
+                                <i class="fas fa-database"></i>
+                                Base de Dados
+                            </a>
                         </li>
                     </ul>
 
@@ -198,18 +210,18 @@
 <!--===============================================================================================-->
 <script src="../../js/common.js"></script>
 <script src="../../js/loading.js"></script>
-<script src="../../js/form/general.js"></script>
+{{--<script src="../../js/form/general.js"></script>--}}
 <!--===============================================================================================-->
-<script src="../../js/main.js"></script>
+{{--<script src="../../js/main.js"></script>
 <script src="../../js/select2.min.js"></script>
-<script src="../../js/perfect-scrollbar.min.js"></script>
+<script src="../../js/perfect-scrollbar.min.js"></script>--}}
 <!--===============================================================================================-->
-<script src="../../js/form/animsition.js"></script>
-{{--<script src="../../js/form/main.js"></script>--}}
+{{--<script src="../../js/form/animsition.js"></script>
+<script src="../../js/form/main.js"></script>
 <script src="../../js/form/moment.js"></script>
 <script src="../../js/form/daterangepicker.js"></script>
 <script src="../../js/form/countdowntime.js"></script>
-<script src="../../js/form/nouislider.js"></script>
+<script src="../../js/form/nouislider.js"></script>--}}
 <!--===============================================================================================-->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-23581568-13"></script>
 <!--===============================================================================================-->

@@ -13,6 +13,10 @@ i{
     padding-right: 10px;
 }
 
+.btn-submit{
+    margin-bottom: 15px;
+}
+
 .top{
     min-height: 50px;
 }
@@ -137,7 +141,7 @@ i{
     position: absolute;
     width: 250px;
     right: 2%;
-    top: 5%;
+    top: 2%;
     border: none;
     box-shadow: 0 2px 30px 6px rgba(0,0,0,0.1);
     z-index: 1000;
@@ -174,7 +178,26 @@ i{
     outline: none;
 }
 
+.profile-items button{
+    color: #666;
+    font-size: 15px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    margin-bottom: 10px;
+    display: inline-block;
+    width: 100%;
+    box-sizing: border-box;
+    outline: none;
+    border: none;
+    background-color: white;
+    text-align: left;
+}
+
 .profile-items a:hover{
+    background-color: #F1F1F1;
+}
+
+.profile-items button:hover{
     background-color: #F1F1F1;
 }
 
@@ -217,4 +240,63 @@ td a{
 }
 td button i{
     padding-right: 0px;
+}
+
+.form-body{
+    margin-left: 3%;
+    margin-top: 3%;
+    width: 80%;
+    min-height: 650px;
+    background-color: white;
+    border-radius: 25px;
+    box-shadow: 0 2px 30px 6px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+
+.form-title{
+    width: 80%;
+}
+
+.form-title p{
+    padding-left: 50px;
+    padding-top: 20px;
+    font-size: 1.275rem;
+    font-weight: 500;
+}
+
+.form-options{
+    float: right;
+    margin-top: -50px;
+    margin-right: 30px;
+    font-size: 30px;
+    cursor: pointer;
+}
+
+.form-wrapper{
+    margin-left: 160px;
+    width: 80%;
+    min-height: 540px;
+}
+
+.form-wrapper label{
+    margin-top: 20px;
+}
+
+.form-wrapper input{
+    margin-top: 20px;
+}
+
+.form-wrapper select{
+    margin-top: 20px;
+}
+
+#span_valid_model{
+    color: #28a745;
+    display: none;
+}
+
+#span_invalid_model{
+    color: red;
+    display: none;
 }

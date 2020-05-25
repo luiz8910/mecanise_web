@@ -43,7 +43,6 @@ class CarController extends Controller
         $edit = false;
 
         $scripts[] = '../../js/car.js';
-        $links[] = '../../css/main.css';
 
         foreach ($cars as $car){
             $car->brand_name = $this->brandsRepository->findByField('id', $car->brand)->first()->name;
@@ -109,8 +108,8 @@ class CarController extends Controller
         try{
 
             $data['model'] = strtoupper($data['model']);
-            $data['brand'] = strtoupper($data['brand']);
             $data['version'] = strtoupper($data['version']);
+
 
             $this->repository->create($data);
 
@@ -144,7 +143,6 @@ class CarController extends Controller
         try{
 
             $data['model'] = strtoupper($data['model']);
-            $data['brand'] = strtoupper($data['brand']);
             $data['version'] = strtoupper($data['version']);
 
             $this->repository->update($data, $id);
