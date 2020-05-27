@@ -59,6 +59,7 @@ class CarController extends Controller
         foreach ($cars as $car){
 
             $car->brand_name = $this->brandsRepository->findByField('id', $car->brand)->first()->name;
+            $car->fuel_name = $this->fuelRepository->findByField('id', $car->fuel)->first()->name;
         }
 
         return view('index', compact('cars', 'route', 'scripts', 'edit', 'qtde_model', 'offset'));

@@ -6,7 +6,7 @@
             <th scope="col">#</th>
             <th scope="col">Modelo</th>
             <th scope="col">Montadora</th>
-            <th scope="col">Versão</th>
+            <th scope="col">Combustível</th>
             <th scope="col">Fabricação</th>
             <th scope="col">Fabricação Final</th>
             <th scope="col">
@@ -22,7 +22,7 @@
                     <th scope="row">{{ $car->id }}</th>
                     <td><a href="{{ route('cars.edit', ['id' => $car->id]) }}" class="car_model">{{ $car->model }}</a></td>
                     <td>{{ $car->brand_name }}</td>
-                    <td><span class="car_version">{{ $car->version }}</span></td>
+                    <td><span>{{ $car->fuel_name }}</span></td>
                     <td>{{ $car->start_year }}</td>
                     <td>{{ $car->end_year }}</td>
                     <td>
