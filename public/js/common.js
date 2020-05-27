@@ -271,12 +271,91 @@ $(function () {
 
     });
 
+
+
+
 });
+
+function load_more()
+{
+
+    $("#load-more").attr('disabled', true);
+    $("#load-more span").text('Carregando...');
+    $(".fa-download").css('display', 'none');
+    $(".fa-spinner").css('display', 'inline-block');
+
+
+    var offset = $("#offset").val();
+    var page = location.pathname;
+    var url = '';
+
+    switch (page) {
+        case '/':
+            url = '/car_pagination/' + offset;
+            break;
+
+        case '/carros':
+            url = '/car_pagination/' + offset;
+            break;
+    }
+
+    var request = $.ajax({
+        url: url,
+        method: 'GET',
+        dataType: 'json'
+    });
+
+    request.done(function (e) {
+
+        if(e.status)
+        {
+
+            var append = '';
+
+            for (var i = 0; i < e.cars.length; i++)
+            {
+                var start_year = e.cars[i].start_year != null ? e.cars[i].start_year : '';
+                var end_year = e.cars[i].end_year != null ? e.cars[i].end_year : '';
+
+                append += '<tr class="row100 body" id="model_'+e.cars[i].id+'">'+
+                    '<th scope="row">'+e.cars[i].id+'</th>'+
+                    '<td><a href="'+e.edit+e.cars[i].id+'" class="car_model">'+e.cars[i].model+'</a></td>'+
+                    '<td>'+e.cars[i].brand_name+'</td>'+
+                    '<td><span class="car_version">'+e.cars[i].version+'</span></td>'+
+                    '<td>'+start_year+'</td>'+
+                    '<td>'+end_year+'</td>'+
+                    '<td><a href="'+e.edit+e.cars[i].id+'" class="btn btn-sm btn-outline-info" title="Editar Carro">' +
+                                    '<i class="fas fa-edit"></i>' +
+                    '          </a> '+
+                    '          <button class="btn btn-sm btn-outline-danger" onclick="delete_car('+e.cars[i].id+')" title="Excluir Carro">' +
+                    '               <i class="fas fa-trash"></i>' +
+                    '          </button>'+
+                    '      </td>'+
+                '</tr>';
+            }
+
+            $("#tbody-main").append(append);
+
+            $("#offset").val(e.offset);
+        }
+    });
+
+    request.fail(function (e) {
+        console.log('fail', e);
+
+        sweet_alert_error();
+    });
+
+    $("#load-more").attr('disabled', null);
+    $("#load-more span").text('Carregar mais resultados');
+    $(".fa-download").css('display', 'inline-block');
+    $(".fa-spinner").css('display', 'none');
+}
 
 function remove_filters()
 {
-
     $("#tbody-search").css('display', 'none');
+
     $("#tbody-main").css('display', 'block');
 
     $("#search-model").val('');
@@ -582,9 +661,9 @@ function validate_chassis() {
 
 
 
-$(document).on('click', 'button', function () {
+$(document).ready(function () {
 
-    var id = $(this)[0].id.replace('model_id_', '');
+    /*var id = $(this)[0].id.replace('model_id_', '');
 
     if (id && parseInt(id) > 0) {
         var location = window.location.pathname;
@@ -599,7 +678,8 @@ $(document).on('click', 'button', function () {
                 sweet_alert_error();
         }
 
-    }
+    }*/
 
 });
+
 

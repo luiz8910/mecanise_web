@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Car;
 use App\Repositories\CarBrandsRepository;
 use App\Repositories\CarRepository;
+use App\Repositories\ConfigRepository;
 use App\Repositories\FuelRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -22,12 +24,18 @@ class CarController extends Controller
      * @var CarBrandsRepository
      */
     private $brandsRepository;
+    /**
+     * @var ConfigRepository
+     */
+    private $configRepository;
 
-    public function __construct(CarRepository $repository, FuelRepository $fuelRepository, CarBrandsRepository $brandsRepository)
+    public function __construct(CarRepository $repository, FuelRepository $fuelRepository, CarBrandsRepository $brandsRepository,
+                                ConfigRepository $configRepository)
     {
         $this->repository = $repository;
         $this->fuelRepository = $fuelRepository;
         $this->brandsRepository = $brandsRepository;
+        $this->configRepository = $configRepository;
     }
 
     /**
@@ -35,20 +43,25 @@ class CarController extends Controller
      */
     public function index()
     {
-        $cars = $this->repository->orderBy('model')->all();
+        $offset = $this->configRepository->findByField('key', 'pagination')->first()->value;
 
-        //dd($cars);
+        $cars = $this->repository->orderBy('model')->paginate($offset);
+
+        $qtde_model = count($this->repository->all());
+
         $route = 'cars.index';
 
         $edit = false;
 
         $scripts[] = '../../js/car.js';
 
+
         foreach ($cars as $car){
+
             $car->brand_name = $this->brandsRepository->findByField('id', $car->brand)->first()->name;
         }
 
-        return view('index', compact('cars', 'route', 'scripts', 'edit'));
+        return view('index', compact('cars', 'route', 'scripts', 'edit', 'qtde_model', 'offset'));
     }
 
     /**
@@ -224,5 +237,24 @@ class CarController extends Controller
         }
 
         return json_encode(['status' => false, 'msg' => 'Este modelo não foi encontrado']);
+    }
+
+    public function car_pagination($offset)
+    {
+        $limit = $this->configRepository->findByField('key', 'pagination')->first()->value;
+
+        $cars = DB::table('cars')
+                ->orderBy('model')
+                ->offset($offset)
+                ->limit($limit)
+                ->whereNull('deleted_at')
+                ->get();
+
+        for ($i = 0; $i < count($cars); $i++)
+        {
+            $cars[$i]->brand_name = $this->brandsRepository->findByField('id', $cars[$i]->brand)->first()->name;
+        }
+
+        return json_encode(['status' => true, 'cars' => $cars, 'edit' => '/editar_carro/', 'offset' => $offset + $limit]);
     }
 }

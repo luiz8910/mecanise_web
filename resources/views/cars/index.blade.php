@@ -1,5 +1,5 @@
 <div class="col-md-10">
-    <p class="text-center" style="font-size: 30px;">Carros Cadastrados: {{ count($cars) }}</p>
+    <p class="text-center" style="font-size: 30px;">Carros Cadastrados: {{ $qtde_model }}</p>
     <table class="table table-style table-hover">
         <thead class="">
         <tr>
@@ -16,7 +16,7 @@
             </th>
         </tr>
         </thead>
-        <tbody>
+        <tbody id="tbody-main">
             @foreach($cars as $car)
                 <tr class="row100 body" id="model_{{ $car->id }}">
                     <th scope="row">{{ $car->id }}</th>
@@ -38,4 +38,13 @@
         </tbody>
     </table>
 
+    <div class="load-more">
+        <button class="btn btn-default btn-outline-dark" id="load-more" onclick="load_more();">
+            <i class="fas fa-spinner fa-spin" style="display:none;"></i>
+            <i class="fas fa-download"></i>
+            <span>Carregar mais resultados</span>
+        </button>
+    </div>
+
+    <input type="hidden" value="{{ $offset }}" id="offset">
 </div>

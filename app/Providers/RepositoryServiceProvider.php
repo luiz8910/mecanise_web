@@ -30,6 +30,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(\App\Repositories\ColorsRepository::class, \App\Repositories\ColorsRepositoryEloquent::class);
         $this->app->bind(\App\Repositories\CarBrandsRepository::class, \App\Repositories\CarBrandsRepositoryEloquent::class);
         $this->app->bind(\App\Repositories\OrderRepository::class, \App\Repositories\OrderRepositoryEloquent::class);
+        $this->app->bind(\App\Repositories\ConfigRepository::class, \App\Repositories\ConfigRepositoryEloquent::class);
     }
 
     /**

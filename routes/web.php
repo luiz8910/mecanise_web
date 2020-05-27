@@ -146,6 +146,8 @@ Route::group(['middleware' => 'auth'], function (){
 
     Route::get('/car_details/{id}', 'CarController@car_details');
 
+    Route::get('/car_pagination/{offset}', 'CarController@car_pagination');
+
     /*
      * Ordens de Serviço / Orders
      */
