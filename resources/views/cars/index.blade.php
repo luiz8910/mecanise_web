@@ -16,6 +16,7 @@
             </th>
         </tr>
         </thead>
+        <tbody id="tbody-search" style="display:none;"></tbody>
         <tbody id="tbody-main">
             @foreach($cars as $car)
                 <tr class="row100 body" id="model_{{ $car->id }}">
@@ -45,6 +46,10 @@
             <span>Carregar mais resultados</span>
         </button>
     </div>
+
+    <p class="no-results">Não há resultados para exibir, tente pesquisar novamente.</p>
+
+
 
     <input type="hidden" value="{{ $offset }}" id="offset">
 </div>

@@ -92,7 +92,9 @@
 
                 <div class="search-icon">
                     <i class="fas fa-search" id="general-search-icon" style="display:none;"></i>
+                    <i class="fas fa-times" id="general-search-icon-close" style="display:none;"></i>
                 </div>
+
 
                 <div class="icon-profile">
                     <img src="../../images/perfil.png" alt="">

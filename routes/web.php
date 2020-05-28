@@ -148,6 +148,8 @@ Route::group(['middleware' => 'auth'], function (){
 
     Route::get('/car_pagination/{offset}', 'CarController@car_pagination');
 
+    Route::get('/car_search/{input}', 'CarController@car_search');
+
     /*
      * Ordens de Serviço / Orders
      */
@@ -179,3 +181,5 @@ Auth::routes();
 Route::get('get_session', 'TesteController@get_session');
 
 Route::get('/domains/{length?}', "TesteController@domains");
+
+

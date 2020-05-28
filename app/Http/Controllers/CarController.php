@@ -254,8 +254,35 @@ class CarController extends Controller
         for ($i = 0; $i < count($cars); $i++)
         {
             $cars[$i]->brand_name = $this->brandsRepository->findByField('id', $cars[$i]->brand)->first()->name;
+            $cars[$i]->fuel_name = $this->fuelRepository->findByField('id', $cars[$i]->fuel)->first()->name;
         }
 
         return json_encode(['status' => true, 'cars' => $cars, 'edit' => '/editar_carro/', 'offset' => $offset + $limit]);
+    }
+
+    public function car_search($input)
+    {
+        $cars = DB::table('cars')
+                    ->where('model', 'like', '%'.$input.'%')
+                    ->whereNull('deleted_at')
+                    ->limit(20)
+                    ->get();
+
+        $model = [];
+        $i = 0;
+
+        foreach ($cars as $item)
+        {
+            $model[$i]['column_0'] = $item->id;
+            $model[$i]['column_1'] = $item->model;
+            $model[$i]['column_2'] = $this->brandsRepository->findByField('id', $item->brand)->first()->name;
+            $model[$i]['column_3'] = $this->fuelRepository->findByField('id', $item->fuel)->first()->name;
+            $model[$i]['column_4'] = $item->start_year ? $item->start_year : '';
+            $model[$i]['column_5'] = $item->end_year ? $item->end_year : '';
+
+            $i++;
+        }
+
+        return json_encode(['status' => true, 'model' => $model, 'columns' => 6, 'edit' => '/editar_carro/']);
     }
 }

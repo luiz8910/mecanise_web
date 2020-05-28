@@ -31,6 +31,10 @@ i{
     cursor: pointer;
 }
 
+#general-search-icon-close{
+    cursor: pointer;
+}
+
 #general-search-input{
     left: 18%;
     top: 16%;
@@ -306,4 +310,11 @@ td button i{
     margin-top: 40px;
     margin-bottom: 30px;
     margin-left: 45%;
+}
+
+.no-results{
+    margin-top: 80px;
+    margin-bottom: 30px;
+    margin-left: 35%;
+    display: none;
 }

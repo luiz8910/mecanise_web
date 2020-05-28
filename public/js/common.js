@@ -111,10 +111,14 @@ $(function () {
         })
     });
 
+    //When loading disable next-tab button
     $('.next-tab').attr('disabled', null);
 
+    //When loading disable submit button
     $('.submit').attr('disabled', null);
 
+    //Used to limit user typing to numbers
+    //Limita o usuário a digitar apenas números
     $(".number").keypress(function (e) {
 
         if (e.which < 48 || e.which > 57)
@@ -131,29 +135,34 @@ $(function () {
         $(".text-danger").css('display', 'none');
     });
 
+    //Do not allow input type number to add "e" character
+    //Não permite campos do tipo número de conter o caracter "e"
     $("input[type=number]").keydown(function (e) {
 
         if (e.which === 69)
             return false;
     });
 
+    //When CPF field changes / Quando o campo cpf muda de valor
     $("#cpf").change(function () {
-
+        //Pre cpf validation / Validação preliminar do CPF
         before_validate_cpf();
     });
 
-
+    //When CPF field inside a modal changes / Quando um cpf dentro do modal muda de valor
     $("#modal_cpf").change(function () {
 
         before_validate_cpf('modal_cpf');
     });
 
+    //Chassis validation when input field changes
+    // Quando o campo chassis tem seu valor alterado ocorre a validação do mesmo
     $("#chassis").change(function () {
         validate_chassis();
     });
 
 
-    $(".search-model").click(function () {
+    /*$(".search-model").click(function () {
         $(this).css('display', 'none');
 
         $(".hide-search").css('display', 'none');
@@ -174,8 +183,9 @@ $(function () {
         if(localStorage.getItem('filters') == true)
             $("#remove_filters").css('display', 'inline-block');
 
-    });
+    });*/
 
+    //Quando o proprietário muda / When the owner changes
     $("#owner_id").change(function () {
         var value = $(this).val();
 
@@ -183,6 +193,7 @@ $(function () {
     });
 
 
+    //Format a date value / Formata uma data
     $(".date").keyup(function (e) {
 
         var value = $(this).val();
@@ -225,21 +236,20 @@ $(function () {
     });
 
 
+    //Gambiarra para dar um efeito de animação no ícone pesquisa
+    //Animation of search icon
     setTimeout(function () {
         $("#general-search-icon").css('display', 'inline-block');
     }, 2000);
 
-    $("#general-search-icon").click(function () {
 
-        $(this).css('display', 'none');
 
-        $("#general-search-input").css("display", "inline-block");
-    });
-
+    //When hovered, shows up the user options
     $(".icon-profile").mouseenter(function () {
         $(".profile-settings-box").css('display', 'inline-block');
     });
 
+    //When hovered out, hide user options
     $(".profile-settings-box").mouseleave(function () {
         $(this).css('display', 'none');
     });
@@ -271,11 +281,215 @@ $(function () {
 
     });
 
+    //Fires when $this has new inputs
+    //Evento dispara ao digitar
+    $("#general-search-input").keyup(function (e) {
 
+        //Gambiarra monstra para diminuir a velocidade de digitação do usuário corno
+        //A way to slow down user when typing
+        setTimeout(function () {
+            $(this).attr('disabled', true);
+        }, 500);
 
+        //Parte final da gambiarra acima
+        //Final part of the "fix" above
+        $(this).attr('disabled', false);
 
+        //If search field is blank / Se o campo pesquisa estiver em branco
+        if($(this).val() == "")
+        {
+            //Shows up the search icon / Mostra o ícone de pesquisa
+            $("#general-search-icon").css('display', 'inline-block');
+
+            //Hide the X icon / Esconde o ícone X
+            $("#general-search-icon-close").css('display', 'none');
+
+            //Shows up the initial table / Mostra a tabela inicial
+            $("#tbody-search").css('display', 'none');
+
+            //Hide the table with search results / Esconde a tabela com resultados da pesquisa
+            $("#tbody-main").css("display", 'table-row-group');
+
+            //Hide the information of no results found / Esconde a info de resultados não encontrados
+            $(".no-results").css('display', 'none');
+
+            //Shows up the pagination button
+            $(".load-more").css('display', 'inline-block');
+        }
+        else{
+            //Ajax search request / Requisição de pesquisa
+            search_model();
+
+            //Hide the search icon / Esconde o ícone de pesquisa
+            $("#general-search-icon").css('display', 'none');
+
+            //Shows up the X icon / Mostra o ícone X
+            $("#general-search-icon-close").css('display', 'inline-block');
+        }
+    });
+
+    //When $this was clicked / Quando o ícone fechar for clickado
+    $("#general-search-icon-close").click(function () {
+
+        //Input search value is now blank / Campo pesquisa está vazio
+        $("#general-search-input").val("");
+
+        //Hide the table with search results / Esconde a tabela com resultados da pesquisa
+        $("#tbody-search").css('display', 'none');
+
+        //Shows up the initial table / Mostra a tabela inicial
+        $("#tbody-main").css("display", 'table-row-group');
+
+        //Shows up the search icon / Mostra o ícone de pesquisa
+        $("#general-search-icon").css('display', 'inline-block');
+
+        //Hide the X icon / Esconde o ícone X
+        $("#general-search-icon-close").css('display', 'none');
+
+        //Hide the information of no results found / Esconde a info de resultados não encontrados
+        $(".no-results").css('display', 'none');
+
+        //Shows up the pagination button
+        $(".load-more").css('display', 'inline-block');
+    });
 });
 
+//Searchs any model / Procura dados em qualquer classe
+function search_model()
+{
+    //Actual url / Url atual
+    var page = location.pathname;
+
+    var url = '';
+
+    //Value of input search / Valor do campo pesquisa
+    var input = $("#general-search-input").val();
+
+    //If page is "/" or "carros" we must search for table cars
+    //Se page é = "/" ou é igual a "carros", procura-se por tabela carros
+    switch (page) {
+        case '/':
+            url = '/car_search/' + input;
+            break;
+
+        case '/carros':
+            url = '/car_search/' + input;
+            break;
+
+        default: url = null; break;
+    }
+
+    //If url, so search for the given model
+    if(url)
+    {
+        //Beginning of ajax search request / Ínicio da requisição ajax
+        var request = $.ajax({
+            url: url,
+            method: 'GET',
+            dataType: 'json'
+        });
+
+        request.done(function (e) {
+            if(e.status)
+            {
+                //Hide the initial table / Esconde a tabela inicial
+                $("#tbody-main").css('display', 'none');
+
+                //Remove tr tags from search results table / Remove tags tr da tabela de resultados
+                $("#tbody-search tr").remove();
+
+                var append = '';
+
+                //If has any results / Se houver qualquer resultado
+                if(e.model.length > 0)
+                {
+                    //Hide the pagination button / Esconde o botão de paginação
+                    $(".load-more").css('display', 'none');
+
+                    //Iterate over array model which containing all search results
+                    //Iteração no array model que contém todos os resultados da pesquisa
+                    for (var i = 0; i < e.model.length; i++)
+                    {
+                        //Used to know how much columns we should print
+                        //Usado para saber quantas colunas devemos exibir
+                        var columns = 0;
+
+                        //Tr tag which contains the entire row, we need the id model to delete the right row
+                        //in case the user delete a model
+                        append += '<tr class="row100 body" id="model_'+e.model[i].column_0+'">';
+
+                        //Displays id from model / Exibe o id da classe
+                        append += '<th scope="row">'+e.model[i].column_0+'</th>';
+
+                        //Displays model´s column name and the link to edit
+                        //Exibe a coluna nome da classe correspondente e o link para edição
+                        append += '<td><a href="'+e.edit+e.model[i].column_0+'">'+e.model[i].column_1+'</a></td>';
+
+                        //Iterate over the remaining columns / Iteração nas colunas restantes
+                        for(var x = 2; x < e.columns; x++)
+                        {
+                            //Used to know which column we are at the moment
+                            //Usado para saber qual coluna estamos
+                            var c = 'column_' + x;
+
+                            //Display <td> content
+                            //Exibe o conteúdo da tag <td>
+                            append += '<td>'+e.model[i][c]+'</td>';
+                        }
+
+                        //<td> and href link of a edit button / <td> e link para edição
+                        append += '<td><a href="'+e.edit+e.model[i].column_0+'" class="btn btn-sm btn-outline-info" title="Editar">';
+                        append += '<i class="fas fa-edit"></i></a>';
+
+                        //Button delete / Botão Excluir
+                        append += '<button class="btn btn-sm btn-outline-danger" onclick="delete_model('+e.model[i].column_0+')" title="Excluir">';
+                        append += '<i class="fas fa-trash"></i></button></td>';
+                    }
+
+                    //Finally displays search results / Exibe os resultados da pesquisa
+                    $("#tbody-search").css('display', 'table-row-group').append(append);
+                }
+                //If has not any results / Senão houver resultados
+                else{
+                    sweet_alert_error('Nenhum resultado encontrado');
+                    $(".no-results").css('display', 'block');
+                }
+
+            }
+        });
+
+        //When request fails it shows the log at console
+        //Exibe erros no console
+        request.fail(function (e) {
+            console.log('fail', e);
+
+            //Error alert message / Mensagem de erro em um alerta
+            sweet_alert_error();
+        });
+    }
+
+
+}
+
+//Used to verify which model has to be deleted
+//Usado para verificar qual classe deve ser excluída
+function delete_model($id)
+{
+    var page = location.pathname;
+
+    switch (page) {
+        case '/':
+            delete_car($id);
+            break;
+
+        case '/carros':
+            delete_car($id);
+            break;
+    }
+}
+
+//Load more data to increase list (infinite pagination)
+//Carrega mais dados para aumentar o tamanho da lista (paginação infinita)
 function load_more()
 {
 
@@ -309,7 +523,6 @@ function load_more()
 
         if(e.status)
         {
-
             var append = '';
 
             for (var i = 0; i < e.cars.length; i++)
@@ -319,15 +532,15 @@ function load_more()
 
                 append += '<tr class="row100 body" id="model_'+e.cars[i].id+'">'+
                     '<th scope="row">'+e.cars[i].id+'</th>'+
-                    '<td><a href="'+e.edit+e.cars[i].id+'" class="car_model">'+e.cars[i].model+'</a></td>'+
+                    '<td><a href="'+e.edit+e.cars[i].id+'">'+e.cars[i].model+'</a></td>'+
                     '<td>'+e.cars[i].brand_name+'</td>'+
-                    '<td><span class="car_version">'+e.cars[i].version+'</span></td>'+
+                    '<td><span>'+e.cars[i].fuel_name+'</span></td>'+
                     '<td>'+start_year+'</td>'+
                     '<td>'+end_year+'</td>'+
-                    '<td><a href="'+e.edit+e.cars[i].id+'" class="btn btn-sm btn-outline-info" title="Editar Carro">' +
+                    '<td><a href="'+e.edit+e.cars[i].id+'" class="btn btn-sm btn-outline-info" title="Editar">' +
                                     '<i class="fas fa-edit"></i>' +
                     '          </a> '+
-                    '          <button class="btn btn-sm btn-outline-danger" onclick="delete_car('+e.cars[i].id+')" title="Excluir Carro">' +
+                    '          <button class="btn btn-sm btn-outline-danger" onclick="delete_car('+e.cars[i].id+')" title="Excluir">' +
                     '               <i class="fas fa-trash"></i>' +
                     '          </button>'+
                     '      </td>'+
@@ -413,6 +626,13 @@ function back_menu() {
     }
 }
 
+/*
+    Before user identification is validated,
+    verify if cpf fields has 11 characters
+
+    Antes de validar se o cpf é valido, verifica-se
+    o cpf tem 11 caracteres
+* */
 function before_validate_cpf($input) {
     $input = $input ? $input : 'cpf';
 
@@ -427,6 +647,7 @@ function before_validate_cpf($input) {
     }
 }
 
+//Generic Ajax Request / Requisição ajax genérica
 function sweet_alert($data, $ajax) {
     swal({
         title: $data.title,
@@ -522,18 +743,22 @@ function clean_fields($class) {
  * $class verifica quais campos são obrigatórios
  */
 function next_tab($tab, $class) {
+    //Every input which has target $class
     var fields = $("." + $class);
 
     $(".input-group").removeClass('border-red');
     $(".select-input").removeClass('border-red');
 
-    console.log($class);
-
+    //If has at least one field of the given $class
+    //Se pelo menos um campo com a $class informada for encontrado
     if (fields.length > 0) {
         var i = 0;
         var errors = localStorage.getItem('errors') ? localStorage.getItem('errors') : 0;
 
         while (i < fields.length) {
+
+            //If a required input wasn't filled.
+            //Se um campo obrigatório não foi preenchido.
             if (fields[i].value === '' && fields[i].getAttribute('required') !== null) {
                 var id = fields[i].id;
 
@@ -541,6 +766,7 @@ function next_tab($tab, $class) {
 
                 $("#span_" + id + "_status").css('display', 'block');
 
+                //Scroll to input with error
                 $('html, body').animate({
                     scrollTop: $("." + $class + "-title").offset().top
                 }, 1000);
@@ -551,11 +777,12 @@ function next_tab($tab, $class) {
             i++;
         }
 
+        //If no errors / Se não houver erros
         if (errors === 0) {
-            if ($tab === 0)
-                $("#form").submit();
+            if ($tab === 0) //If there is no others tabs to fill in / Senão houver outras tabs
+                $("#form").submit(); //then the form can be persisted normally / Formulário submetido
 
-            else
+            else //If has others tabs and no errors, remove disabled class from next tab title
                 $("#user_edit_tab_" + $tab).trigger('click').removeClass('disabled');
 
 
@@ -658,28 +885,5 @@ function validate_chassis() {
         localStorage.getItem('errors') ? localStorage.setItem('errors', localStorage.getItem('errors') - 1) : localStorage.removeItem('errors');
     }
 }
-
-
-
-$(document).ready(function () {
-
-    /*var id = $(this)[0].id.replace('model_id_', '');
-
-    if (id && parseInt(id) > 0) {
-        var location = window.location.pathname;
-
-        switch (location) {
-            case '/carros':
-
-                delete_car(id);
-                break;
-
-            default:
-                sweet_alert_error();
-        }
-
-    }*/
-
-});
 
 
