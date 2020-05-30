@@ -142,13 +142,33 @@ Route::group(['middleware' => 'auth'], function (){
 
     Route::delete('/carro/{id}', 'CarController@delete');
 
+    //If a car exists
     Route::get('/car_exists/{model}/{id?}', 'CarController@car_exists');
 
+    //Fill inputs when a car was chosen
     Route::get('/car_details/{id}', 'CarController@car_details');
 
+    //Car Infinite Pagination
     Route::get('/car_pagination/{offset}', 'CarController@car_pagination');
 
+    //Car Search
     Route::get('/car_search/{input}', 'CarController@car_search');
+
+    /*
+     * Brands / Montadoras
+     */
+
+    Route::get('/montadoras', 'CarController@brands')->name('brands.index');
+
+    Route::get('/brand_pagination/{offset}', 'CarController@brand_pagination');
+
+    Route::get('/brand_exists/{name}', 'CarController@brand_exists');
+
+    Route::post('/brand', 'CarController@brand_store');
+
+    Route::put('/brand/{id}', 'CarController@brand_update');
+
+
 
     /*
      * Ordens de Serviço / Orders

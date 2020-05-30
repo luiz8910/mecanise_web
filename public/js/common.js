@@ -398,6 +398,9 @@ function search_model()
                 //Remove tr tags from search results table / Remove tags tr da tabela de resultados
                 $("#tbody-search tr").remove();
 
+                //Remove info of no results fount / Remover <p> de nenhum resultado encontrado
+                $(".no-results").css('display', 'none');
+
                 var append = '';
 
                 //If has any results / Se houver qualquer resultado
@@ -511,6 +514,10 @@ function load_more()
         case '/carros':
             url = '/car_pagination/' + offset;
             break;
+
+        case '/montadoras':
+            url = '/brand_pagination/' + offset;
+            break;
     }
 
     var request = $.ajax({
@@ -525,27 +532,35 @@ function load_more()
         {
             var append = '';
 
-            for (var i = 0; i < e.cars.length; i++)
-            {
-                var start_year = e.cars[i].start_year != null ? e.cars[i].start_year : '';
-                var end_year = e.cars[i].end_year != null ? e.cars[i].end_year : '';
+            if(page === '/montadoras')
+                append = load_more_brands(e);
 
-                append += '<tr class="row100 body" id="model_'+e.cars[i].id+'">'+
-                    '<th scope="row">'+e.cars[i].id+'</th>'+
-                    '<td><a href="'+e.edit+e.cars[i].id+'">'+e.cars[i].model+'</a></td>'+
-                    '<td>'+e.cars[i].brand_name+'</td>'+
-                    '<td><span>'+e.cars[i].fuel_name+'</span></td>'+
-                    '<td>'+start_year+'</td>'+
-                    '<td>'+end_year+'</td>'+
-                    '<td><a href="'+e.edit+e.cars[i].id+'" class="btn btn-sm btn-outline-info" title="Editar">' +
-                                    '<i class="fas fa-edit"></i>' +
-                    '          </a> '+
-                    '          <button class="btn btn-sm btn-outline-danger" onclick="delete_car('+e.cars[i].id+')" title="Excluir">' +
-                    '               <i class="fas fa-trash"></i>' +
-                    '          </button>'+
-                    '      </td>'+
-                '</tr>';
+            else{
+
+                for (var i = 0; i < e.cars.length; i++)
+                {
+                    var start_year = e.cars[i].start_year != null ? e.cars[i].start_year : '';
+                    var end_year = e.cars[i].end_year != null ? e.cars[i].end_year : '';
+
+                    append += '<tr class="row100 body" id="model_'+e.cars[i].id+'">'+
+                        '<th scope="row">'+e.cars[i].id+'</th>'+
+                        '<td><a href="'+e.edit+e.cars[i].id+'">'+e.cars[i].model+'</a></td>'+
+                        '<td>'+e.cars[i].brand_name+'</td>'+
+                        '<td><span>'+e.cars[i].fuel_name+'</span></td>'+
+                        '<td>'+start_year+'</td>'+
+                        '<td>'+end_year+'</td>'+
+                        '<td><a href="'+e.edit+e.cars[i].id+'" class="btn btn-sm btn-outline-info" title="Editar">' +
+                        '<i class="fas fa-edit"></i>' +
+                        '          </a> '+
+                        '          <button class="btn btn-sm btn-outline-danger" onclick="delete_car('+e.cars[i].id+')" title="Excluir">' +
+                        '               <i class="fas fa-trash"></i>' +
+                        '          </button>'+
+                        '      </td>'+
+                        '</tr>';
+                }
+
             }
+
 
             $("#tbody-main").append(append);
 
@@ -886,4 +901,7 @@ function validate_chassis() {
     }
 }
 
-
+function feature_not_available()
+{
+    sweet_alert_error('Este recurso ainda não está disponível, tente novamente mais tarde');
+}

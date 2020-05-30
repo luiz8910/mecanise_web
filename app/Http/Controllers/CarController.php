@@ -240,6 +240,7 @@ class CarController extends Controller
         return json_encode(['status' => false, 'msg' => 'Este modelo não foi encontrado']);
     }
 
+    //Car Pagination Button
     public function car_pagination($offset)
     {
         $limit = $this->configRepository->findByField('key', 'pagination')->first()->value;
@@ -284,5 +285,105 @@ class CarController extends Controller
         }
 
         return json_encode(['status' => true, 'model' => $model, 'columns' => 6, 'edit' => '/editar_carro/']);
+    }
+
+    //List all brands / Lista de todas as montadoras
+    public function brands()
+    {
+        $offset = $this->configRepository->findByField('key', 'pagination')->first()->value;
+
+        $brands = $this->brandsRepository->orderBy('name')->paginate($offset);
+
+        $scripts[] = '../../js/car.js';
+
+        $route = 'cars.brands';
+
+        foreach ($brands as $brand)
+        {
+            $brand->qtde = count($this->repository->findByField('brand', $brand->id));
+        }
+
+        $qtde_model = count($this->brandsRepository->all());
+
+        return view('index', compact('brands', 'scripts', 'route', 'qtde_model', 'offset'));
+    }
+
+    //Brand button pagination
+    public function brand_pagination($offset)
+    {
+        $limit = $this->configRepository->findByField('key', 'pagination')->first()->value;
+
+        $model = DB::table('car_brands')
+            ->orderBy('name')
+            ->offset($offset)
+            ->limit($limit)
+            ->get();
+
+        foreach ($model as $item)
+        {
+            $item->qtde = count($this->repository->findByField('brand', $item->id));
+        }
+
+        return json_encode(['status' => true, 'model' => $model, 'offset' => $offset + $limit]);
+    }
+
+    //Verify if the brand name is available
+    public function brand_exists($name)
+    {
+        $brand = $this->brandsRepository->findByField('name', $name)->first();
+
+        if ($brand)
+            return json_encode(['status' => false, 'msg' => 'Esta montadora já existe']);
+
+        return json_encode(['status' => true]);
+    }
+
+    //Store a new car brand / Nova montadora
+    public function brand_store(Request $request)
+    {
+        DB::beginTransaction();
+
+        try{
+            $data = $request->all();
+
+            $this->brandsRepository->create($data);
+
+            DB::commit();
+
+            return json_encode(['status' => true]);
+        }catch (\Exception $e){
+            DB::rollBack();
+
+            return json_encode(['status' => false, 'msg' => $e->getMessage()]);
+        }
+    }
+
+    //Update a existing car brand / Alterar montadora
+    public function brand_update(Request $request, $id)
+    {
+        DB::beginTransaction();
+
+        $brand = $this->brandsRepository->findByField('id', $id)->first();
+
+        if($brand)
+        {
+            try {
+                $data = $request->all();
+
+                $this->brandsRepository->update($data, $id);
+
+                DB::commit();
+
+                return json_encode(['status' => true]);
+
+            }catch (\Exception $e) {
+
+                DB::rollBack();
+
+                return json_encode(['status' => false, 'msg' => '']);
+            }
+        }
+        else
+            return json_encode(['status' => false, 'msg' => 'Esta montadora não existe']);
     }
 }

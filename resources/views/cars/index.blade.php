@@ -50,6 +50,5 @@
     <p class="no-results">Não há resultados para exibir, tente pesquisar novamente.</p>
 
 
-
     <input type="hidden" value="{{ $offset }}" id="offset">
 </div>

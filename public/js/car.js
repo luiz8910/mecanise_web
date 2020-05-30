@@ -114,6 +114,34 @@ $(function () {
         }
     });
 
+    $(".btn_brand").click(function () {
+
+        var id = this.id.replace('btn_brand_', '');
+
+        $("#modal_label").text("Editar Montadora: " + $("#name_brand_"+id).text());
+
+        $("#brand_id").val(id);
+
+        $("#modal_brand").modal('show');
+    });
+
+    $("#new_brand").click(function () {
+
+        $("#modal_label").text('Nova Montadora');
+
+        $("#brand_id").val('');
+
+        $("#name").val('');
+
+        $("#modal_brand").modal('show');
+    });
+
+    $("#modal_submit").click(function () {
+
+        var brand_id = $("#brand_id").val();
+
+        brand(brand_id);
+    });
 });
 
 function delete_car($id)
@@ -138,6 +166,8 @@ function delete_car($id)
 
 }
 
+//This function works when <td> has a string long enough to break table layout
+//Esta função reduz o tamanho de uma string numa <td>
 function reduce_string()
 {
     var model = $(".car_model");
@@ -157,3 +187,107 @@ function reduce_string()
     }
 }
 
+//Pagination brands list / Paginação na página de montadoras
+function load_more_brands($e)
+{
+    var append = '';
+
+    for (var i = 0; i < $e.model.length; i++)
+    {
+        append += '<tr class="row100 body" id="model_'+$e.model[i].id+'">';
+        append += '<td>'+$e.model[i].name+'</td>';
+        append += '<td>'+$e.model[i].qtde+'</td>';
+        append += '<td><button class="btn btn-sm btn-outline-info" title="Editar Montadora"><i class="fas fa-edit"></i></button>';
+        append += '<button class="btn btn-sm btn-outline-danger" onclick="feature_not_available();" title="Excluir Montadora"><i class="fas fa-trash"></i></button></td>';
+        append += '</tr>';
+    }
+
+    return append;
+}
+
+//Submit a new brand or update a existing one
+function brand($id)
+{
+    //Hides modal error
+    $("#modal_error").css('display', 'none');
+
+    //Brand name to be persisted // Montadora a ser persistida
+    var name = $("#name").val();
+
+    if (name == "")
+    {
+        $("#modal_error").text('Preencha o campo nome!!!').css('display', 'block');
+        return false;
+    }
+
+    var request = $.ajax({
+        url: '/brand_exists/' + name,
+        method: 'GET',
+        dataType: 'json'
+    });
+
+    request.done(function (e) {
+        if(e.status)
+        {
+            if($id)
+            {
+                $.ajax({
+                    url: '/brand/'+$id,
+                    method: 'PUT',
+                    dataType: 'json',
+                    data: {'name': name},
+
+                }).done(function (e) {
+                    if(e.status)
+                    {
+                        sweet_alert_success(name + ' foi alterada');
+
+                        $("#name_brand_"+$id).text(name);
+
+                        $("#modal_brand").modal('hide');
+                    }
+                    else
+                        sweet_alert_error();
+
+                }).fail(function (e) {
+                    console.log('fail', e);
+                    sweet_alert_error();
+                });
+            }
+            else{
+                $.ajax({
+                    url: '/brand',
+                    method: 'POST',
+                    dataType: 'json',
+                    data:{'name': name}
+
+                }).done(function (e) {
+                    if(e.status)
+                    {
+                        sweet_alert_success(name + ' foi cadastrada com sucesso');
+
+                        setTimeout(function () {
+                            location.reload();
+                        },3000);
+                    }
+                    else
+                        sweet_alert_error();
+
+                }).fail(function (e) {
+                    console.log('fail', e);
+                    sweet_alert_error();
+                });
+            }
+        }
+        else
+            $("#modal_error").text('Já existe uma montadora com este nome!!!').css('display', 'block');
+
+    });
+
+    request.fail(function (e) {
+
+        console.log('fail', e);
+
+
+    });
+}

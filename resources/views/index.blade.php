@@ -184,10 +184,29 @@
                         </li>
 
                         <li class="li-items" style="margin-top: 30px;">
-                            <a href="{{ route('cars.index')}}" class="a-item main-item">
+                            <a href="javascript:" class="a-item main-item" id="item-cars">
                                 <i class="fas fa-database"></i>
-                                Base de Dados
+                                <span class="span-item-name">Base de Dados</span> <span class="span-item"> > </span>
                             </a>
+
+                            <ul id="ul-cars" class="ul-subitem">
+                                <li class="li-items">
+                                    <a href="{{ route('cars.index')}}" class="a-item">
+                                        <i class="fas fa-list"></i> Lista Geral
+                                    </a>
+                                </li>
+                                <li class="li-items">
+                                    <a href="{{ route('cars.create')}}" class="a-item">
+                                        <i class="fas fa-car"></i> Novo Carro
+                                    </a>
+                                </li>
+                                <li class="li-items">
+                                    <a href="{{ route('brands.index')}}" class="a-item">
+                                        <i class="far fa-copyright"></i>Lista de Montadoras
+                                    </a>
+                                </li>
+
+                            </ul>
                         </li>
                     </ul>
 
