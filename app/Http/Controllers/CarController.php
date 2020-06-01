@@ -59,8 +59,8 @@ class CarController extends Controller
 
         foreach ($cars as $car){
 
-            $car->brand_name = $this->brandsRepository->findByField('id', $item->brand)->first() ?
-                $this->brandsRepository->findByField('id', $item->brand)->first()->name : 'Nâo informado';
+            $car->brand_name = $this->brandsRepository->findByField('id', $car->brand)->first() ?
+                $this->brandsRepository->findByField('id', $car->brand)->first()->name : 'Nâo informado';
 
             $car->fuel_name = $this->fuelRepository->findByField('id', $car->fuel)->first() ?
                 $this->fuelRepository->findByField('id', $car->fuel)->first()->name : 'Não informado';
