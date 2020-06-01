@@ -43,7 +43,8 @@ class CarController extends Controller
      */
     public function index()
     {
-        $offset = $this->configRepository->findByField('key', 'pagination')->first()->value;
+        $offset = $this->configRepository->findByField('key', 'pagination')->first() ?
+            $this->configRepository->findByField('key', 'pagination')->first()->value : 10;
 
         $cars = $this->repository->orderBy('model')->paginate($offset);
 
@@ -58,8 +59,11 @@ class CarController extends Controller
 
         foreach ($cars as $car){
 
-            $car->brand_name = $this->brandsRepository->findByField('id', $car->brand)->first()->name;
-            $car->fuel_name = $this->fuelRepository->findByField('id', $car->fuel)->first()->name;
+            $car->brand_name = $this->brandsRepository->findByField('id', $item->brand)->first() ?
+                $this->brandsRepository->findByField('id', $item->brand)->first()->name : 'Nâo informado';
+
+            $car->fuel_name = $this->fuelRepository->findByField('id', $car->fuel)->first() ?
+                $this->fuelRepository->findByField('id', $car->fuel)->first()->name : 'Não informado';
         }
 
         return view('index', compact('cars', 'route', 'scripts', 'edit', 'qtde_model', 'offset'));
@@ -243,7 +247,8 @@ class CarController extends Controller
     //Car Pagination Button
     public function car_pagination($offset)
     {
-        $limit = $this->configRepository->findByField('key', 'pagination')->first()->value;
+        $limit = $this->configRepository->findByField('key', 'pagination')->first() ?
+            $this->configRepository->findByField('key', 'pagination')->first()->value : 10;
 
         $cars = DB::table('cars')
                 ->orderBy('model')
@@ -254,8 +259,11 @@ class CarController extends Controller
 
         for ($i = 0; $i < count($cars); $i++)
         {
-            $cars[$i]->brand_name = $this->brandsRepository->findByField('id', $cars[$i]->brand)->first()->name;
-            $cars[$i]->fuel_name = $this->fuelRepository->findByField('id', $cars[$i]->fuel)->first()->name;
+            $cars[$i]->brand_name = $this->brandsRepository->findByField('id', $item->brand)->first() ?
+                $this->brandsRepository->findByField('id', $item->brand)->first()->name : 'Nâo informado';
+
+            $cars[$i]->fuel_name = $this->fuelRepository->findByField('id', $car->fuel)->first() ?
+                $this->fuelRepository->findByField('id', $cars[$i]->fuel)->first()->name : 'Não informado';
         }
 
         return json_encode(['status' => true, 'cars' => $cars, 'edit' => '/editar_carro/', 'offset' => $offset + $limit]);
@@ -276,9 +284,15 @@ class CarController extends Controller
         {
             $model[$i]['column_0'] = $item->id;
             $model[$i]['column_1'] = $item->model;
-            $model[$i]['column_2'] = $this->brandsRepository->findByField('id', $item->brand)->first()->name;
-            $model[$i]['column_3'] = $this->fuelRepository->findByField('id', $item->fuel)->first()->name;
+
+            $model[$i]['column_2'] = $this->brandsRepository->findByField('id', $item->brand)->first() ?
+                $this->brandsRepository->findByField('id', $item->brand)->first()->name : 'Nâo informado';
+
+            $model[$i]['column_3'] = $this->fuelRepository->findByField('id', $car->fuel)->first() ?
+                $this->fuelRepository->findByField('id', $item->fuel)->first()->name : 'Não informado';
+
             $model[$i]['column_4'] = $item->start_year ? $item->start_year : '';
+
             $model[$i]['column_5'] = $item->end_year ? $item->end_year : '';
 
             $i++;
@@ -290,7 +304,8 @@ class CarController extends Controller
     //List all brands / Lista de todas as montadoras
     public function brands()
     {
-        $offset = $this->configRepository->findByField('key', 'pagination')->first()->value;
+        $offset = $this->configRepository->findByField('key', 'pagination')->first() ?
+            $this->configRepository->findByField('key', 'pagination')->first()->value : 10;
 
         $brands = $this->brandsRepository->orderBy('name')->paginate($offset);
 
@@ -311,7 +326,8 @@ class CarController extends Controller
     //Brand button pagination
     public function brand_pagination($offset)
     {
-        $limit = $this->configRepository->findByField('key', 'pagination')->first()->value;
+        $limit = $this->configRepository->findByField('key', 'pagination')->first() ?
+            $this->configRepository->findByField('key', 'pagination')->first()->value : 10;
 
         $model = DB::table('car_brands')
             ->orderBy('name')
@@ -385,5 +401,28 @@ class CarController extends Controller
         }
         else
             return json_encode(['status' => false, 'msg' => 'Esta montadora não existe']);
+    }
+
+    //Searches in table car_brands
+    public function brand_search($input)
+    {
+        $brands = DB::table('car_brands')
+            ->where('model', 'like', '%'.$input.'%')
+            ->limit(20)
+            ->get();
+
+        $model = [];
+        $i = 0;
+
+        foreach ($brands as $brand)
+        {
+            $model[$i]['id'] = $brand->id;
+            $model[$i]['name'] = $brand->name;
+            $model[$i]['qtde'] = count($this->repository->findByField('brand', $brand->id));
+
+            $i++;
+        }
+
+        return json_encode(['status' => true, 'model' => $model]);
     }
 }

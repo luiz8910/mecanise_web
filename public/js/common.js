@@ -376,10 +376,14 @@ function search_model()
             url = '/car_search/' + input;
             break;
 
+        case '/montadoras':
+            url = '/brand_search/' + input;
+            break;
+
         default: url = null; break;
     }
 
-    //If url, so search for the given model
+    //If url, search for the given model
     if(url)
     {
         //Beginning of ajax search request / Ínicio da requisição ajax
@@ -409,45 +413,52 @@ function search_model()
                     //Hide the pagination button / Esconde o botão de paginação
                     $(".load-more").css('display', 'none');
 
-                    //Iterate over array model which containing all search results
-                    //Iteração no array model que contém todos os resultados da pesquisa
-                    for (var i = 0; i < e.model.length; i++)
-                    {
-                        //Used to know how much columns we should print
-                        //Usado para saber quantas colunas devemos exibir
-                        var columns = 0;
+                    //Searching for brands
+                    if(page == "/montadoras")
+                        append = brand_search(e);
 
-                        //Tr tag which contains the entire row, we need the id model to delete the right row
-                        //in case the user delete a model
-                        append += '<tr class="row100 body" id="model_'+e.model[i].column_0+'">';
-
-                        //Displays id from model / Exibe o id da classe
-                        append += '<th scope="row">'+e.model[i].column_0+'</th>';
-
-                        //Displays model´s column name and the link to edit
-                        //Exibe a coluna nome da classe correspondente e o link para edição
-                        append += '<td><a href="'+e.edit+e.model[i].column_0+'">'+e.model[i].column_1+'</a></td>';
-
-                        //Iterate over the remaining columns / Iteração nas colunas restantes
-                        for(var x = 2; x < e.columns; x++)
+                    else{
+                        //Iterate over array model which containing all search results
+                        //Iteração no array model que contém todos os resultados da pesquisa
+                        for (var i = 0; i < e.model.length; i++)
                         {
-                            //Used to know which column we are at the moment
-                            //Usado para saber qual coluna estamos
-                            var c = 'column_' + x;
+                            //Used to know how much columns we should print
+                            //Usado para saber quantas colunas devemos exibir
+                            var columns = 0;
 
-                            //Display <td> content
-                            //Exibe o conteúdo da tag <td>
-                            append += '<td>'+e.model[i][c]+'</td>';
+                            //Tr tag which contains the entire row, we need the id model to delete the right row
+                            //in case the user delete a model
+                            append += '<tr class="row100 body" id="model_'+e.model[i].column_0+'">';
+
+                            //Displays id from model / Exibe o id da classe
+                            append += '<th scope="row">'+e.model[i].column_0+'</th>';
+
+                            //Displays model´s column name and the link to edit
+                            //Exibe a coluna nome da classe correspondente e o link para edição
+                            append += '<td><a href="'+e.edit+e.model[i].column_0+'">'+e.model[i].column_1+'</a></td>';
+
+                            //Iterate over the remaining columns / Iteração nas colunas restantes
+                            for(var x = 2; x < e.columns; x++)
+                            {
+                                //Used to find which column we are at the moment
+                                //Usado para saber qual coluna estamos
+                                var c = 'column_' + x;
+
+                                //Display <td> content
+                                //Exibe o conteúdo da tag <td>
+                                append += '<td>'+e.model[i][c]+'</td>';
+                            }
+
+                            //<td> and href link of a edit button / <td> e link para edição
+                            append += '<td><a href="'+e.edit+e.model[i].column_0+'" class="btn btn-sm btn-outline-info" title="Editar">';
+                            append += '<i class="fas fa-edit"></i></a>';
+
+                            //Button delete / Botão Excluir
+                            append += '<button class="btn btn-sm btn-outline-danger" onclick="delete_model('+e.model[i].column_0+')" title="Excluir">';
+                            append += '<i class="fas fa-trash"></i></button></td>';
                         }
-
-                        //<td> and href link of a edit button / <td> e link para edição
-                        append += '<td><a href="'+e.edit+e.model[i].column_0+'" class="btn btn-sm btn-outline-info" title="Editar">';
-                        append += '<i class="fas fa-edit"></i></a>';
-
-                        //Button delete / Botão Excluir
-                        append += '<button class="btn btn-sm btn-outline-danger" onclick="delete_model('+e.model[i].column_0+')" title="Excluir">';
-                        append += '<i class="fas fa-trash"></i></button></td>';
                     }
+
 
                     //Finally displays search results / Exibe os resultados da pesquisa
                     $("#tbody-search").css('display', 'table-row-group').append(append);

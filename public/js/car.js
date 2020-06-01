@@ -288,6 +288,22 @@ function brand($id)
 
         console.log('fail', e);
 
-
     });
+}
+
+function brand_search($e)
+{
+    var append = '';
+
+    for (var i = 0; i < $e.model.length; i++)
+    {
+        append += '<tr class="row100 body" id="model_'+$e.model[i].id+'">';
+        append += '<td id="name_brand_'+$e.model[i].id+'">'+$e.model[i].name+'</td>';
+        append += '<td>'+$e.model[i].qtde+'</td>';
+        append += '<td><button class="btn btn-sm btn-outline-info btn_brand" title="Editar Montadora" id="btn_brand_'+$e.model[i].id+'"><i class="fas fa-edit"></i></button>';
+        append += '<button class="btn btn-sm btn-outline-danger" onclick="feature_not_available();" title="Excluir Montadora"><i class="fas fa-trash"></i></button></td>';
+        append += '</tr>';
+    }
+
+    return append;
 }

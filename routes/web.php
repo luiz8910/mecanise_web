@@ -168,6 +168,8 @@ Route::group(['middleware' => 'auth'], function (){
 
     Route::put('/brand/{id}', 'CarController@brand_update');
 
+    Route::get('/brand_search/{input}', 'CarController@brand_search');
+
 
 
     /*
