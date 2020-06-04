@@ -307,3 +307,8 @@ function brand_search($e)
 
     return append;
 }
+
+function reorder($orderBy)
+{
+    location.href = '/carros/' + $orderBy;
+}

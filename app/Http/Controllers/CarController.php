@@ -41,7 +41,7 @@ class CarController extends Controller
     /**
      * List all cars
      */
-    public function index()
+    public function index($orderBy = null)
     {
         $offset = $this->configRepository->findByField('key', 'pagination')->first() ?
             $this->configRepository->findByField('key', 'pagination')->first()->value : 10;
@@ -56,7 +56,6 @@ class CarController extends Controller
 
         $scripts[] = '../../js/car.js';
 
-
         foreach ($cars as $car){
 
             $car->brand_name = $this->brandsRepository->findByField('id', $car->brand)->first() ?
@@ -65,6 +64,10 @@ class CarController extends Controller
             $car->fuel_name = $this->fuelRepository->findByField('id', $car->fuel)->first() ?
                 $this->fuelRepository->findByField('id', $car->fuel)->first()->name : 'Não informado';
         }
+
+        if($orderBy)
+            $cars = $cars->sortBy($orderBy);
+
 
         return view('index', compact('cars', 'route', 'scripts', 'edit', 'qtde_model', 'offset'));
     }
@@ -208,24 +211,19 @@ class CarController extends Controller
 
     public function car_exists($model, $id = null)
     {
-
         $car = $this->repository->findByField('model', strtoupper($model))->first();
 
         if($car)
         {
             if($id)
-            {
                 if($car->id == $id)
-                {
                     return json_encode(['status' => true, 'id' => true]);
-                }
-            }
+
 
             return json_encode(['status' => false, 'msg' => 'Erro! Este carro já está cadastrado']);
         }
 
         return json_encode(['status' => true]);
-
 
     }
 
@@ -245,7 +243,7 @@ class CarController extends Controller
     }
 
     //Car Pagination Button
-    public function car_pagination($offset)
+    public function car_pagination($offset, $orderBy)
     {
         $limit = $this->configRepository->findByField('key', 'pagination')->first() ?
             $this->configRepository->findByField('key', 'pagination')->first()->value : 10;
@@ -259,12 +257,15 @@ class CarController extends Controller
 
         for ($i = 0; $i < count($cars); $i++)
         {
-            $cars[$i]->brand_name = $this->brandsRepository->findByField('id', $item->brand)->first() ?
-                $this->brandsRepository->findByField('id', $item->brand)->first()->name : 'Nâo informado';
+            $cars[$i]->brand_name = $this->brandsRepository->findByField('id', $cars[$i]->brand)->first() ?
+                $this->brandsRepository->findByField('id', $cars[$i]->brand)->first()->name : 'Nâo informado';
 
-            $cars[$i]->fuel_name = $this->fuelRepository->findByField('id', $car->fuel)->first() ?
+            $cars[$i]->fuel_name = $this->fuelRepository->findByField('id', $cars[$i]->fuel)->first() ?
                 $this->fuelRepository->findByField('id', $cars[$i]->fuel)->first()->name : 'Não informado';
         }
+
+        if($orderBy)
+            $cars = $cars->sortBy($orderBy);
 
         return json_encode(['status' => true, 'cars' => $cars, 'edit' => '/editar_carro/', 'offset' => $offset + $limit]);
     }
@@ -288,7 +289,7 @@ class CarController extends Controller
             $model[$i]['column_2'] = $this->brandsRepository->findByField('id', $item->brand)->first() ?
                 $this->brandsRepository->findByField('id', $item->brand)->first()->name : 'Nâo informado';
 
-            $model[$i]['column_3'] = $this->fuelRepository->findByField('id', $car->fuel)->first() ?
+            $model[$i]['column_3'] = $this->fuelRepository->findByField('id', $item->fuel)->first() ?
                 $this->fuelRepository->findByField('id', $item->fuel)->first()->name : 'Não informado';
 
             $model[$i]['column_4'] = $item->start_year ? $item->start_year : '';

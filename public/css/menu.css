@@ -318,3 +318,7 @@ td button i{
     margin-left: 35%;
     display: none;
 }
+
+.re-order{
+    cursor: pointer;
+}

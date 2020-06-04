@@ -4,9 +4,9 @@
         <thead class="">
         <tr>
             <th scope="col">#</th>
-            <th scope="col">Modelo</th>
-            <th scope="col">Montadora</th>
-            <th scope="col">Combustível</th>
+            <th scope="col">Modelo <i class="fas fa-chevron-down re-order" onclick="reorder('model')"></i></th>
+            <th scope="col">Montadora <i class="fas fa-chevron-down re-order" onclick="reorder('brand_name')"></i> </th>
+            <th scope="col">Combustível <i class="fas fa-chevron-down re-order" onclick="reorder('fuel_name')"></i></th>
             <th scope="col">Fabricação</th>
             <th scope="col">Fabricação Final</th>
             <th scope="col">

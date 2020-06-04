@@ -130,7 +130,7 @@ Route::group(['middleware' => 'auth'], function (){
     /**
      * Cars
      */
-    Route::get('/carros', 'CarController@index')->name('cars.index');
+    Route::get('/carros/{orderBy?}', 'CarController@index')->name('cars.index');
 
     Route::get('/novo-carro', 'CarController@create')->name('cars.create');
 
@@ -188,6 +188,13 @@ Route::group(['middleware' => 'auth'], function (){
     Route::delete('/os/{id}', 'OrderController@delete');
 
     Route::get('/get_vehicles/{owner_id}', 'OrderController@get_vehicles');
+
+    /*
+     * Config
+     */
+    Route::get('/configuracoes', 'ConfigController@index')->name('config.index');
+
+    Route::post('/pagination', 'ConfigController@set_pagination');
 
     /*
      * Peças / Pastilhas de Freio

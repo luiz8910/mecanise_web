@@ -56,7 +56,7 @@
     <div class="profile-settings-box">
         <div class="profile-items">
 
-            <a href="javascript:" id="config" class="user-option-item">
+            <a href="{{ route('config.index') }}" id="config" class="user-option-item">
                 <i class="fas fa-cog fa-lg"></i>
                 Configurações
             </a>

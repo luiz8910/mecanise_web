@@ -360,6 +360,8 @@ function search_model()
     //Actual url / Url atual
     var page = location.pathname;
 
+    page = page.search('/carros') != -1 ? '/carros' : page;
+
     var url = '';
 
     //Value of input search / Valor do campo pesquisa
@@ -376,6 +378,7 @@ function search_model()
             url = '/car_search/' + input;
             break;
 
+        //If true, seacrhes for brands
         case '/montadoras':
             url = '/brand_search/' + input;
             break;
