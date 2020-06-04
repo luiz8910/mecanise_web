@@ -211,4 +211,7 @@ Route::get('get_session', 'TesteController@get_session');
 
 Route::get('/domains/{length?}', "TesteController@domains");
 
+Route::get('/admin-login', function (){
+    return view('auth.login-admin');
+});
 

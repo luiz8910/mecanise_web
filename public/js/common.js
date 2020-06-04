@@ -366,7 +366,7 @@ function search_model()
 
     //Value of input search / Valor do campo pesquisa
     var input = $("#general-search-input").val();
-
+console.log(page);
     //If page is "/" or "carros" we must search for table cars
     //Se page é = "/" ou é igual a "carros", procura-se por tabela carros
     switch (page) {
@@ -378,7 +378,7 @@ function search_model()
             url = '/car_search/' + input;
             break;
 
-        //If true, seacrhes for brands
+        //If true, searches for brands // Pesquisa por montadoras
         case '/montadoras':
             url = '/brand_search/' + input;
             break;

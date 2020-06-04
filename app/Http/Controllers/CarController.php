@@ -408,7 +408,7 @@ class CarController extends Controller
     public function brand_search($input)
     {
         $brands = DB::table('car_brands')
-            ->where('model', 'like', '%'.$input.'%')
+            ->where('name', 'like', '%'.$input.'%')
             ->limit(20)
             ->get();
 

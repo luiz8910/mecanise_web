@@ -26,7 +26,7 @@
                         <button class="btn btn-sm btn-outline-danger" onclick="feature_not_available();" title="Excluir Montadora">
                             <i class="fas fa-trash"></i>
                         </button>
-                    </td>
+
                 </tr>
             @endforeach
         </tbody>
