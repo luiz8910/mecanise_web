@@ -197,8 +197,13 @@ Route::group(['middleware' => 'auth'], function (){
     Route::post('/pagination', 'ConfigController@set_pagination');
 
     /*
-     * Peças / Pastilhas de Freio
+     * Peças / Parts
      */
+    Route::get('/pecas', 'PartsController@index')->name('parts.index');
+
+    Route::get('/criar-peca', 'PartsController@create')->name('parts.create');
+
+    Route::get('/editar-peca/{id}', 'PartsController@edit')->name('parts.edit');
 
 });
 

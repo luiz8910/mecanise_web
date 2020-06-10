@@ -50,9 +50,9 @@
 
 <body>
 
-@include('loading')
+{{--@include('loading')--}}
 
-<div class="pre-loading" style="display:none;">
+<div class="pre-loading" style="display:block;">
     <div class="profile-settings-box">
         <div class="profile-items">
 
@@ -180,6 +180,33 @@
                                     </a>
                                 </li>
 
+                            </ul>
+                        </li>
+
+                        <li class="li-items" style="margin-top: 30px;">
+                            <a href="javascript:" class="a-item main-item" id="item-parts">
+                                <i class="fas fa-wrench"></i>
+                                <span class="span-item-name">Peças</span> <span class="span-item"> > </span>
+                            </a>
+
+                            <ul class="ul-subitem" id="ul-parts">
+                                <li class="li-items">
+                                    <a href="javascript:" class="a-item">
+                                        <i class="fas fa-list"></i>Lista Geral
+                                    </a>
+                                </li>
+
+                                <li class="li-items">
+                                    <a href="javascript:" class="a-item">
+                                        <i class="fas fa-copyright"></i>Marcas
+                                    </a>
+                                </li>
+
+                                <li class="li-items">
+                                    <a href="javascript:" class="a-item">
+                                        <i class="fas fa-layer-group"></i>Sistemas do Carro
+                                    </a>
+                                </li>
                             </ul>
                         </li>
 

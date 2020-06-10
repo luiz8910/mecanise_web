@@ -31,6 +31,10 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(\App\Repositories\CarBrandsRepository::class, \App\Repositories\CarBrandsRepositoryEloquent::class);
         $this->app->bind(\App\Repositories\OrderRepository::class, \App\Repositories\OrderRepositoryEloquent::class);
         $this->app->bind(\App\Repositories\ConfigRepository::class, \App\Repositories\ConfigRepositoryEloquent::class);
+        $this->app->bind(\App\Repositories\PartsRepository::class, \App\Repositories\PartsRepositoryEloquent::class);
+        $this->app->bind(\App\Repositories\PartsNameRepository::class, \App\Repositories\PartsNameRepositoryEloquent::class);
+        $this->app->bind(\App\Repositories\PartsBrandsRepository::class, \App\Repositories\PartsBrandsRepositoryEloquent::class);
+        $this->app->bind(\App\Repositories\SystemRepository::class, \App\Repositories\SystemRepositoryEloquent::class);
     }
 
     /**
