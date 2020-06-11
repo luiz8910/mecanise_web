@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -199,11 +200,19 @@ Route::group(['middleware' => 'auth'], function (){
     /*
      * Peças / Parts
      */
-    Route::get('/pecas', 'PartsController@index')->name('parts.index');
+    Route::get('/pecas/{orderBy?}', 'PartsController@index')->name('parts.index');
 
     Route::get('/criar-peca', 'PartsController@create')->name('parts.create');
 
     Route::get('/editar-peca/{id}', 'PartsController@edit')->name('parts.edit');
+
+    Route::post('/peca', 'PartsController@store')->name('parts.store');
+
+    Route::put('/peca/{id}', 'PartsController@update')->name('parts.update');
+
+    Route::get('/system_parts/{system_id}', 'PartsController@system_parts');
+
+    Route::delete('/peca/{id}', 'PartsController@delete');
 
 });
 

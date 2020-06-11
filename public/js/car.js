@@ -319,7 +319,4 @@ function edit_brand($id)
     $("#modal_brand").modal('show');
 }
 
-function reorder($orderBy)
-{
-    location.href = '/carros/' + $orderBy;
-}
+

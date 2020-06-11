@@ -352,6 +352,11 @@ $(function () {
         //Shows up the pagination button
         $(".load-more").css('display', 'inline-block');
     });
+
+    //Closes the alert / Fecha o alert
+    setTimeout(function () {
+        $(".close").trigger('click');
+    },3000);
 });
 
 //Searchs any model / Procura dados em qualquer classe
@@ -918,4 +923,9 @@ function validate_chassis() {
 function feature_not_available()
 {
     sweet_alert_error('Este recurso ainda não está disponível, tente novamente mais tarde');
+}
+
+function reorder($orderBy)
+{
+    location.href = location.pathname + '/' + $orderBy;
 }

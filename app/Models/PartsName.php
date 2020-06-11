@@ -21,6 +21,6 @@ class PartsName extends Model implements Transformable
      *
      * @var array
      */
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'system_id'];
 
 }

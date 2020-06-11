@@ -14,14 +14,14 @@
 
     <div class="form-wrapper">
         @if($edit)
-            <form action="" method="POST">
+            <form action="{{ route('parts.update', ['id' => $part->id]) }}" method="POST">
                 @method('PUT')
                 @else
-                    <form action="" method="POST">
+                    <form action="{{ route('parts.store') }}" method="POST">
                         @endif
 
                         <div class="row">
-                            <div class="col-md-10 col-xs-6">
+                            <div class="col-md-5 col-xs-6">
                                 <div class="form-group">
                                     <label for="car_id">Modelo</label>
                                     <select name="car_id" id="car_id" class="form-control">
@@ -37,30 +37,22 @@
                                 </div>
                             </div>
 
+                            <div class="col-md-5 col-xs-6">
+                                <div class="form-group">
+                                    <label for="type">Tipo</label>
+                                    <input type="text" name="type" id="type" class="form-control" @if($edit) value="{{ $part->type }}" @endif
+                                           placeholder="Insira alguma especificação da peça.">
+                                    <span class="form-text text-danger" id="span_type_status" style="display:none;">Insira um tipo válido</span>
+                                </div>
+                            </div>
+
                         </div>
 
                         <div class="row">
                             <div class="col-md-5 col-xs-6">
                                 <div class="form-group">
-                                    <label for="parts_name">Peça</label>
-                                    <select id="parts_name" name="parts_name" class="form-control" required>
-                                        <option value="">Selecione um valor</option>
-                                        @foreach($parts_name as $pn)
-                                            @if($edit)
-                                                <option value="{{ $pn->id }}" @if($pn->id == $part->part_id) selected @endif >{{ $pn->name }}</option>
-                                            @else
-                                                <option value="{{ $pn->id }}">{{ $pn->name }}</option>
-                                            @endif
-                                        @endforeach
-                                    </select>
-                                    <span class="form-text text-danger" id="span_parts_status" style="display:none;">Insira uma peça válida.</span>
-                                </div>
-                            </div>
-
-                            <div class="col-md-5 col-xs-6">
-                                <div class="form-group">
-                                    <label for="system">Sistema</label>
-                                    <select name="system" id="system" class="form-control">
+                                    <label for="system_id">Sistema</label>
+                                    <select name="system_id" id="system_id" class="form-control">
                                         <option value="">Selecione uma opção</option>
                                         @foreach($system as $sys)
                                             @if($edit)
@@ -73,13 +65,27 @@
                                     <span id="span_system_status" style="color: red; display:none;"></span>
                                 </div>
                             </div>
+
+                            <div class="col-md-5 col-xs-6">
+                                <div class="form-group">
+                                    <label for="part_id">Peça</label>
+
+                                    @if($edit)<input type="hidden" id="hidden_part_id" value="{{ $part->id }}">@endif
+
+                                    <select id="part_id" name="part_id" class="form-control" required>
+                                        <option value="">Selecione um sistema ao lado</option>
+                                    </select>
+                                    <span class="form-text text-danger" id="span_part_id_status" style="display:none;">Insira uma peça válida.</span>
+                                </div>
+                            </div>
+
                         </div>
 
                         <div class="row">
                             <div class="col-md-5 col-xs-6">
                                 <div class="form-group">
-                                    <label for="parts_brands">Marca da Peça</label>
-                                    <select name="parts_brands" id="parts_brands" class="form-control">
+                                    <label for="brand_parts_id">Marca da Peça</label>
+                                    <select name="brand_parts_id" id="brand_parts_id" class="form-control">
                                         <option value="">Selecione uma opção</option>
                                         @foreach($parts_brands as $pb)
                                             @if($edit)

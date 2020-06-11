@@ -322,3 +322,10 @@ td button i{
 .re-order{
     cursor: pointer;
 }
+
+.alert{
+    position: absolute;
+    top: 17%;
+    left: 35%;
+    opacity: 0.8;
+}
