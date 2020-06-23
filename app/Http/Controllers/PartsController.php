@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Repositories\CarBrandsRepository;
 use App\Repositories\CarRepository;
 use App\Repositories\ConfigRepository;
 use App\Repositories\PartsBrandsRepository;
@@ -10,6 +11,7 @@ use App\Repositories\PartsRepository;
 use App\Repositories\SystemRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Input;
 
 class PartsController extends Controller
 {
@@ -23,14 +25,14 @@ class PartsController extends Controller
     private $system;
 
     private $car;
-    /**
-     * @var ConfigRepository
-     */
+
     private $config;
+
+    private $carBrands;
 
     public function __construct(PartsRepository $repository, PartsBrandsRepository $partsBrands,
                                 PartsNameRepository $partsName, SystemRepository $system, CarRepository $car,
-                                ConfigRepository $config)
+                                ConfigRepository $config, CarBrandsRepository $carBrands)
     {
 
         $this->repository = $repository;
@@ -39,6 +41,7 @@ class PartsController extends Controller
         $this->system = $system;
         $this->car = $car;
         $this->config = $config;
+        $this->carBrands = $carBrands;
     }
 
     public function index($orderBy = null)
@@ -84,7 +87,6 @@ class PartsController extends Controller
 
     public function create()
     {
-        $cars = $this->car->orderBy('model')->all();
 
         $parts_brands = $this->partsBrands->orderBy('name')->all();
 
@@ -97,9 +99,14 @@ class PartsController extends Controller
         $route = 'parts.form';
 
         $scripts[] = '../../js/parts.js';
+        $scripts[] = 'https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.26.0/slimselect.min.js';
 
-        return view('index', compact('cars', 'parts_brands', 'parts_name',
-            'system', 'edit', 'route', 'scripts'));
+        $links[] = 'https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.26.0/slimselect.min.css';
+
+        $brands = $this->carBrands->orderBy('name')->all();
+
+        return view('index', compact( 'parts_brands', 'parts_name',
+            'system', 'edit', 'route', 'scripts', 'brands', 'links'));
     }
 
     public function edit($id)
@@ -108,6 +115,8 @@ class PartsController extends Controller
 
         if($part)
         {
+            $brands = $this->carBrands->orderBy('name')->all();
+
             $cars = $this->car->orderBy('model')->all();
 
             $parts_brands = $this->partsBrands->orderBy('name')->all();
@@ -121,9 +130,12 @@ class PartsController extends Controller
             $route = 'parts.form';
 
             $scripts[] = '../../js/parts.js';
+            $scripts[] = 'https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.26.0/slimselect.min.js';
+
+            $links[] = 'https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.26.0/slimselect.min.css';
 
             return view('index', compact('cars', 'parts_brands', 'parts_name',
-                'system', 'edit', 'route', 'scripts', 'part'));
+                'system', 'edit', 'route', 'scripts', 'part', 'brands', 'links'));
         }
 
         return abort(404);
@@ -131,13 +143,26 @@ class PartsController extends Controller
 
     public function store(Request $request)
     {
-        $data = $request->all();
+        $data = $request->except(['car_id']);
+
+        $cars = $request->only(['car_id']);
+
+        //dd($cars['car_id']);
 
         DB::beginTransaction();
 
         try{
 
-            $this->repository->create($data);
+            $i = 0;
+
+            while ($i < count($cars['car_id']))
+            {
+                $data['car_id'] = $cars['car_id'][$i];
+
+                $this->repository->create($data);
+
+                $i++;
+            }
 
             DB::commit();
 
@@ -219,5 +244,46 @@ class PartsController extends Controller
         }
 
         return json_encode(['status' => false]);
+    }
+
+    public function list_cars_by_brand($brand_id)
+    {
+        $brand = $this->carBrands->findByField('id', $brand_id)->first();
+
+        if($brand)
+        {
+            $cars = $this->car->orderBy('model')->findByField('brand', $brand_id);
+
+            if(count($cars) > 0)
+                return json_encode(['status' => true, 'cars' => $cars]);
+
+            else
+                return json_encode(['status' => false, 'msg' => 'Nenhum carro desta montadora foi encontrado']);
+        }
+
+        return json_encode(['status' => false, 'msg' => 'Esta montadora não foi encontrada']);
+    }
+
+    public function teste($brand_id)
+    {
+        $brand = $this->carBrands->findByField('id', $brand_id)->first();
+
+        if($brand)
+        {
+            $cars = DB::table('cars')
+                        ->where('brand', $brand_id)
+                        ->whereNull('deleted_at')
+                        ->orderBy('model')
+                        ->limit(20)
+                        ->get();
+
+            if(count($cars) > 0)
+                return json_encode(['status' => true, 'cars' => $cars]);
+
+            else
+                return json_encode(['status' => false, 'msg' => 'Nenhum carro desta montadora foi encontrado']);
+        }
+
+        return json_encode(['status' => false, 'msg' => 'Esta montadora não foi encontrada']);
     }
 }

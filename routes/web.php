@@ -214,12 +214,18 @@ Route::group(['middleware' => 'auth'], function (){
 
     Route::delete('/peca/{id}', 'PartsController@delete');
 
+    Route::get('/list_cars_by_brand/{id}', 'PartsController@list_cars_by_brand');
+
+
+
 });
 
 Auth::routes();
 
 
 //Testes
+
+Route::get('/teste/{id}', 'PartsController@teste');
 
 Route::get('get_session', 'TesteController@get_session');
 

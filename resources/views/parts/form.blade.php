@@ -2,8 +2,6 @@
 <div class="form-body">
     <div class="form-title">
         <p> @if($edit) Editar @else Nova @endif Peça</p>
-
-
     </div>
 
     <div class="form-options">
@@ -21,28 +19,32 @@
                         @endif
 
                         <div class="row">
-                            <div class="col-md-5 col-xs-6">
+                            <div class="col-md-10 col-xs-6">
                                 <div class="form-group">
-                                    <label for="car_id">Modelo</label>
-                                    <select name="car_id" id="car_id" class="form-control">
-                                        <option value="">Selecione um carro</option>
-                                        @foreach($cars as $car)
+                                    <label for="brand_id">Montadora</label>
+                                    <select name="brand_id" id="brand_id" class="">
+                                        <option value="">Selecione uma montadora</option>
+                                        @foreach($brands as $brand)
                                             @if($edit)
-                                                <option value="{{ $car->id }}" @if($car->id == $part->car_id) selected @endif>{{ $car->model }}</option>
+                                                <option value="{{ $brand->id }}" @if($brand->id == $chosen_brand_id) selected @endif>
+                                                    {{ $brand->name }}
+                                                </option>
                                             @else
-                                                <option value="{{ $car->id }}">{{ $car->model }}</option>
+                                                <option value="{{ $brand->id }}">{{ $brand->name }}</option>
                                             @endif
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
-
-                            <div class="col-md-5 col-xs-6">
+                        </div>
+                        <div class="row">
+                            <div class="col-md-10 col-xs-6">
                                 <div class="form-group">
-                                    <label for="type">Tipo</label>
-                                    <input type="text" name="type" id="type" class="form-control" @if($edit) value="{{ $part->type }}" @endif
-                                           placeholder="Insira alguma especificação da peça.">
-                                    <span class="form-text text-danger" id="span_type_status" style="display:none;">Insira um tipo válido</span>
+                                    <label for="car_id">Modelo (Escolha uma montadora primeiro)</label>
+
+                                    <select name="car_id[]" id="car_id" multiple class="form-control"
+                                            readonly style="margin-top: 0px; height: 220px;">
+                                    </select>
                                 </div>
                             </div>
 
@@ -111,7 +113,7 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-md-4 col-xs-6">
+                            <div class="col-md-5 col-xs-6">
                                 <div class="form-group">
                                     <label for="universal_code">Código Universal</label>
                                     <input type="text" name="universal_code" id="universal_code" class="form-control" placeholder="Ex: D8RTCMM-10"
@@ -120,7 +122,18 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-3 col-xs-6">
+                            <div class="col-md-5 col-xs-6">
+                                <div class="form-group">
+                                    <label for="type">Tipo</label>
+                                    <input type="text" name="type" id="type" class="form-control" autocomplete="off" @if($edit) value="{{ $part->type }}" @endif
+                                    placeholder="Insira alguma especificação da peça.">
+                                    <span class="form-text text-danger" id="span_type_status" style="display:none;">Insira um tipo válido</span>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5 col-xs-6">
                                 <div class="form-group">
                                     <label for="start_year">Ano Inicial</label>
                                     <input type="text" name="start_year" id="start_year" class="form-control number" maxlength="4" placeholder="Ex: 2000"
@@ -129,7 +142,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-3 col-xs-6">
+                            <div class="col-md-5 col-xs-6">
                                 <div class="form-group">
                                     <label for="end_year">Ano Final</label>
                                     <input type="text" name="end_year" id="end_year" class="form-control number" maxlength="4" placeholder="Ex: 2010"
