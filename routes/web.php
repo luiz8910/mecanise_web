@@ -198,7 +198,7 @@ Route::group(['middleware' => 'auth'], function (){
     Route::post('/pagination', 'ConfigController@set_pagination');
 
     /*
-     * Peças / Parts
+     * Peças / Parts (Vínculo das peças com os carros)
      */
     Route::get('/pecas/{orderBy?}', 'PartsController@index')->name('parts.index');
 
@@ -212,10 +212,27 @@ Route::group(['middleware' => 'auth'], function (){
 
     Route::get('/system_parts/{system_id}', 'PartsController@system_parts');
 
+    //Retira o vínculo peça x carro
     Route::delete('/peca/{id}', 'PartsController@delete');
 
     Route::get('/list_cars_by_brand/{id}', 'PartsController@list_cars_by_brand');
 
+
+
+    /*
+     * Parts_name / Cadastro das peças
+     */
+    //List all parts // Listar todas as peças
+    Route::get('/listar_pecas/{orderBy?}', 'PartsController@list_parts')->name('parts.list');
+
+    //Cadastro de Peça // New Part
+    Route::post('/part_name', 'PartsController@store_part_name');
+
+    //Editar Peça // Edit Part
+    Route::put('/part_name/{id}', 'PartsController@update_part_name');
+
+    //Excluir a peça selecionada, não confundir com a desvinculação da peça com o carro
+    Route::delete('part_name/{id}', 'PartsController@delete_part_name');
 
 
 });
@@ -224,8 +241,6 @@ Auth::routes();
 
 
 //Testes
-
-Route::get('/teste/{id}', 'PartsController@teste');
 
 Route::get('get_session', 'TesteController@get_session');
 

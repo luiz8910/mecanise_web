@@ -141,13 +141,13 @@ class PartsController extends Controller
         return abort(404);
     }
 
+
+    //Links a part to a car // Adiciona uma peça para um veículo
     public function store(Request $request)
     {
         $data = $request->except(['car_id']);
 
         $cars = $request->only(['car_id']);
-
-        //dd($cars['car_id']);
 
         DB::beginTransaction();
 
@@ -180,6 +180,7 @@ class PartsController extends Controller
         }
     }
 
+    //Edit part x car link // Edita um vínculo entre peça x carro
     public function update(Request $request, $id)
     {
         $data = $request->all();
@@ -206,6 +207,7 @@ class PartsController extends Controller
         }
     }
 
+    //Deletes an link car x part // Exclui um vínculo peça x carro
     public function delete($id)
     {
         $part = $this->repository->findByField('id', $id)->first();
@@ -264,7 +266,120 @@ class PartsController extends Controller
         return json_encode(['status' => false, 'msg' => 'Esta montadora não foi encontrada']);
     }
 
-    public function teste($brand_id)
+//---------------------------------- CRUD de peças somente (sem vínculo com carros)-------------------------------------
+
+    //List all parts // Lista todas as peças
+    public function list_parts($orderBy = null)
+    {
+        $route = 'parts.list';
+
+        $scripts[] = '../../js/parts.js';
+
+        $parts = $this->partsName->all();
+
+        $qtde_model = count($parts);
+
+        foreach ($parts as $part)
+        {
+            $part->system_name = $this->system->findByField('id', $part->system_id)->first() ?
+                $this->system->findByField('id', $part->system_id)->first()->name : "Sistema Desconhecido";
+        }
+
+        $offset = $this->config->findByField('key', 'pagination')->first() ?
+            $this->config->findByField('key', 'pagination')->first()->value : 10;
+
+        if($orderBy)
+            $parts = $parts->sortBy($orderBy);
+        else
+            $parts = $parts->sortBy('name');
+
+        $systems = $this->system->orderBy('name')->all();
+
+        return view('index', compact('route', 'scripts', 'parts', 'qtde_model', 'offset', 'systems'));
+    }
+
+    //Cadastra uma nova peça // Creates a new part
+    public function store_part_name(Request $request)
+    {
+        $data = $request->all();
+
+        DB::beginTransaction();
+
+        try{
+
+            $this->partsName->create($data);
+
+            DB::commit();
+
+            return json_encode(['status' => true]);
+
+        }catch (\Exception $e){
+
+            DB::rollBack();
+
+            return json_encode(['status' => false, 'msg' => $e->getMessage()]);
+        }
+    }
+
+    //Altera uma peça existente // Edit an existing part
+    public function update_part_name(Request $request, $id)
+    {
+        $data = $request->all();
+
+        $part = $this->partsName->findByField('id', $id)->first();
+
+        if($part)
+        {
+            DB::beginTransaction();
+
+            try{
+
+                $this->partsName->update($data, $id);
+
+                DB::commit();
+
+                return json_encode(['status' => true]);
+
+            }catch (\Exception $e){
+
+                DB::rollBack();
+
+                return json_encode(['status' => false, 'msg' => $e->getMessage()]);
+            }
+        }
+
+        return json_encode(['status' => false, 'msg' => 'Esta peça não existe']);
+
+    }
+
+    //Exclui uma peça // Deletes an existing part
+    public function delete_part_name($id)
+    {
+        $part = $this->partsName->findByField('id', $id)->first();
+
+        if($part)
+        {
+            DB::beginTransaction();
+
+            try {
+                $this->partsName->delete($id);
+
+                DB::commit();
+
+                return json_encode(['status' => true]);
+
+            }catch (\Exception $e)
+            {
+                DB::rollBack();
+
+                return json_encode(['status' => false, 'msg' => $e->getMessage()]);
+            }
+        }
+
+        return json_encode(['status' => false, 'msg' => 'Esta peça não foi encontrada']);
+    }
+
+    /*public function teste($brand_id)
     {
         $brand = $this->carBrands->findByField('id', $brand_id)->first();
 
@@ -285,5 +400,5 @@ class PartsController extends Controller
         }
 
         return json_encode(['status' => false, 'msg' => 'Esta montadora não foi encontrada']);
-    }
+    }*/
 }

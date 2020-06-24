@@ -371,7 +371,7 @@ function search_model()
 
     //Value of input search / Valor do campo pesquisa
     var input = $("#general-search-input").val();
-console.log(page);
+
     //If page is "/" or "carros" we must search for table cars
     //Se page é = "/" ou é igual a "carros", procura-se por tabela carros
     switch (page) {
@@ -537,6 +537,11 @@ function load_more()
         case '/montadoras':
             url = '/brand_pagination/' + offset;
             break;
+
+        case '/listar_pecas':
+            url = '/part_name/' + offset;
+            break;
+
     }
 
     var request = $.ajax({
@@ -553,6 +558,9 @@ function load_more()
 
             if(page === '/montadoras')
                 append = load_more_brands(e);
+
+            else if(page === '/listar_pecas')
+                append = load_more_part_name(e);
 
             else{
 
