@@ -219,7 +219,7 @@ function part_name_modal($id)
 function part_name()
 {
     var id = $("#part_name_id").val();
-    var url = '/part_name/';
+    var url = '/part_name';
     var p_error = $("#part_name_error");
     var s_error = $("#system_error");
 
@@ -271,7 +271,7 @@ function part_name()
     else
     {
         $.ajax({
-            url: url + id,
+            url: url + '/' + id,
             method: 'PUT',
             dataType: 'json',
             headers: {
