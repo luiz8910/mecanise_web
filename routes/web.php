@@ -225,11 +225,7 @@ Route::group(['middleware' => 'auth'], function (){
     //List all parts // Listar todas as peças
     Route::get('/listar_pecas/{orderBy?}', 'PartsController@list_parts')->name('parts.list');
 
-    //Cadastro de Peça // New Part
-    Route::post('/part_name', 'PartsController@store_part_name');
 
-    //Editar Peça // Edit Part
-    Route::put('/part_name/{id}', 'PartsController@update_part_name');
 
     //Excluir a peça selecionada, não confundir com a desvinculação da peça com o carro
     Route::delete('part_name/{id}', 'PartsController@delete_part_name');
@@ -239,6 +235,11 @@ Route::group(['middleware' => 'auth'], function (){
 
 Auth::routes();
 
+//Cadastro de Peça // New Part
+Route::post('/part_name', 'PartsController@store_part_name');
+
+//Editar Peça // Edit Part
+Route::put('/part_name/{id}', 'PartsController@update_part_name');
 
 //Testes
 

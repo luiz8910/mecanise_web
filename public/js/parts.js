@@ -244,6 +244,9 @@ function part_name()
             url: url,
             method: 'POST',
             dataType: 'json',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+            },
             data:{
                 'name': $("#part_name").val(),
                 'system_id': $("#system_id").val()
@@ -271,6 +274,9 @@ function part_name()
             url: url + id,
             method: 'PUT',
             dataType: 'json',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+            },
             data:{
                 'name': $("#part_name").val(),
                 'system_id': $("#system_id").val(),
