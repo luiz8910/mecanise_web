@@ -245,8 +245,8 @@ function part_name()
             method: 'POST',
             dataType: 'json',
             data:{
-                name: $("#part_name").val(),
-                system_id: $("#system_id").val()
+                'name': $("#part_name").val(),
+                'system_id': $("#system_id").val()
             }
         }).done(function (e) {
             if(e.status)
@@ -272,8 +272,8 @@ function part_name()
             method: 'PUT',
             dataType: 'json',
             data:{
-                name: $("#part_name").val(),
-                system_id: $("#system_id").val(),
+                'name': $("#part_name").val(),
+                'system_id': $("#system_id").val(),
             }
 
         }).done(function (e) {
