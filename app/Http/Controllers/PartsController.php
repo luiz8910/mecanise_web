@@ -52,6 +52,9 @@ class PartsController extends Controller
         $route = 'parts.index';
 
         $scripts[] = '../../js/parts.js';
+        $scripts[] = 'https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.26.0/slimselect.min.js';
+
+        $links[] = 'https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.26.0/slimselect.min.css';
 
         $parts = $this->repository->all();
 
@@ -81,12 +84,25 @@ class PartsController extends Controller
         else
             $parts = $parts->sortBy('name');
 
+        $cars = $this->car->all();
 
-        return view('index', compact('route', 'scripts', 'parts', 'qtde_model', 'offset'));
+        $systems = $this->system->all();
+
+        return view('index', compact('route', 'scripts', 'parts', 'qtde_model',
+            'offset', 'cars', 'links', 'systems'));
     }
 
     public function create()
     {
+        /*
+         * TODO
+         * manter peça
+         * manter Marca da Peça
+         * manter Cód da peça
+         * manter sistema
+         * tirar montadora
+         * tirar modelo
+         */
 
         $parts_brands = $this->partsBrands->orderBy('name')->all();
 

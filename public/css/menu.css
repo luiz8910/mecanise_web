@@ -329,3 +329,20 @@ td button i{
     left: 35%;
     opacity: 0.8;
 }
+
+.car_details{
+    margin-top: 50px !important;
+}
+
+.car_details div p{
+    font-weight: 600;
+    font-size: 20px;
+}
+
+.subitems{
+    margin-left: 20px;
+}
+
+.div-right{
+    margin-left: 60px;
+}

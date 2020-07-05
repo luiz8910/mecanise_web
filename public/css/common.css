@@ -411,3 +411,5 @@ input:checked + .slider:before {
 .not-ready{
     color: red !important;
 }
+
+

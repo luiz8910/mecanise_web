@@ -40,6 +40,7 @@
     <link rel="stylesheet" href="../../css/loading.css">
     <link rel="stylesheet" href="../../css/menu.css">
 
+
     @if(isset($links))
         @foreach($links as $link)
             <link rel="stylesheet" href="{{ $link }}" type="text/css">

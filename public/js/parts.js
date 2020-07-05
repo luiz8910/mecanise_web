@@ -51,10 +51,64 @@ $(function () {
 
     });
 
+    $("#selected_car").change(function () {
+
+        if($(this).val() != "")
+        {
+            $(".form-body").css('display', 'block');
+            car_details($(this).val());
+        }
+        else
+            $(".form-body").css('display', 'none');
+    });
+
+    $(".dropdown-toggle").click(function () {
+        $(this).addClass('active');
+        $(".dropdown-menu").css('width', '100%');
+        $(".dropdown-item").css('text-align', 'center');
+
+        $("#nav-item-car").removeClass('active');
+    });
+
+    $("#nav-item-car").click(function () {
+        $(this).addClass('active');
+        $(".dropdown-toggle").removeClass('active');
+        $(".car_details").css('display', 'none');
+        $("#car_details").css('display', 'block');
+        $(".dropdown-item").removeClass('disabled');
+    });
+
+    $(".dropdown-item").click(function () {
+        $(".dropdown-item").removeClass('disabled');
+
+        const text = $(this).text();
+
+        $(".dropdown-toggle").text(text);
+
+        $(this).addClass('disabled');
+
+        const id = this.id;
+
+        $("#car_details").css('display', 'none');
+        $("#div_"+id).css('display', 'block');
+    });
+
+    search_car();
+
     slim_select_brand();
 
     verify_system_parts();
 });
+
+function search_car()
+{
+    var select = new SlimSelect({
+        select: '#selected_car',
+        placeholder: 'Pesquisar'
+    });
+
+    select.setSearch("Nenhum resultado encontrado");
+}
 
 function slim_select_brand()
 {
@@ -321,7 +375,7 @@ function load_more_part_name($e)
     return append;
 }
 
-//Paginação parts / Paginação na página de carros x peças
+//Pagination parts / Paginação na página de carros x peças
 function load_more_parts($e)
 {
     var append = '';
@@ -337,4 +391,33 @@ function load_more_parts($e)
     }
 
     return append;
+}
+
+//Detalhes do carro escolhido
+function car_details($id)
+{
+    var request = $.ajax({
+        url: 'car_details/' + $id,
+        method: 'GET',
+        dataType: 'json',
+    });
+
+    request.done(function (e) {
+        if(e.status)
+        {
+            $("#car_model").text('Modelo: ' + e.car.model);
+            $("#car_brand").text('Montadora: ' + e.car.brand);
+            $("#car_fuel").text('Combustível: ' + e.car.fuel);
+            $("#car_details").css('display', 'block').css('margin-top', '50px');
+        }
+        else{
+            $(".car_details").css('display', 'none');
+            sweet_alert_error(e.msg);
+        }
+    });
+
+    request.fail(function (e) {
+        console.log('fail', e);
+        sweet_alert_error();
+    });
 }

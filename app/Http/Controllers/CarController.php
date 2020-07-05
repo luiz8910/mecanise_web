@@ -235,6 +235,7 @@ class CarController extends Controller
         if($car)
         {
             $car->brand = $this->brandsRepository->findByField('id', $car->brand)->first()->name;
+            $car->fuel = $this->fuelRepository->findByField('id', $car->fuel)->first()->name;
 
             return json_encode(['status' => true, 'car' => $car]);
         }

@@ -10,6 +10,7 @@
 
     <hr>
 
+
     <div class="form-wrapper">
         @if($edit)
             <form action="{{ route('parts.update', ['id' => $part->id]) }}" method="POST">
