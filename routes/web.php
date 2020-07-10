@@ -217,7 +217,15 @@ Route::group(['middleware' => 'auth'], function (){
 
     Route::get('/list_cars_by_brand/{id}', 'PartsController@list_cars_by_brand');
 
+    Route::get('/part_exists/{name}', 'PartsController@part_exists');
 
+    Route::post('store_part_name', 'PartsController@store_part_name');
+
+    Route::post('/store_part_brand', 'PartsController@store_part_brand');
+
+    Route::post('/store_part', 'PartsController@store_part')->name('store.part');
+
+    Route::put('/update_part/{id}', 'PartsController@update_part')->name('update.part');
 
     /*
      * Parts_name / Cadastro das peças

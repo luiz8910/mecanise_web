@@ -94,15 +94,6 @@ class PartsController extends Controller
 
     public function create()
     {
-        /*
-         * TODO
-         * manter peça
-         * manter Marca da Peça
-         * manter Cód da peça
-         * manter sistema
-         * tirar montadora
-         * tirar modelo
-         */
 
         $parts_brands = $this->partsBrands->orderBy('name')->all();
 
@@ -122,7 +113,7 @@ class PartsController extends Controller
         $brands = $this->carBrands->orderBy('name')->all();
 
         return view('index', compact( 'parts_brands', 'parts_name',
-            'system', 'edit', 'route', 'scripts', 'brands', 'links'));
+            'system', 'edit', 'route', 'scripts', 'brands', 'links', 'system'));
     }
 
     public function edit($id)
@@ -314,6 +305,29 @@ class PartsController extends Controller
         return view('index', compact('route', 'scripts', 'parts', 'qtde_model', 'offset', 'systems'));
     }
 
+    public function store_part(Request $request)
+    {
+        $data = $request->all();
+
+        DB::beginTransaction();
+
+        try {
+            $this->repository->create($data);
+
+            DB::commit();
+
+            $request->session()->flash('success.msg', 'A peça foi cadastrada com sucesso');
+
+        }catch (\Exception $e)
+        {
+            DB::rollBack();
+
+            $request->session()->flash('error.msg', $e->getMessage());
+        }
+
+        return redirect()->back();
+    }
+
     //Cadastra uma nova peça // Creates a new part
     public function store_part_name(Request $request)
     {
@@ -323,11 +337,13 @@ class PartsController extends Controller
 
         try{
 
-            $this->partsName->create($data);
+            $data['name'] = ucfirst($data['name']);
+
+            $id = $this->partsName->create($data)->id;
 
             DB::commit();
 
-            return json_encode(['status' => true]);
+            return json_encode(['status' => true, 'id' => $id]);
 
         }catch (\Exception $e){
 
@@ -393,6 +409,46 @@ class PartsController extends Controller
         }
 
         return json_encode(['status' => false, 'msg' => 'Esta peça não foi encontrada']);
+    }
+
+    public function part_exists($name)
+    {
+        $part = $this->partsName->findByField('name', ucfirst($name))->first();
+
+        if($part)
+            return json_encode(['status' => true, 'msg' => 'Esta peça já existe']);
+
+        return json_encode(['status' => false]);
+    }
+
+    public function store_part_brand(Request $request)
+    {
+        $data = $request->all();
+
+        $brand = $this->partsBrands->findByField('name', ucfirst($data['name']))->first();
+
+        if($brand)
+            return json_encode(['status' => false, 'msg' => 'Esta marca já está cadastrada']);
+
+        else{
+            DB::beginTransaction();
+
+            try{
+                $data['name'] = ucfirst($data['name']);
+
+                $id = $this->partsBrands->create($data)->id;
+
+                DB::commit();
+
+                return json_encode(['status' => true, 'id' => $id]);
+
+            }catch (\Exception $e){
+                DB::rollBack();
+
+                return json_encode(['status' => false, 'msg' => $e->getMessage()]);
+            }
+
+        }
     }
 
     /*public function teste($brand_id)

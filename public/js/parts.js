@@ -93,21 +93,45 @@ $(function () {
         $("#div_"+id).css('display', 'block');
     });
 
+    $("#trigger_new_part_modal").click(function(){
+        $(this).removeClass('disabled');
+    });
+
+    $("#trigger_new_brand_modal").click(function(){
+        $(this).removeClass('disabled');
+    });
+
     search_car();
 
-    slim_select_brand();
+    //slim_select_brand();
 
     verify_system_parts();
+
+    //slim_select_brand_parts();
+
 });
+
+function slim_select_brand_parts()
+{
+    var select = new SlimSelect({
+        select: '#brand_parts_id',
+        placeholder: 'Escolha uma marca'
+    })
+}
+
 
 function search_car()
 {
-    var select = new SlimSelect({
-        select: '#selected_car',
-        placeholder: 'Pesquisar'
-    });
+    if(location.pathname === "pecas")
+    {
+        var select = new SlimSelect({
+            select: '#selected_car',
+            placeholder: 'Pesquisar'
+        });
 
-    select.setSearch("Nenhum resultado encontrado");
+        select.setSearch("Nenhum resultado encontrado");
+    }
+    
 }
 
 function slim_select_brand()
@@ -420,4 +444,135 @@ function car_details($id)
         console.log('fail', e);
         sweet_alert_error();
     });
+}
+
+function new_part()
+{
+    var part_name = $("#modal_part_name").val();
+    var system = $("#modal_system_id").val();
+
+    $(".buttonload").css('display', 'block');
+    $("#submit_new_part").css('display', 'none');
+
+    if(part_name === "")
+    {
+        $("#modal_part_name").css('border', '1px solid red');
+        sweet_alert_error("Preencha o nome da peça");
+        $(".buttonload").css('display', 'none');
+        $("#submit_new_part").css('display', 'block');
+        return;
+    }
+
+    if(system === "")
+    {
+        $("#modal_system_id").css('border', '1px solid red');
+        sweet_alert_error("Escolha um sistema");
+        $(".buttonload").css('display', 'none');
+        $("#submit_new_part").css('display', 'block');
+        return;
+    }
+
+    var request = $.ajax({
+        url: '/part_exists/' + part_name,
+        method: 'GET',
+        dataType: 'json',
+    });
+
+    request.done(function(e){
+        if(!e.status)
+        {
+            $.ajax({
+                url: '/store_part_name',
+                method: 'POST',
+                dataType: 'json',
+                data:{
+                    'name': part_name,
+                    'system_id': system,
+                },
+                success: function(e){
+                    sweet_alert_success('A Peça foi cadastrada com sucesso');
+                    
+                    var append = '<option value="'+e.id+'" selected>'+part_name+'</option>';
+
+                    $("#part_id").append(append);
+                    $('#system_id').val(system);
+
+                },
+                fail: function(e){
+                    sweet_alert_error(e.msg);
+
+                }
+               
+            }).always(function(e){
+                    $(".buttonload").css('display', 'none');
+                    $("#submit_new_part").css('display', 'block');
+                    $("#modal_part_name").val('');
+                    $("#modal_system_id").val('');
+                    $("#new_part").modal('hide');
+                });
+        }
+        else{
+            sweet_alert_error(e.msg);
+            $(".buttonload").css('display', 'none');
+            $("#submit_new_part").css('display', 'block');
+            return;
+        }
+        
+    });
+
+    request.fail(function(e){
+        console.log('fail', e);
+        sweet_alert_error();
+        return true;
+    });
+
+}
+
+function new_part_brand()
+{
+    var brand = $("#modal_part_brand").val();
+
+    $(".buttonload").css('display', 'block');
+    $("#submit_new_brand").css('display', 'none');
+
+    if(brand === "")
+    {
+        sweet_alert_error('Preencha o campo Marca');
+        $("#modal_part_brand").css('border', '1px solid red');
+        $(".buttonload").css('display', 'none');
+        $("#submit_new_brand").css('display', 'block');
+        return;
+    }
+    else{
+        $.ajax({
+            url: '/store_part_brand',
+            method: 'POST',
+            dataType: 'json',
+            data:{'name': brand},
+            success:function(e){
+                if(e.status)
+                {
+                    sweet_alert_success('A Marca ' + brand + ' foi cadastrada com sucesso');
+                    
+                    $("#new_part_brand").modal('hide');
+
+                    var append = '<option value="'+e.id+'" selected>'+brand+'</option>';
+                    $("#brand_parts_id").append(append);
+                }
+                else
+                    sweet_alert_error(e.msg);            
+                    
+            },
+            fail: function(e) {
+                console.log('fail', e);
+                sweet_alert_error();
+            }
+        }).always(function(e) {
+            $(".buttonload").css('display', 'none');
+                    
+            $("#submit_new_brand").css('display', 'block');
+            
+            $("#modal_part_brand").val('');
+        });
+    }
 }
