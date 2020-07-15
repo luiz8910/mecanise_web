@@ -2,6 +2,10 @@ $(function () {
 
     $("#system_id").change(function () {
 
+        if(location.pathname === '/listar_pecas')
+            return false;
+
+
         $("#part_id option").remove();
 
         var request = $.ajax({
@@ -116,7 +120,7 @@ $(function () {
 
     //slim_select_brand();
 
-    verify_system_parts();
+    //verify_system_parts();
 
     //slim_select_brand_parts();
 
