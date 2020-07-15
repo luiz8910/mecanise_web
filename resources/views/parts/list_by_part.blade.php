@@ -7,6 +7,7 @@
             <th scope="col">Marca <i class="fas fa-chevron-down re-order" onclick="reorder('brand')"></i></th>
             <th scope="col">Cód Marca <i class="fas fa-chevron-down re-order" onclick="reorder('brand_code')"></i> </th>
             <th scope="col">Cód Universal <i class="fas fa-chevron-down re-order" onclick="reorder('universal_code')"></i></th>
+            <th scope="col">Tipo <i class="fas fa-chevron-down re-order" onclick="reorder('type')"></i></th>
             <th scope="col">
                 <a href="{{ route('parts.create') }}" class="btn btn-success btn-sm" title="Criar Peça" style="margin-left: 30px; padding-right: 0px;">
                     <i class="fas fa-plus"></i>
@@ -22,6 +23,7 @@
                 <td><a href="javascript:" class="car_model">{{ $part->brand_name }}</a></td>
                 <td>{{ $part->brand_code }}</td>
                 <td><span>{{ $part->universal_code }}</span></td>
+                <td>{{ $part->type }}</td>
                 <td>
                     <button type="button" class="btn btn-info btn-sm notes" id="notes_{{ $part->id }}">
                         <i class="fas fa-file"></i>
@@ -29,7 +31,7 @@
                     <a href="javascript:" class="btn btn-sm btn-outline-info" onclick="feature_not_available();" title="Editar Peça">
                         <i class="fas fa-edit"></i>
                     </a>
-                    <button class="btn btn-sm btn-outline-danger" onclick="feature_not_available();" title="Excluir Peça">
+                    <button class="btn btn-sm btn-outline-danger" onclick="delete_single_part({!! $part->id !!})" title="Excluir Peça">
                         <i class="fas fa-trash"></i>
                     </button>
                 </td>

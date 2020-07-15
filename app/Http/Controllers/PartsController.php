@@ -325,7 +325,7 @@ class PartsController extends Controller
             $request->session()->flash('error.msg', $e->getMessage());
         }
 
-        return redirect()->route('parts.list');
+        return redirect()->route('list.by.part', ['id' => 1]);
     }
 
     //Cadastra uma nova peça // Creates a new part
@@ -487,6 +487,7 @@ class PartsController extends Controller
     {
         DB::beginTransaction();
 
+
         try {
             $x['notes'] = $request->get('notes');
 
@@ -497,11 +498,35 @@ class PartsController extends Controller
             return json_encode(['status' => true]);
 
         }catch (\Exception $e){
-            DB::rollBack();
+            //DB::rollBack();
 
             return json_encode(['status' => false, 'msg' => $e->getMessage()]);
         }
 
+    }
+
+    public function delete_part($id)
+    {
+        $part = $this->repository->findByField('id', $id)->first();
+
+        if($part)
+        {
+            DB::beginTransaction();
+
+            try {
+                $this->repository->delete($id);
+
+                DB::commit();
+
+                return json_encode(['status' => true]);
+
+            }catch (\Exception $e){
+
+                DB::rollBack();
+
+                return json_encode(['status' => false, 'msg' => $e->getMessage()]);
+            }
+        }
     }
 
     /*public function teste($brand_id)

@@ -79,7 +79,7 @@
                                             @if($edit)
                                                 <option value="{{ $sys->id }}" @if($sys->id == $part->system_id) selected @endif>{{ $sys->name }}</option>
                                             @else
-                                                <option value="{{ $sys->id }}">{{ $sys->name }}</option>
+                                                <option value="{{ $sys->id }}" @if($sys->id == 1) selected @endif>{{ $sys->name }}</option>
                                             @endif
                                         @endforeach
                                     </select>
@@ -115,7 +115,7 @@
                                             @if($edit)
                                                 <option value="{{ $pb->id }}" @if($pb->id == $part->brand_parts_id) selected @endif >{{ $pb->name }}</option>
                                             @else
-                                                <option value="{{ $pb->id }}">{{ $pb->name }}</option>
+                                                <option value="{{ $pb->id }}" @if($pb->id === 1) selected @endif>{{ $pb->name }}</option>
                                             @endif
                                         @endforeach
                                     </select>
@@ -137,7 +137,7 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-md-10 col-xs-6">
+                            <div class="col-md-5 col-xs-6">
                                 <div class="form-group">
                                     <label for="universal_code">Código Universal</label>
                                     <input type="text" name="universal_code" id="universal_code" class="form-control" placeholder="Ex: D8RTCMM-10"
@@ -146,14 +146,21 @@
                                 </div>
                             </div>
 
-                            {{--<div class="col-md-5 col-xs-6">
+                            <div class="col-md-5 col-xs-6">
                                 <div class="form-group">
                                     <label for="type">Tipo</label>
-                                    <input type="text" name="type" id="type" class="form-control" autocomplete="off" @if($edit) value="{{ $part->type }}" @endif
-                                    placeholder="Insira alguma especificação da peça.">
+                                    <select name="type" id="type" class="form-control">
+                                        <option value="">Selecione uma opção</option>
+                                        <option>Aplicação Original MM: 0,9/0,7</option>
+                                        <option>Aplicação Original MM: 0,7</option>
+                                        <option>Aplicação Original MM: 0,8</option>
+                                        <option>NGK GREEN MM: 0,7</option>
+                                        <option>G-POWER MM: 0,7</option>
+                                        <option>NGK IRIDIUM MM: 0,7</option>
+                                    </select>
                                     <span class="form-text text-danger" id="span_type_status" style="display:none;">Insira um tipo válido</span>
                                 </div>
-                            </div>--}}
+                            </div>
 
                         </div>
                         {{--<div class="row">

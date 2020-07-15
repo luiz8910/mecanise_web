@@ -18,7 +18,11 @@ $(function () {
 
                 for(var i = 0; i < e.parts.length; i++)
                 {
-                    append += '<option value="'+e.parts[i].id+'">'+e.parts[i].name+'</option>';
+                    if(e.parts[i].id === 1)
+                        append += '<option value="'+e.parts[i].id+'" selected>'+e.parts[i].name+'</option>';
+
+                    else
+                        append += '<option value="'+e.parts[i].id+'">'+e.parts[i].name+'</option>';
                 }
 
                 $("#part_id").append(append);
@@ -32,7 +36,8 @@ $(function () {
             console.log('fail', e);
             sweet_alert_error();
         });
-    });
+
+    }).trigger('change');
 
     $("#universal_code").keyup(function () {
         $("#universal_code").val($(this).val().toUpperCase());
@@ -597,7 +602,8 @@ function notes_modal($id)
 
 function update_notes()
 {
-    var notes = $("#notes").text();
+
+    var notes = $("#notes").val();
 
     $.ajax({
         url: '/update_notes/' + $("#notes_modal_id").val(),
@@ -618,4 +624,24 @@ function update_notes()
     }).always(function (e) {
         $("#notes_modal").modal('hide');
     });
+}
+
+function delete_single_part($id)
+{
+    var data = {
+        title: 'Atenção',
+        text: 'Deseja excluir esta peça?',
+        icon: 'warning',
+        button: 'Excluir',
+        success_msg: 'A peça foi excluída',
+        reload: false,
+        id: $id
+    }
+
+    var ajax = {
+        url: '/single_part/' + $id,
+        method: 'DELETE',
+    };
+
+    return sweet_alert(data, ajax);
 }

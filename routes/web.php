@@ -235,12 +235,14 @@ Route::group(['middleware' => 'auth'], function (){
     //List all parts // Listar todas as peças
     Route::get('/listar_pecas/{orderBy?}', 'PartsController@list_parts')->name('parts.list');
 
-    //Update notes
-    Route::post('/update_notes/{id}', 'PartsController@update_notes');
+    //Update part notes
+    Route::post('update_notes/{id}', 'PartsController@update_notes');
 
-
-    //Excluir a peça selecionada, não confundir com a desvinculação da peça com o carro
+    //Excluir a peça selecionada, não confundir com a desvinculação da peça com o carro -- Ex: Exclui todas as velas
     Route::delete('part_name/{id}', 'PartsController@delete_part_name');
+
+    //Excluir uma peça, Ex: Exclui uma vela do tipo NGK Green 0,7mm
+    Route::delete('/single_part/{id}', 'PartsController@delete_part');
 
 
 });
@@ -262,4 +264,5 @@ Route::get('/domains/{length?}', "TesteController@domains");
 Route::get('/admin-login', function (){
     return view('auth.login-admin');
 });
+
 
