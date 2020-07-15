@@ -193,7 +193,13 @@
                             <ul class="ul-subitem" id="ul-parts">
                                 <li class="li-items">
                                     <a href="{{ route('parts.index') }}" class="a-item">
-                                        <i class="fas fa-list"></i>Peças
+                                        <i class="fas fa-list"></i>Peças por Carros
+                                    </a>
+                                </li>
+
+                                <li class="li-items">
+                                    <a href="{{ route('parts.list') }}" class="a-item">
+                                        <i class="fas fa-list-alt"></i>Peças
                                     </a>
                                 </li>
 

@@ -7,7 +7,7 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label for="selected_car" style="margin-left: 50%;">Selecione um carro para ver informações</label>
-                <select name="" id="selected_car" class="" style="margin-left: 50%">
+                <select name="" id="selected_car" class="form-control" style="margin-left: 50%">
                     <option value="">Selecione um carro</option>
                     @foreach($cars as $car)
                         <option value="{{ $car->id }}">{{ $car->model }}</option>

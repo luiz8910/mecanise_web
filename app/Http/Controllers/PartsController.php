@@ -325,7 +325,7 @@ class PartsController extends Controller
             $request->session()->flash('error.msg', $e->getMessage());
         }
 
-        return redirect()->back();
+        return redirect()->route('parts.list');
     }
 
     //Cadastra uma nova peça // Creates a new part
@@ -449,6 +449,11 @@ class PartsController extends Controller
             }
 
         }
+    }
+
+    public function parts_list()
+    {
+
     }
 
     /*public function teste($brand_id)

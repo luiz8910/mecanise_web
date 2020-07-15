@@ -227,6 +227,8 @@ Route::group(['middleware' => 'auth'], function (){
 
     Route::put('/update_part/{id}', 'PartsController@update_part')->name('update.part');
 
+    Route::get('/lista_pecas', 'PartsController@parts_list')->name('parts.list');
+
     /*
      * Parts_name / Cadastro das peças
      */
