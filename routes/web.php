@@ -227,7 +227,7 @@ Route::group(['middleware' => 'auth'], function (){
 
     Route::put('/update_part/{id}', 'PartsController@update_part')->name('update.part');
 
-    Route::get('/lista_pecas', 'PartsController@parts_list')->name('parts.list');
+    Route::get('/peca_detalhe/{id}/{orderBy?}', 'PartsController@list_by_part')->name('list.by.part');
 
     /*
      * Parts_name / Cadastro das peças
@@ -235,6 +235,8 @@ Route::group(['middleware' => 'auth'], function (){
     //List all parts // Listar todas as peças
     Route::get('/listar_pecas/{orderBy?}', 'PartsController@list_parts')->name('parts.list');
 
+    //Update notes
+    Route::post('/update_notes/{id}', 'PartsController@update_notes');
 
 
     //Excluir a peça selecionada, não confundir com a desvinculação da peça com o carro

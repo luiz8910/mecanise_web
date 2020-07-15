@@ -451,8 +451,56 @@ class PartsController extends Controller
         }
     }
 
-    public function parts_list()
+    public function list_by_part($part_id, $orderBy = null)
     {
+        $offset = $this->config->findByField('key', 'pagination')->first() ?
+            $this->config->findByField('key', 'pagination')->first()->value : 10;
+
+        $route = 'parts.list_by_part';
+
+        $scripts[] = '../../js/parts.js';
+
+        $parts = $this->repository->findByField('part_id', $part_id);
+
+        $part_name = $this->partsName->findByField('id', $part_id)->first()->name;
+
+        foreach ($parts as $part)
+        {
+            $part->brand_name = $this->partsBrands->findByField('id', $part->brand_parts_id)->first()
+                ? $this->partsBrands->findByField('id', $part->brand_parts_id)->first()->name
+                : 'Marca não encontrada';
+        }
+
+        $qtde_model = count($parts);
+
+        if($orderBy)
+            $parts = $parts->sortBy($orderBy);
+        else
+            $parts = $parts->sortBy('name');
+
+
+        return view('index', compact('route', 'scripts', 'parts', 'qtde_model',
+            'offset', 'part_name'));
+    }
+
+    public function update_notes(Request $request, $id)
+    {
+        DB::beginTransaction();
+
+        try {
+            $x['notes'] = $request->get('notes');
+
+            $this->repository->update($x, $id);
+
+            DB::commit();
+
+            return json_encode(['status' => true]);
+
+        }catch (\Exception $e){
+            DB::rollBack();
+
+            return json_encode(['status' => false, 'msg' => $e->getMessage()]);
+        }
 
     }
 

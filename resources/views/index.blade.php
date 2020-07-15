@@ -214,12 +214,6 @@
                                         <i class="fas fa-copyright"></i>Marcas
                                     </a>
                                 </li>
-
-                                <li class="li-items">
-                                    <a href="{{ route('parts.list') }}" class="a-item">
-                                        <i class="fas fa-layer-group"></i>Lista Geral
-                                    </a>
-                                </li>
                             </ul>
                         </li>
 

@@ -18,7 +18,9 @@
         @foreach($parts as $part)
             <tr class="row100 body" id="model_{{ $part->id }}">
                 <th scope="row">{{ $part->id }}</th>
-                <td id="part_name_{{ $part->id }}">{{ $part->name }}</td>
+                <td id="part_name_{{ $part->id }}">
+                    <a href="{{ route('list.by.part', ['id' => $part->id]) }}">{{ $part->name }}</a>
+                </td>
                 <td id="part_system_{{ $part->id }}">{{ $part->system_name }}</td>
                 <td>
                     <button class="btn btn-sm btn-outline-info btn_part_name" title="Editar Peça"

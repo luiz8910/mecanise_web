@@ -101,6 +101,12 @@ $(function () {
         $(this).removeClass('disabled');
     });
 
+    $(".notes").click(function () {
+        var id = this.id.replace('notes_', "");
+
+        notes_modal(id);
+    });
+
     search_car();
 
     //slim_select_brand();
@@ -131,7 +137,7 @@ function search_car()
 
         select.setSearch("Nenhum resultado encontrado");
     }
-    
+
 }
 
 function slim_select_brand()
@@ -491,7 +497,7 @@ function new_part()
                 },
                 success: function(e){
                     sweet_alert_success('A Peça foi cadastrada com sucesso');
-                    
+
                     var append = '<option value="'+e.id+'" selected>'+part_name+'</option>';
 
                     $("#part_id").append(append);
@@ -502,7 +508,7 @@ function new_part()
                     sweet_alert_error(e.msg);
 
                 }
-               
+
             }).always(function(e){
                     $(".buttonload").css('display', 'none');
                     $("#submit_new_part").css('display', 'block');
@@ -517,7 +523,7 @@ function new_part()
             $("#submit_new_part").css('display', 'block');
             return;
         }
-        
+
     });
 
     request.fail(function(e){
@@ -553,15 +559,15 @@ function new_part_brand()
                 if(e.status)
                 {
                     sweet_alert_success('A Marca ' + brand + ' foi cadastrada com sucesso');
-                    
+
                     $("#new_part_brand").modal('hide');
 
                     var append = '<option value="'+e.id+'" selected>'+brand+'</option>';
                     $("#brand_parts_id").append(append);
                 }
                 else
-                    sweet_alert_error(e.msg);            
-                    
+                    sweet_alert_error(e.msg);
+
             },
             fail: function(e) {
                 console.log('fail', e);
@@ -569,10 +575,47 @@ function new_part_brand()
             }
         }).always(function(e) {
             $(".buttonload").css('display', 'none');
-                    
+
             $("#submit_new_brand").css('display', 'block');
-            
+
             $("#modal_part_brand").val('');
         });
     }
+}
+
+function notes_modal($id)
+{
+    var notes = $("#notes_input_" + $id).val();
+
+    $('#notes_modal').modal('show');
+
+    $("#notes").text(notes);
+
+    $("#notes_modal_id").val($id);
+
+}
+
+function update_notes()
+{
+    var notes = $("#notes").text();
+
+    $.ajax({
+        url: '/update_notes/' + $("#notes_modal_id").val(),
+        method: 'POST',
+        dataType: 'json',
+        data: {'notes': notes},
+        success: function (e) {
+            if(e.status)
+                sweet_alert_success('Alteração cadastrada com sucesso');
+
+            else
+                sweet_alert_error(e.msg);
+
+        },fail: function (e) {
+            console.log('fail', e);
+            sweet_alert_error();
+        }
+    }).always(function (e) {
+        $("#notes_modal").modal('hide');
+    });
 }
