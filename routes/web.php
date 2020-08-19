@@ -197,6 +197,10 @@ Route::group(['middleware' => 'auth'], function (){
 
     Route::post('/pagination', 'ConfigController@set_pagination');
 
+    Route::get('/importar', 'ImportController@view')->name('config.import');
+
+    Route::post('importar', 'ImportController@receive');
+
     /*
      * Peças / Parts (Vínculo das peças com os carros)
      */

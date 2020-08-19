@@ -239,6 +239,11 @@
                                         <i class="far fa-copyright"></i>Lista de Montadoras
                                     </a>
                                 </li>
+                                <li class="li-items">
+                                    <a href="{{ route('config.import') }}" class="a-item">
+                                        <i class="fas fa-upload"></i>Importar
+                                    </a>
+                                </li>
 
                             </ul>
                         </li>
