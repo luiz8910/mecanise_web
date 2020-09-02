@@ -101,9 +101,19 @@ class VehicleController extends Controller
      * @param $owner_id
      * @return View
      */
-    public function vehicle_by_owner($owner_id)
+    public function vehicle_by_owner($owner_id, $json = null)
     {
         $vehicles = $this->repository->findByField('owner_id', $owner_id);
+
+        if($json)
+        {
+            foreach ($vehicles as $vehicle) {
+                $vehicle->name = $this->carRepository->findByField('id', $vehicle->car_id)->first()->model;
+            }
+
+            return json_encode(['status' => true, 'vehicles' => $vehicles]);
+        }
+
 
         $route = 'vehicles.by_owner';
 

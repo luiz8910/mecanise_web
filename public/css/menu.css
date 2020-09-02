@@ -54,7 +54,7 @@ i{
 }
 
 .top-menu{
-    background-color: #404E67;
+    background-color: #242825;
     height: 50px;
     max-height: 50px;
     width: 16%;
@@ -62,7 +62,7 @@ i{
 }
 
 .menu{
-    background-color: #404E67;
+    background-color: #242825;
     width: 16%;
     height: 100%;
     position: fixed;
@@ -228,7 +228,7 @@ i{
 }
 
 table thead{
-    background-color: #404e67 !important;
+    background-color: #242825 !important;
 }
 
 thead tr th{

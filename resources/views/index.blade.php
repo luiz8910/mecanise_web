@@ -139,12 +139,12 @@
 
                             <ul id="ul-os" class="ul-subitem">
                                 <li class="li-items">
-                                    <a href="javascript:" class="a-item">
+                                    <a href="{{ route('order.index') }}" class="a-item">
                                         <i class="fas fa-list"></i> Lista Geral
                                     </a>
                                 </li>
                                 <li class="li-items">
-                                    <a href="javascript:" class="a-item">
+                                    <a href="{{ route('order.create')}}" class="a-item">
                                         <i class="fas fa-plus"></i> Nova OS
                                     </a>
                                 </li>

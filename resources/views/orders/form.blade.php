@@ -1,128 +1,3 @@
-<div class="container-contact100">
-    <div class="wrap-contact100">
-        @if($edit)
-            <form class="contact100-form validate-form" id="form" method="POST" action="{{ route('order.update', ['id' => $order->id]) }}">
-                @method('PUT')
-                @else
-                    <form class="contact100-form validate-form" id="form" method="POST" action="{{ route('order.store') }}">
-                @endif
-                        @csrf
-
-                        <span class="contact100-form-title">@if($edit) Editar @else Nova @endif OS</span>
-
-                        <a href="javascript:" class="btn btn-outline-success btn-left" data-target="#new_owner" data-toggle="modal">
-                            <i class="fas fa-user"></i>
-                            Novo Proprietário
-                        </a>
-
-                        <a href="javascript:" class="btn btn-outline-info btn-right" data-target="#new_vehicle" data-toggle="modal">
-                            <i class="fas fa-car"></i>
-                            Novo veículo
-                        </a>
-
-
-                        @if($edit)
-                            <div class="wrap-input100 validate-input bg1 rs1-wrap-input100" data-validate = "Insira um valor válido">
-                                <span class="label-input100">Código OS</span>
-                                <input class="input100 tab-info" type="text"
-                                       id="code" required readonly value="{{ $order->code }}">
-                            </div>
-                        @endif
-
-                        @if($edit)
-                            <div class="wrap-input100 bg1 rs1-wrap-input100">
-                                @foreach($owners as $owner)
-                                    @if($owner->id == $order->owner_id)
-                                        <input type="hidden" value="{{ $owner->id }}" id="owner_id_input" name="owner_id">
-                                        @break
-                                    @endif
-                                @endforeach
-                            @else
-                                <div class="wrap-input100 bg1">
-                                <input type="hidden" value="" id="owner_id_input" name="owner_id">
-                            @endif
-
-
-                            <span class="label-input100">Proprietário</span>
-                            <div>
-                                <select class="select-style form-control select2 tab-info" id="owner_id" name="owner_id" required>
-                                    <option value="">Selecione um valor</option>
-                                    @foreach($owners as $owner)
-                                        @if($edit)
-                                            <option value="{{ $owner->id }}" @if($owner->id == $order->owner_id) selected @endif>{{ $owner->name }}</option>
-                                        @else
-                                            <option value="{{ $owner->id }}">{{ $owner->name }}</option>
-                                        @endif
-                                    @endforeach
-                                </select>
-                                <span class="form-text text-danger" id="span_owner_id_status" style="display: none;">Selecione uma opção</span>
-                                <div class="dropDownSelect2"></div>
-                            </div>
-
-                        </div>
-
-                        <input type="hidden" id="car_id_input" name="car_id" value="@if($edit){{ $order->car_id }}@endif">
-                        <input type="hidden" id="vehicle_id_input" value="@if($edit){{ $order->vehicle_id }}@endif" name="vehicle_id">
-
-
-                        <div class="wrap-input100 validate-input bg1" data-validate="Insira um valor válido">
-                            <span class="label-input100">Veículo</span>
-                            <div>
-                                <select id="car_id" class="form-control select-style tab-info" required>
-                                    <option value="">Selecione um proprietário primeiro</option>
-                                    @if($edit)
-                                        @foreach($vehicles as $vehicle)
-                                            <option value="{{ $vehicle->id }}" @if($vehicle->id == $order->vehicle_id) selected @endif>{{ $vehicle->name }}</option>
-                                        @endforeach
-                                    @endif
-                                </select>
-                            </div>
-
-                            <div class="invalid-feedback" id="span-invalid-model" style="display:none;"></div>
-                            <span class="form-text text-danger" id="span_model_status" style="display:none;">Insira o veículo.</span>
-                        </div>
-
-                        <div class="wrap-input100 validate-input bg1 rs1-wrap-input100" data-validate = "Insira um valor válido">
-                            <span class="label-input100">Realizado em:</span>
-                            <input class="input100 tab-info date number tab-info" type="text" name="done_at"
-                                   id="done_at"
-                                   value="@if($edit){{ $order->done_at }}@else{{ old('done_at') }}@endif">
-
-                            <span class="form-text text-danger" id="span_brand_status" style="display:none;">Insira uma data.</span>
-                        </div>
-
-                        <div class="wrap-input100 validate-input bg1 rs1-wrap-input100" data-validate = "Insira um valor válido">
-                            <span class="label-input100">Finalizado em:</span>
-                            <input class="input100 tab-info date number tab-info" type="text" name="conclusion_at"
-                                   id="conclusion_at"
-                                   value="@if($edit){{ $order->conclusion_at }}@else{{ old('conclusion_at') }}@endif">
-
-                            <span class="form-text text-danger" id="span_conclusion_at_status" style="display:none;">Insira uma data.</span>
-                        </div>
-
-                        <div class="wrap-input100 validate-input bg0 rs1-alert-validate" data-validate = "Descreva o serviço executado">
-                            <span class="label-input100">Descrição</span>
-                            <textarea class="input100 tab-info" name="description" placeholder="Descreva o serviço executado">@if($edit){{ $order->description }}@else{{ old('description') }}@endif</textarea>
-                        </div>
-
-
-                        <div class="container-contact100-form-btn">
-
-                            <button type="button" class="contact50-form-btn next-tab" onclick="next_tab(0, 'tab-info')" disabled>
-                                <span>
-                                    Salvar
-                                    <i class="fa fa-long-arrow-right m-l-7" aria-hidden="true"></i>
-                                </span>
-                            </button>
-                        </div>
-                    </form>
-    </div>
-</div>
-
-<br><br><br>
-
-
-
 
 <div class="modal fade" id="new_owner" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
@@ -240,7 +115,6 @@
 </div>
 
 
-
 <div class="modal fade" id="new_vehicle" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -334,4 +208,120 @@
 
         </div>
     </div>
+</div>
+
+
+<div class="form-body">
+    <div class="form-title">
+        <p> @if($edit) Editar Ordem de Serviço: #{{ $order->code }} @else Nova Ordem de Serviço @endif</p>
+    </div>
+
+    <div class="form-options">
+        <div class="dropdown dropleft">
+            <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Opções
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="javascript:" id="show_new_owner">
+                    <i class="fas fa-user"></i> Novo Proprietário
+                </a>
+                <a class="dropdown-item" href="javascript:" id="show_new_vehicle">
+                    <i class="fas fa-car"></i> Novo Veículo
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="form-wrapper">
+        @if($edit)
+            <form action="{{ route('order.update', ['id' => $order->id]) }}" method="POST">
+                @method('PUT')
+                @else
+                    <form action="{{ route('order.store') }}" method="POST">
+                        @endif
+
+                        <div class="row">
+                            <div class="col-md-5 col-xs-6">
+                                <div class="form-group">
+                                    <label for="owner_id">Proprietário</label>
+                                    <select id="owner_id" name="owner_id" class="form-control" required>
+                                        <option value="">Selecione um valor</option>
+                                        @foreach($people as $person)
+                                            @if($edit)
+                                                <option value="{{ $person->id }}" @if($person->id == $order->owner_id) selected @endif >{{ $person->name }}</option>
+                                            @else
+                                                <option value="{{ $person->id }}">{{ $person->name }}</option>
+                                            @endif
+                                        @endforeach
+                                    </select>
+                                    <span class="form-text text-danger" id="span_owner_id_status" style="display:none;">Escolha um proprietário.</span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-5 col-xs-6">
+                                <div class="form-group">
+                                    <label for="car_id">Veículos</label>
+                                    <select id="car_id" name="car_id" class="form-control" required>
+                                        <option value="">Selecione um proprietário primeiro</option>
+                                        @if($edit)
+                                            @foreach($vehicles as $vehicle)
+                                                <option value="{{ $vehicle->id }}" @if($vehicle->id == $order->vehicle_id) selected @endif >{{ $vehicle->model }}</option>
+                                            @endforeach
+                                        @endif
+                                    </select>
+                                    <span class="form-text text-danger" id="span_car_id_status" style="display:none;">Escolha um veículo.</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-5 col-xs-6">
+                                <div class="form-group">
+                                    <label for="start_year">Realizado em:</label>
+                                    <input type="text" id="done_at" name="done_at" class="form-control date number"
+                                           placeholder="Ex: Digite a data em que o serviço começou" value="@if($edit){{ $order->done_at }}@else{{ old('done_at') }}@endif">
+                                    <span id="span_done_at_status" style="color: red; display:none;"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-5 col-xs-6">
+                                <div class="form-group">
+                                    <label for="end_year">Finalizado em:</label>
+                                    <input type="text" id="conclusion_at" name="conclusion_at" class="form-control date number"
+                                           placeholder="Ex: Digite a data em que o serviço foi concluído"
+                                           value="@if($edit){{ $order->conclusion_at }}@else{{ old('conclusion_at') }}@endif">
+                                    <span id="span_conclusion_at_status" style="color: red; display:none;"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-10 col-xs-6">
+                                <div class="form-group">
+                                    <label for="description">Descrição</label>
+                                    <textarea type="text" id="description" name="description" class="form-control" rows="10"
+                                              placeholder="Entre com informações relevantes para a Ordem de Serviço.">@if($edit){{ $car->description }}@else{{ old('description') }}@endif</textarea>
+                                    <span class="form-text text-danger" id="span_description_status" style="display: none;"></span>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <br><br>
+                        <div class="row">
+                            <div class="col-md-10 col-xs-6">
+                                <button type="submit" class="btn btn-outline-dark btn-block btn-submit">
+                                    <i class="fas fa-check"></i>
+                                    Salvar
+                                </button>
+                            </div>
+                        </div>
+
+                    </form>
+    </div>
+
+
+
 </div>

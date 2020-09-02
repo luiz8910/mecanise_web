@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Repositories\CarRepository;
 use App\Repositories\ColorsRepository;
+use App\Repositories\ConfigRepository;
 use App\Repositories\OrderRepository;
 use App\Repositories\PersonRepository;
 use App\Repositories\StatesRepository;
@@ -45,11 +46,15 @@ class OrderController extends Controller
      * @var ColorsRepository
      */
     private $colorsRepository;
+    /**
+     * @var ConfigRepository
+     */
+    private $configRepository;
 
     public function __construct(OrderRepository $repository, PersonRepository $personRepository,
                                 CarRepository $carRepository, VehicleRepository $vehicleRepository,
                                 WorkshopRepository $workshopRepository, StatesRepository $statesRepository,
-                                ColorsRepository $colorsRepository)
+                                ColorsRepository $colorsRepository, ConfigRepository $configRepository)
     {
 
         $this->repository = $repository;
@@ -59,6 +64,7 @@ class OrderController extends Controller
         $this->workshopRepository = $workshopRepository;
         $this->statesRepository = $statesRepository;
         $this->colorsRepository = $colorsRepository;
+        $this->configRepository = $configRepository;
     }
 
     public function index($filter = null)
@@ -95,13 +101,39 @@ class OrderController extends Controller
         $route = 'orders.index';
 
         $scripts[] = '../../js/order.js';
-        $links[] = '../../css/main.css';
+
 
         foreach ($orders as $order)
         {
-            $order->owner_name = $this->personRepository->findByField('id', $order->owner_id)->first()->name;
+            $order->owner_name = $this->personRepository->findByField('id', $order->owner_id)->first();
 
-            $order->vehicle_name = $this->carRepository->findByField('id', $order->car_id)->first()->model;
+            if($order->owner_name)
+                $order->owner_name = $order->owner_name->name;
+
+            else{
+                $result = DB::table('people')->where('id', $order->owner_id)->first();
+
+                if($result)
+                    $order->owner_name = $result->name;
+
+                else
+                    $order->owner_name = "Cliente não informado";
+            }
+
+            $order->vehicle_name = $this->carRepository->findByField('id', $order->car_id)->first();
+
+            if($order->vehicle_name)
+                $order->vehicle_name = $order->vehicle_name->model;
+
+            else{
+                $result = DB::table('cars')->where('id', $order->car_id)->first();
+
+                if($result)
+                    $order->vehicle_name = $result->model;
+
+                else
+                    $order->vehicle_name = 'Veículo não informado';
+            }
 
             $order->conclusion_at = $order->conclusion_at ?
                 date_format(date_create($order->conclusion_at), 'd/m/Y') : 'Em Aberto';
@@ -109,7 +141,12 @@ class OrderController extends Controller
 
         $orders->sortByDesc('created_at');
 
-        return view('index', compact('route', 'orders', 'scripts', 'links'));
+        $qtde_model = count($this->repository->findByField('conclusion_at', null));
+
+        $offset = $this->configRepository->findByField('key', 'pagination')->first() ?
+            $this->configRepository->findByField('key', 'pagination')->first()->value : 10;
+
+        return view('index', compact('route', 'orders', 'scripts', 'qtde_model', 'offset'));
     }
 
 
@@ -124,7 +161,7 @@ class OrderController extends Controller
         $scripts[] = '../../js/zipcode.js';
         $scripts[] = '../../js/mask.js';
 
-        $owners = $this->personRepository->findWhere(['workshop_id' => $this->get_user_workshop(), 'role_id' => 4]);
+        $people = $this->personRepository->findWhere(['workshop_id' => $this->get_user_workshop(), 'role_id' => 4]);
 
         $states = $this->statesRepository->orderBy('state')->all();
 
@@ -134,11 +171,20 @@ class OrderController extends Controller
 
         $cars = $cars->sortBy('model');
 
-        $owners = $owners->sortBy('name');
+        $people = $people->sortBy('name');
 
         $colors = $colors->sortBy('name');
 
-        return view('index', compact('route', 'edit', 'scripts', 'owners', 'states', 'cars', 'colors'));
+        $vehicles = $this->vehicleRepository->findByField('workshop_id', $this->get_user_workshop());
+
+        foreach ($vehicles as $vehicle)
+        {
+            $vehicle->name = $this->carRepository->findByField('id', $vehicle->car_id)->first() ?
+                $this->carRepository->findByField('id', $vehicle->car_id)->first()->model : 'Veículo Desconhecido';
+        }
+
+        return view('index', compact('route', 'edit', 'scripts', 'people', 'states',
+            'cars', 'colors', 'vehicles'));
     }
 
     public function edit($id)

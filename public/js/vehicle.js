@@ -311,7 +311,6 @@ function car_change($input_id)
 
     const id = $('#'+$input_id).val();
 
-
     if(id)
     {
         var request = $.ajax({

@@ -1,6 +1,5 @@
 $(function () {
 
-    $(".column1").css('width', '10%');
 
     if(location.pathname.search('editar') == -1)
     {
@@ -8,13 +7,19 @@ $(function () {
 
         var month = today.getMonth() + 1 < 10 ? '0' + (today.getMonth() + 1) : today.getMonth() + 1;
 
-        today = today.getDate() + '/' + month + '/' + today.getFullYear();
+        if(today.getDate() < 10)
+            var day = '0' + today.getDate();
+
+        else
+            day = today.getDate();
+
+        today = day + '/' + month + '/' + today.getFullYear();
 
         $("#done_at").val(today);
         $("#conclusion_at").val(today);
     }
 
-    $("#owner_id").change(function () {
+    /*$("#owner_id").change(function () {
 
         //id = owner id
         var id = $("#owner_id_input").val();
@@ -64,16 +69,47 @@ $(function () {
 
             sweet_alert_error();
         });
-    });
+    });*/
 
     $("#car_id_modal").change(function () {
 
         car_change('car_id_modal');
     });
 
-    $("#car_id").change(function () {
-        $("#car_id_input").val($(this).val());
+    $("#owner_id").change(function () {
+        //$("#car_id_input").val($(this).val());
+        $.ajax({
+            url: '/vehicle_by_owner/' + $(this).val() + '/' + true,
+            method: 'GET',
+            dataType: 'json',
+            success: function (e){
+                if(e.status && e.vehicles.length > 0)
+                {
+                    $("#car_id option").remove();
+                    var append = '';
+
+                    for(var i = 0; i < e.vehicles.length; i++)
+                    {
+                        append += '<option value="'+e.vehicles[i].id+'">'+e.vehicles[i].name+'</option>'
+                    }
+
+                    $("#car_id").append(append);
+                }
+            },
+            fail: function (e){
+                console.log('fail', e);
+            }
+        });
     });
+
+    $("#show_new_owner").click(function (){
+        $("#new_owner").modal('show');
+    });
+
+    $("#show_new_vehicle").click(function (){
+        $("#new_vehicle").modal('show');
+    });
+
 });
 
 function new_vehicle()

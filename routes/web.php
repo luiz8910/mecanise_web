@@ -58,7 +58,7 @@ Route::group(['middleware' => 'auth'], function (){
 
     Route::delete('/vehicle/{id}', 'VehicleController@delete');
 
-    Route::get('/vehicle_by_owner/{id}', 'VehicleController@vehicle_by_owner')->name('vehicle.by.owner');
+    Route::get('/vehicle_by_owner/{id}/{json?}', 'VehicleController@vehicle_by_owner')->name('vehicle.by.owner');
 
     Route::get('/search-vehicles/{input}', 'VehicleController@search');
 
