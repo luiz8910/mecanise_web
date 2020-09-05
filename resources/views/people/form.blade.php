@@ -5,7 +5,19 @@
     </div>
 
     <div class="form-options">
-        <i class="fas fa-cog"></i>
+        <div class="dropdown dropleft">
+            <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Opções
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="javascript:">
+                    <i class="fas fa-user"></i> Novo Proprietário
+                </a>
+                <a class="dropdown-item" href="javascript:">
+                    <i class="fas fa-cog"></i> Novo Funcionário
+                </a>
+            </div>
+        </div>
     </div>
 
     <hr>
@@ -14,6 +26,7 @@
         @if($edit)
             <form action="{{ route('person.update', ['id' => $person->id]) }}" method="POST">
                 @method('PUT')
+                <input type="hidden" value="{{ $person->id }}" id="person_id">
                 @else
                     <form action="{{ route('person.store') }}" method="POST">
                 @endif
@@ -43,9 +56,9 @@
                             <div class="col-md-6 col-xs-6">
                                 <div class="form-group">
                                     <label for="cpf">CPF</label>
-                                    <input type="text" id="cpf" name="cpf" class="form-control number"
+                                    <input type="text" id="cpf" name="cpf" class="form-control number" maxlength="14"
                                            placeholder="Digite o CPF do cliente" value="@if($edit){{ $person->cpf }}@else{{ old('cpf') }}@endif">
-                                    <span class="form-text text-danger" id="span_cpf_status" style="display: none;">Insira um valor válido</span>
+                                    <span class="form-text text-danger" id="span_cpf_status" style="display: none;">Insira um CPF válido</span>
                                 </div>
                             </div>
                         </div>

@@ -144,10 +144,10 @@ $(function () {
     });
 
     //When CPF field changes / Quando o campo cpf muda de valor
-    $("#cpf").change(function () {
+    /*$("#cpf").change(function () {
         //Pre cpf validation / Validação preliminar do CPF
         before_validate_cpf();
-    });
+    });*/
 
     //When CPF field inside a modal changes / Quando um cpf dentro do modal muda de valor
     $("#modal_cpf").change(function () {
@@ -668,26 +668,7 @@ function back_menu() {
     }
 }
 
-/*
-    Before user identification is validated,
-    verify if cpf fields has 11 characters
 
-    Antes de validar se o cpf é valido, verifica-se
-    o cpf tem 11 caracteres
-* */
-function before_validate_cpf($input) {
-    $input = $input ? $input : 'cpf';
-
-    if ($("#" + $input).val().length == 11) {
-        if (!validate_cpf($input)) {
-            sweet_alert_error('CPF inválido');
-
-            $("#" + $input).addClass('input-error');
-        } else {
-            $("#" + $input).removeClass('input-error');
-        }
-    }
-}
 
 //Generic Ajax Request / Requisição ajax genérica
 function sweet_alert($data, $ajax) {
@@ -852,60 +833,6 @@ function spinner_input($function, $id, $class) {
 
 }
 
-/*
- Validate CPF
- */
-function validate_cpf($input_id) {
-    var cpf = $input_id ? $("#" + $input_id).val() : $("#cpf").val();
-
-    cpf = cpf.replace(/[^\d]+/g, '');
-
-    if (cpf == '')
-        return false;
-
-    // Elimina CPFs invalidos conhecidos
-    if (cpf.length != 11 ||
-        cpf == "00000000000" ||
-        cpf == "11111111111" ||
-        cpf == "22222222222" ||
-        cpf == "33333333333" ||
-        cpf == "44444444444" ||
-        cpf == "55555555555" ||
-        cpf == "66666666666" ||
-        cpf == "77777777777" ||
-        cpf == "88888888888" ||
-        cpf == "99999999999")
-        return false;
-
-    // Valida 1o digito
-    add = 0;
-    for (i = 0; i < 9; i++)
-        add += parseInt(cpf.charAt(i)) * (10 - i);
-
-    rev = 11 - (add % 11);
-
-    if (rev == 10 || rev == 11)
-        rev = 0;
-
-    if (rev != parseInt(cpf.charAt(9)))
-        return false;
-
-    // Valida 2o digito
-    add = 0;
-
-    for (i = 0; i < 10; i++)
-        add += parseInt(cpf.charAt(i)) * (11 - i);
-
-    rev = 11 - (add % 11);
-
-    if (rev == 10 || rev == 11)
-        rev = 0;
-
-    if (rev != parseInt(cpf.charAt(10)))
-        return false;
-
-    return true;
-}
 
 /*
  Validate chassis number

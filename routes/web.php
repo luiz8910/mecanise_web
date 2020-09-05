@@ -43,6 +43,8 @@ Route::group(['middleware' => 'auth'], function (){
 
     Route::delete('/person/{id}', 'PersonController@delete');
 
+    Route::get('/cpf_exists/{cpf}/{id?}', 'PersonController@cpf_exists');
+
     /**
      * Crud Vehicles
      */

@@ -121,6 +121,7 @@ class PersonController extends Controller
         //$scripts[] = '../../assets/js/pages/custom/user/add-user.js';
         $scripts[] = '../../js/person.js';
         $scripts[] = '../../js/address.js';
+        $scripts[] = '../../js/config.js';
 
         $route = 'people.form';
 
@@ -146,6 +147,7 @@ class PersonController extends Controller
             //$scripts[] = '../../assets/js/pages/custom/user/add-user.js';
             $scripts[] = '../../js/person.js';
             $scripts[] = '../../js/address.js';
+            $scripts[] = '../../js/config.js';
 
             $route = 'people.form';
 
@@ -429,5 +431,30 @@ class PersonController extends Controller
             }
 
         }
+    }
+
+    /*
+     * Verify if cpf is in use by another person.
+     * Verifica se o cpf está em uso por outra pessoa.
+     */
+    public function cpf_exists($cpf, $id = null)
+    {
+        $response = $this->repository->findByField('cpf', $cpf)->first();
+
+        if($response)
+        {
+            if($id)
+            {
+                if($response->id == $id)
+                    return json_encode(['status' => true]);
+
+                return json_encode(['status' => false]);
+            }
+
+            return json_encode(['status' => false]);
+        }
+
+        return json_encode(['status' => true]);
+
     }
 }
