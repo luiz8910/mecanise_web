@@ -39,6 +39,7 @@
     {{--<link rel="stylesheet" href="../../css/common.css">--}}
     <link rel="stylesheet" href="../../css/loading.css">
     <link rel="stylesheet" href="../../css/menu.css">
+    <link rel="stylesheet" href="../../css/loading_bars.css">
 
 
     @if(isset($links))
@@ -53,7 +54,10 @@
 
 {{--@include('loading')--}}
 
+
 <div class="pre-loading" style="display:block;">
+    @include('loading_bars')
+
     <div class="profile-settings-box">
         <div class="profile-items">
 
@@ -123,9 +127,18 @@
                             </a>
 
                             <ul id="ul-users" class="ul-subitem">
-                                <li class="li-items"><a href="javascript:" class="a-item">Teste I</a></li>
-                                <li class="li-items"><a href="javascript:" class="a-item">Teste II</a></li>
-                                <li class="li-items"><a href="javascript:" class="a-item">Teste III</a></li>
+                                <li class="li-items"><a href="{{ route('person.index') }}" class="a-item">
+                                        <i class="fas fa-list"></i> Lista Geral
+                                    </a></li>
+                                <li class="li-items"><a href="javascript:" class="a-item">
+                                        <i class="fas fa-users"></i> Funcionários
+                                    </a></li>
+                                <li class="li-items"><a href="{{ route('person.create') }}" class="a-item">
+                                        <i class="fas fa-plus"></i> Novo Usuário
+                                    </a></li>
+                                <li class="li-items"><a href="javascript:" class="a-item">
+                                        <i class="fas fa-plus"></i> Novo Funcionário
+                                    </a></li>
                             </ul>
                         </li>
 

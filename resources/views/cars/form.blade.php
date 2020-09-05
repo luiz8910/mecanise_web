@@ -59,7 +59,7 @@
                         <label for="start_year">Ano Inicial de Fabricação</label>
                         <input type="text" id="start_year" name="start_year" class="form-control"
                                placeholder="Ex: 2000" value="@if($edit){{ $car->start_year }}@else{{ old('start_year') }}@endif">
-                        <span id="span_end_start_status" style="color: red; display:none;"></span>
+                        <span id="span_start_year_status" style="color: red; display:none;"></span>
                     </div>
                 </div>
             </div>

@@ -21,8 +21,9 @@ class Workshop extends Model implements Transformable
      * @var array
      */
     protected $fillable = [
-        'name', 'cel', 'email', 'website', 'cnpj', 'responsible_id', 'description',
-        'zip_code', 'street', 'number', 'district', 'city', 'state', 'address_reference'
+        'name', 'cel', 'email', 'website', 'cnpj', 'responsible_id',
+        'description', 'zip_code', 'street', 'number', 'district',
+        'city', 'state', 'address_reference', 'business_name', 'cpf'
     ];
 
     protected $dates = ['deleted_at'];

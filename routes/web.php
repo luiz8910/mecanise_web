@@ -29,13 +29,13 @@ Route::group(['middleware' => 'auth'], function (){
     /**
      * Crud Users
      */
-    Route::get('/usuarios', 'PersonController@index')->name('person.index');
+    Route::get('/usuarios/{role?}', 'PersonController@index')->name('person.index');
 
     Route::get('/tabela-usuarios', 'PersonController@index_table')->name('person.table');
 
-    Route::get('/criar-usuario', 'PersonController@create')->name('person.create');
+    Route::get('/criar-usuario/{role?}', 'PersonController@create')->name('person.create');
 
-    Route::get('/editar-usuario/{id}', 'PersonController@edit')->name('person.edit');
+    Route::get('/editar-usuario/{id}/{role?}', 'PersonController@edit')->name('person.edit');
 
     Route::post('/person', 'PersonController@store')->name('person.store');
 
@@ -267,6 +267,10 @@ Route::get('/domains/{length?}', "TesteController@domains");
 
 Route::get('/admin-login', function (){
     return view('auth.login-admin');
+});
+
+Route::get('/loading_bars', function (){
+    return view('loading_bars');
 });
 
 

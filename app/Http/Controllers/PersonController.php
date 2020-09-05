@@ -24,40 +24,39 @@ class PersonController extends Controller
     /**
      * @var WorkshopRepository
      */
-    private $workshopRepository;
+    private $workshops;
     /**
      * @var RolesRepository
      */
-    private $rolesRepository;
+    private $roles;
     /**
      * @var UserRepository
      */
-    private $userRepository;
+    private $users;
     /**
      * @var StatesRepository
      */
-    private $statesRepository;
+    private $states;
 
-    public function __construct(PersonRepository $repository, UserRepository $userRepository,
-                                WorkshopRepository $workshopRepository, RolesRepository $rolesRepository,
-                                StatesRepository $statesRepository)
+    public function __construct(PersonRepository $repository, UserRepository $users,
+                                WorkshopRepository $workshops, RolesRepository $roles,
+                                StatesRepository $states)
     {
 
         $this->repository = $repository;
-        $this->workshopRepository = $workshopRepository;
-        $this->rolesRepository = $rolesRepository;
-        $this->userRepository = $userRepository;
-        $this->statesRepository = $statesRepository;
+        $this->workshops = $workshops;
+        $this->roles = $roles;
+        $this->users = $users;
+        $this->states = $states;
     }
 
     public function index()
     {
-        $workshop = $this->workshopRepository->findByField('id', $this->get_user_workshop())->first();
+        $workshop = $this->workshops->findByField('id', $this->get_user_workshop())->first();
 
         if($workshop)
-        {
             $people = $workshop->people;
-        }
+
 
         $route = 'people.list-default';
 
@@ -65,8 +64,8 @@ class PersonController extends Controller
         {
             $person->initials = $this->initials($person->name);
 
-            $person->role_name = $this->rolesRepository->findByField('id', $person->role_id)->first() ?
-                $this->rolesRepository->findByField('id', $person->role_id)->first()->name : 'Cargo não definido';
+            $person->role_name = $this->roles->findByField('id', $person->role_id)->first() ?
+                $this->roles->findByField('id', $person->role_id)->first()->name : 'Cargo não definido';
 
             $person->created_at_str = date_format(date_create($person->created_at), 'd/m/Y');
         }
@@ -80,7 +79,7 @@ class PersonController extends Controller
     {
         $scripts[] = 'assets/js/pages/crud/metronic-datatable/base/html-table.js';
 
-        $workshop = $this->workshopRepository->findByField('id', $this->get_user_workshop())->first();
+        $workshop = $this->workshops->findByField('id', $this->get_user_workshop())->first();
 
         if($workshop)
         {
@@ -93,8 +92,8 @@ class PersonController extends Controller
         {
             $person->initials = $this->initials($person->name);
 
-            $person->role_name = $this->rolesRepository->findByField('id', $person->role_id)->first() ?
-                $this->rolesRepository->findByField('id', $person->role_id)->first()->name : 'Cargo não definido';
+            $person->role_name = $this->roles->findByField('id', $person->role_id)->first() ?
+                $this->roles->findByField('id', $person->role_id)->first()->name : 'Cargo não definido';
 
             $person->created_at_str = date_format(date_create($person->created_at), 'd/m/Y');
         }
@@ -106,60 +105,60 @@ class PersonController extends Controller
 
     public function employees()
     {
-        $workshop = $this->workshopRepository->findByField('id', $this->get_user_workshop())->first();
+        $workshop = $this->workshops->findByField('id', $this->get_user_workshop())->first();
 
         if($workshop)
-        {
             $people = $this->repository->findByField('role_id', 2);
-        }
+
 
         return $people;
         //TODO: return view
     }
 
-    public function create()
+    public function create($role = null)
     {
-        $links[] = '../../assets/css/pages/wizard/wizard-4.css';
 
         //$scripts[] = '../../assets/js/pages/custom/user/add-user.js';
         $scripts[] = '../../js/person.js';
         $scripts[] = '../../js/address.js';
-        $scripts[] = '../../assets/js/pages/crud/forms/widgets/bootstrap-maxlength.js';
 
         $route = 'people.form';
 
-        $roles = $this->rolesRepository->all();
+        $roles = $this->roles->all();
 
-        $states = $this->statesRepository->all();
+        $states = $this->states->all();
 
         $edit = false;
 
-        return view('index', compact('links', 'route', 'roles', 'scripts', 'states', 'edit'));
+        $role = $role ? $role : $this->get_owner_id();
+
+        return view('index', compact( 'route', 'roles', 'scripts', 'states', 'edit', 'role'));
     }
 
     //$id = person id
-    public function edit($id)
+    public function edit($id, $role = null)
     {
         $person = $this->repository->findByField('id', $id)->first();
 
         if($person)
         {
-            $links[] = '../../assets/css/pages/wizard/wizard-4.css';
 
             //$scripts[] = '../../assets/js/pages/custom/user/add-user.js';
             $scripts[] = '../../js/person.js';
             $scripts[] = '../../js/address.js';
-            $scripts[] = '../../assets/js/pages/crud/forms/widgets/bootstrap-maxlength.js';
 
             $route = 'people.form';
 
-            $roles = $this->rolesRepository->all();
+            $roles = $this->roles->all();
 
-            $states = $this->statesRepository->all();
+            $states = $this->states->all();
 
             $edit = true;
 
-            return view('index', compact('links', 'route', 'person', 'roles', 'scripts', 'states', 'edit'));
+            $role = $role ? $role : $this->get_owner_id();
+
+            return view('index', compact('links', 'route', 'person', 'roles',
+                'scripts', 'states', 'edit', 'role'));
         }
 
         Session::flash('error.msg', 'Usuário não existe');
@@ -227,7 +226,7 @@ class PersonController extends Controller
                     $u['person_id'] = $person_id;
                     $u['workshop_id'] = $this->get_user_workshop();
 
-                    $this->userRepository->create($u);
+                    $this->users->create($u);
 
                     DB::commit();
 
@@ -254,7 +253,7 @@ class PersonController extends Controller
 
         $data['workshop_id'] = $this->get_user_workshop();
 
-        $user = $data['email'] != "" ? $this->userRepository->findByField('email', $data['email'])->first() : false;
+        $user = $data['email'] != "" ? $this->users->findByField('email', $data['email'])->first() : false;
 
         if(!$user){
             $person = $this->repository->findByField('cpf', $data['cpf'])->first();
@@ -313,7 +312,7 @@ class PersonController extends Controller
             $u['person_id'] = $person_id;
             $u['workshop_id'] = $this->get_user_workshop();
 
-            $this->userRepository->create($u);
+            $this->users->create($u);
 
             DB::commit();
 
@@ -351,7 +350,7 @@ class PersonController extends Controller
                 }
                 else{
                     //Workshop exists
-                    if($this->workshopRepository->findByField('email', $data['email'])->first())
+                    if($this->workshops->findByField('email', $data['email'])->first())
                     {
                         //Return message informing the error
                         $request->session()->flash('error.msg', 'Este email está sendo usado por outra pessoa, tente outro email.');
@@ -359,11 +358,11 @@ class PersonController extends Controller
                     }
                     //In case the new email is not in use, it changes email for login
                     else{
-                        $user = $this->userRepository->findByField('email', $person->email)->first();
+                        $user = $this->users->findByField('email', $person->email)->first();
 
                         if($user)
                         {
-                            $this->userRepository->update($data['email'], $user->id);
+                            $this->users->update($data['email'], $user->id);
                         }
                     }
                 }
@@ -414,7 +413,7 @@ class PersonController extends Controller
             DB::beginTransaction();
 
             try{
-                $this->userRepository->delete($person->user->id);
+                $this->users->delete($person->user->id);
 
                 $this->repository->delete($id);
 

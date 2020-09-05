@@ -2,13 +2,15 @@ $(function () {
 
     //Quando o campo cep muda.
     //When zipCode changes
-    $("#zipCode").keyup(function(e) {
+    $("#zip_code").keyup(function(e) {
 
-        var $cep = $(this).val().replace(/\D/g, '');
+        //var $cep = $(this).val().replace(/\D/g, '');
+
+        var cep = $(this).val();
 
         var loading = $('.loading-cep');
 
-        var zip = $("#zipCode")[0].value.length;
+        var zip = $(this)[0].value.length;
 
         if(zip === 9)
         {
@@ -16,15 +18,16 @@ $(function () {
 
             read_only(true);
 
-            find_cep($cep);
+            find_cep(cep);
         }
         else if(zip === 5)
         {
+
             if(e.which !== 8)
             {
-                $cep = $cep + '-';
+                cep = cep + '-';
 
-                $(this).val($cep);
+                $(this).val(cep);
             }
         }
 
@@ -71,10 +74,15 @@ function read_only($status)
 
 function find_cep($cep)
 {
-    var loading = $('.loading-cep');
+
+    var loading = $('.loader-wrap');
+
+    loading.css('display', 'block');
 
     //Verifica se campo cep possui valor informado.
-    if ($cep != "") {
+    if ($cep !== "") {
+
+        $cep = $cep.replace('-', '');
 
         //Expressão regular para validar o CEP.
         var validacep = /^[0-9]{8}$/;
@@ -95,7 +103,7 @@ function find_cep($cep)
                 if (!("erro" in dados)) {
                     //Atualiza os campos com os valores da consulta.
                     setTimeout(function () {
-                        loading.removeClass('kt-spinner kt-spinner--sm kt-spinner--success kt-spinner--right kt-spinner--input');
+                        loading.css('display', 'none');
                         //$(".input-address").css('display', 'block');
                         $("#street").val(dados.logradouro);
                         $("#number").val('').focus();
@@ -108,7 +116,7 @@ function find_cep($cep)
                 else {
                     //CEP pesquisado não foi encontrado.
                     clean_fields();
-                    loading.removeClass('kt-spinner kt-spinner--sm kt-spinner--success kt-spinner--right kt-spinner--input');
+                    loading.css('display', 'none');
                     //$(".input-address").css('display', 'block');
                 }
             });
@@ -116,13 +124,13 @@ function find_cep($cep)
         else {
             //cep é inválido.
             clean_fields();
-            loading.removeClass('kt-spinner kt-spinner--sm kt-spinner--success kt-spinner--right kt-spinner--input');
+            loading.css('display', 'none');
             //$(".input-address").css('display', 'block');
         }
     } //end if.
     else {
         //cep sem valor, limpa formulário.
-        loading.removeClass('kt-spinner kt-spinner--sm kt-spinner--success kt-spinner--right kt-spinner--input');
+        loading.css('display', 'none');
         //$(".input-address").css('display', 'block');
         clean_fields();
     }
