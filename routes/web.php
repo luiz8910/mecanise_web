@@ -29,7 +29,7 @@ Route::group(['middleware' => 'auth'], function (){
     /**
      * Crud Users
      */
-    Route::get('/usuarios/{role?}', 'PersonController@index')->name('person.index');
+    Route::get('/usuarios/{orderBy?}/{role?}', 'PersonController@index')->name('person.index');
 
     Route::get('/tabela-usuarios', 'PersonController@index_table')->name('person.table');
 

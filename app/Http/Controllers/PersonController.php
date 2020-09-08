@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Repositories\CarRepository;
+use App\Repositories\ConfigRepository;
+use App\Repositories\OrderRepository;
 use App\Repositories\PersonRepository;
 use App\Repositories\RolesRepository;
 use App\Repositories\StatesRepository;
 use App\Repositories\UserRepository;
+use App\Repositories\VehicleRepository;
 use App\Repositories\WorkshopRepository;
 use App\Traits\Config;
 use Illuminate\Http\Request;
@@ -37,10 +41,27 @@ class PersonController extends Controller
      * @var StatesRepository
      */
     private $states;
+    /**
+     * @var ConfigRepository
+     */
+    private $config;
+    /**
+     * @var VehicleRepository
+     */
+    private $vehicles;
+    /**
+     * @var CarRepository
+     */
+    private $cars;
+    /**
+     * @var OrderRepository
+     */
+    private $orders;
 
     public function __construct(PersonRepository $repository, UserRepository $users,
                                 WorkshopRepository $workshops, RolesRepository $roles,
-                                StatesRepository $states)
+                                StatesRepository $states, ConfigRepository $config, VehicleRepository $vehicles,
+                                CarRepository $cars, OrderRepository $orders)
     {
 
         $this->repository = $repository;
@@ -48,31 +69,71 @@ class PersonController extends Controller
         $this->roles = $roles;
         $this->users = $users;
         $this->states = $states;
+        $this->config = $config;
+        $this->vehicles = $vehicles;
+        $this->cars = $cars;
+        $this->orders = $orders;
     }
 
-    public function index()
+    public function index($orderBy = null, $role = null)
     {
         $workshop = $this->workshops->findByField('id', $this->get_user_workshop())->first();
 
+        $offset = $this->config->findByField('key', 'pagination')->first() ?
+            $this->config->findByField('key', 'pagination')->first()->value : 10;
+
         if($workshop)
-            $people = $workshop->people;
-
-
-        $route = 'people.list-default';
-
-        foreach ($people as $person)
         {
-            $person->initials = $this->initials($person->name);
+            if($orderBy)
+            {
+                $people = $this->repository->findWhere([
+                    'workshop_id' => $this->get_user_workshop(),
+                    'role_id' => $this->get_owner_id()
+                ])->sortByDesc($orderBy);
+            }
+            else{
+                $people = $this->repository->findWhere([
+                    'workshop_id' => $this->get_user_workshop(),
+                    'role_id' => $this->get_owner_id()
+                ]);
+            }
 
-            $person->role_name = $this->roles->findByField('id', $person->role_id)->first() ?
-                $this->roles->findByField('id', $person->role_id)->first()->name : 'Cargo não definido';
 
-            $person->created_at_str = date_format(date_create($person->created_at), 'd/m/Y');
+            $route = 'people.index';
+
+            foreach ($people as $person)
+            {
+                $vehicle = $this->vehicles->findByField('owner_id', $person->id)->first();
+
+                if($vehicle) {
+                    $person->vehicle_name = $this->cars->findByField('id', $vehicle->car_id)->first() ?
+                        $this->cars->findByField('id', $vehicle->car_id)->first()->model : 'Veículo não encontrado';
+
+                    $person->vehicle_id = $vehicle->id;
+                }
+                else
+                    $person->vehicle_name = 'Nenhum Veículo Cadastrado';
+
+
+
+                /*$person->initials = $this->initials($person->name);
+
+                $person->role_name = $this->roles->findByField('id', $person->role_id)->first() ?
+                    $this->roles->findByField('id', $person->role_id)->first()->name : 'Cargo não definido';
+
+
+                //$person->created_at_str = date_format(date_create($person->created_at), 'd/m/Y');*/
+            }
+
+            $qtde_model = count($people);
+
+            $scripts[] = '../../js/person.js';
+
+            return view('index', compact('route', 'people', 'qtde_model', 'offset', 'scripts'));
         }
 
-        $people_qtde = count($people);
+        return abort(404);
 
-        return view('index', compact('route', 'people', 'people_qtde'));
     }
 
     public function index_table()
@@ -122,6 +183,7 @@ class PersonController extends Controller
         $scripts[] = '../../js/person.js';
         $scripts[] = '../../js/address.js';
         $scripts[] = '../../js/config.js';
+        $scripts[] = '../../js/mask.js';
 
         $route = 'people.form';
 
@@ -148,6 +210,7 @@ class PersonController extends Controller
             $scripts[] = '../../js/person.js';
             $scripts[] = '../../js/address.js';
             $scripts[] = '../../js/config.js';
+            $scripts[] = '../../js/mask.js';
 
             $route = 'people.form';
 
@@ -172,6 +235,7 @@ class PersonController extends Controller
     {
         $data = $request->all();
 
+        //dd($data);
         $data['workshop_id'] = $this->get_user_workshop();
 
         $person = $this->repository->findByField('cpf', $data['cpf'])->first();
@@ -241,7 +305,7 @@ class PersonController extends Controller
         }catch (\Exception $e){
             DB::rollBack();
 
-            $request->session()->flash('error.msg', 'Um erro desconhecido ocorreu');
+            $request->session()->flash('error.msg', $e->getMessage());
 
             return isset($data['origin']) ? json_encode(['status' => false, 'msg' => 'Um erro desconhecido ocorreu']) :
                 redirect()->back();
@@ -373,10 +437,9 @@ class PersonController extends Controller
 
                 try{
 
-                    if($data['dateBirth'])
-                    {
+                    if(isset($data['dateBirth']))
                         $data['dateBirth'] = date_format(date_create($data['dateBirth']), 'Y-m-d');
-                    }
+
 
                     $this->repository->update($data, $id);
 
@@ -390,7 +453,7 @@ class PersonController extends Controller
                 {
                     DB::rollBack();
 
-                    $request->session()->flash('error.msg', 'Um erro ocorreu, tente novamente mais tarde');
+                    $request->session()->flash('error.msg', $e->getMessage());
 
                     return redirect()->back()->withInput();
                 }
@@ -415,7 +478,25 @@ class PersonController extends Controller
             DB::beginTransaction();
 
             try{
-                $this->users->delete($person->user->id);
+
+                $user = $this->users->findByField('person_id', $person->id)->first();
+
+                if($user)
+                    $this->users->delete($user->id);
+
+                $vehicles = $this->vehicles->findByField('owner_id', $id);
+
+                foreach ($vehicles as $vehicle)
+                {
+                    $this->vehicles->delete($vehicle->id);
+                }
+
+                $orders = $this->orders->findByField('owner_id', $id);
+
+                foreach ($orders as $order)
+                {
+                    $this->orders->delete($order->id);
+                }
 
                 $this->repository->delete($id);
 
@@ -427,7 +508,7 @@ class PersonController extends Controller
 
                 DB::rollBack();
 
-                return json_encode(['status' => false, 'msg' => $e->getMessage()]);
+                return json_encode(['status' => false, 'msg' => $e->getMessage(), 'line' => $e->getLine()]);
             }
 
         }

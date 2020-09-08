@@ -128,7 +128,7 @@
 
                             <ul id="ul-users" class="ul-subitem">
                                 <li class="li-items"><a href="{{ route('person.index') }}" class="a-item">
-                                        <i class="fas fa-list"></i> Lista Geral
+                                        <i class="fas fa-list"></i> Usuários
                                     </a></li>
                                 <li class="li-items"><a href="javascript:" class="a-item">
                                         <i class="fas fa-users"></i> Funcionários

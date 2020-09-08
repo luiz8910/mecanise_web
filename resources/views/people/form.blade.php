@@ -76,7 +76,7 @@
                             <div class="col-md-4 col-xs-6">
                                 <div class="form-group">
                                     <label for="cel">Telefone</label>
-                                    <input type="text" id="cel" name="cel" class="form-control" required
+                                    <input type="text" id="cel" name="cel" class="form-control phone" required
                                            placeholder="Ex: (15)999999999" value="@if($edit){{ $person->cel }}@else{{ old('cel') }}@endif">
                                     <span id="span_cel_status" style="color: red; display:none;"></span>
                                 </div>
@@ -85,7 +85,7 @@
                             <div class="col-md-4 col-xs-6">
                                 <div class="form-group">
                                     <label for="cel2">Telefone 2</label>
-                                    <input type="text" id="cel2" name="cel2" class="form-control"
+                                    <input type="text" id="cel2" name="cel2" class="form-control phone"
                                            placeholder="Ex: (15)999999999" value="@if($edit){{ $person->cel2 }}@else{{ old('cel2') }}@endif">
                                     <span id="span_cel2_status" style="color: red; display:none;"></span>
                                 </div>

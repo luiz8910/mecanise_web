@@ -76,6 +76,10 @@ i{
     z-index: 999;
 }
 
+.alert{
+    margin-top: -100px !important;
+}
+
 .menu-topic{
     padding-top: 10px;
     padding-left: 15px;

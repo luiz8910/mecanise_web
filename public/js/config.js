@@ -63,12 +63,38 @@ $(function () {
         }
         else if(length === 11 && e.which !== 8)
         {
-            cpf = cpf + '-';
+            //console.log(cpf.search('.'));
+            if(cpf.search('.') == 0)
+            {
+                temp = '';
 
-            $(this).val(cpf);
+                for(i = 0; i < 11; i++)
+                {
+                    if(!isNaN(cpf.charAt(i)))
+                        temp += cpf.charAt(i);
+
+                }
+
+                console.log(temp);
+
+                cpf = temp.charAt(0) + temp.charAt(1) + temp.charAt(2) + '.' + temp.charAt(3) + temp.charAt(4) + temp.charAt(5) + '.'
+                    + temp.charAt(6) + temp.charAt(7) + temp.charAt(8) + '-' + temp.charAt(9) + temp.charAt(10);
+
+                $(this).val(cpf);
+
+                if(cpf.length == 14)
+                    cpf_full_length();
+            }
+            else{
+                cpf = cpf + '-';
+
+                $(this).val(cpf);
+            }
+
         }
         else if(length === 12)
         {
+
             if(cpf.charAt(11) !== '-')
             {
                 i = 0;
@@ -89,41 +115,72 @@ $(function () {
             }
         }
         else if(length === 14)
+            cpf_full_length();
+
+
+    });
+
+    $("#cnpj").keyup(function (e){
+
+        if($(this).val().length == 14 || ($(this).val().length == 18))
         {
-            if(validate_cpf())
-            {
+            if(validate_cnpj($(this).val())){
+                $(this).addClass('has-success').removeClass('has-error');
 
-                loading.css('display', 'block');
-
-                if(location.pathname.search('editar') != -1)
-                    allowed_cpf($(this).val());
-                else
-                    allowed_cpf($(this).val(), $("#person_id").val());
-
-
+                $("#span_cnpj_status")
+                    .removeClass('text-danger')
+                    .addClass('text-success')
+                    .css('display', 'block')
+                    .text('CNPJ Válido');
             }
-            else{
-                $("#cpf")
-                    .removeClass('has-success')
-                    .addClass('has-error');
 
-                $("#span_cpf_status")
+
+            else{
+                $(this).addClass('has-error').removeClass('has-success');
+
+                $("#span_cnpj_status")
                     .addClass('text-danger')
                     .removeClass('text-success')
                     .css('display', 'block')
-                    .text('Entre com um CPF válido');
+                    .text('CNPJ Inválido');
             }
-
-            setTimeout(function (){
-
-                loading.css('display', 'none');
-            }, 2000);
         }
-
     });
+
+
 });
 
+function cpf_full_length()
+{
+    var loading = $('.loader-wrap');
 
+    if(validate_cpf())
+    {
+        loading.css('display', 'block');
+
+        if(location.pathname.search('editar') != -1)
+            allowed_cpf($('#cpf').val());
+        else
+            allowed_cpf($('#cpf').val(), $("#person_id").val());
+
+    }
+    else{
+        $("#cpf")
+            .removeClass('has-success')
+            .addClass('has-error');
+
+        $("#span_cpf_status")
+            .addClass('text-danger')
+            .removeClass('text-success')
+            .css('display', 'block')
+            .text('Entre com um CPF válido');
+    }
+
+    setTimeout(function (){
+
+        loading.css('display', 'none');
+    }, 2000);
+}
 
 /*
  Validate CPF
@@ -221,6 +278,62 @@ function allowed_cpf($cpf, $id)
     });
 }
 
+function validate_cnpj(cnpj) {
+
+    cnpj = cnpj.replace(/[^\d]+/g,'');
+
+    if(cnpj == '')
+        return false;
+
+    if (cnpj.length != 14)
+        return false;
+
+    // Elimina CNPJs invalidos conhecidos
+    if (cnpj == "00000000000000" ||
+        cnpj == "11111111111111" ||
+        cnpj == "22222222222222" ||
+        cnpj == "33333333333333" ||
+        cnpj == "44444444444444" ||
+        cnpj == "55555555555555" ||
+        cnpj == "66666666666666" ||
+        cnpj == "77777777777777" ||
+        cnpj == "88888888888888" ||
+        cnpj == "99999999999999")
+        return false;
+
+    // Valida DVs
+    tamanho = cnpj.length - 2
+    numeros = cnpj.substring(0,tamanho);
+    digitos = cnpj.substring(tamanho);
+    soma = 0;
+    pos = tamanho - 7;
+    for (i = tamanho; i >= 1; i--) {
+        soma += numeros.charAt(tamanho - i) * pos--;
+        if (pos < 2)
+            pos = 9;
+    }
+    resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+    if (resultado != digitos.charAt(0))
+        return false;
+
+    tamanho = tamanho + 1;
+    numeros = cnpj.substring(0,tamanho);
+    soma = 0;
+    pos = tamanho - 7;
+    for (i = tamanho; i >= 1; i--) {
+        soma += numeros.charAt(tamanho - i) * pos--;
+        if (pos < 2)
+            pos = 9;
+    }
+    resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+    if (resultado != digitos.charAt(1))
+        return false;
+
+    return true;
+
+}
+
+
 /*
  * Update pagination value
  */
@@ -246,3 +359,4 @@ function form_config()
         sweet_alert_error();
     });
 }
+

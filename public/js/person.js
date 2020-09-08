@@ -6,50 +6,22 @@ $(function () {
 
 function delete_person(id)
 {
-    var request = $.ajax({
+
+    var data = {
+        title: 'Atenção',
+        text: 'Deseja excluir este usuário',
+        icon: 'warning',
+        button: 'Excluir',
+        success_msg: 'Usuário excluído com sucesso',
+        reload: false,
+        id: id
+    };
+
+    var ajax = {
         url: '/person/' + id,
-        method: 'DELETE',
-        dataType: 'json'
-    });
+        method: 'DELETE'
+    }
 
-    var data = '';
+    sweet_alert(data, ajax);
 
-    request.done(function (e) {
-        if(e.status)
-        {
-            data = {
-                title: 'Sucesso',
-                text: 'O usuário foi excluído',
-                type: 'success',
-                confirmButtonClass: 'btn btn-secondary'
-            };
-
-            swal(data);
-        }
-        else{
-
-            data = {
-                title: 'Atenção',
-                text: 'Um erro ocorreu, tente novamente mais tarde',
-                type: 'danger',
-                confirmButtonClass: 'btn btn-danger'
-            };
-
-            swal(data);
-        }
-    });
-
-    request.fail(function (e) {
-        console.log('fail');
-        console.log(e);
-
-        data = {
-            title: 'Atenção',
-            text: 'Um erro ocorreu, tente novamente mais tarde',
-            type: 'danger',
-            confirmButtonClass: 'btn btn-danger'
-        };
-
-        swal(data);
-    })
 }

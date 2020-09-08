@@ -357,6 +357,15 @@ $(function () {
     setTimeout(function () {
         $(".close").trigger('click');
     },3000);
+
+    $('form').submit(function (e){
+
+        if($('.has-error').length > 0)
+        {
+            e.preventDefault();
+            sweet_alert_error('Verifique os erros na página e tente novamente');
+        }
+    })
 });
 
 //Searchs any model / Procura dados em qualquer classe
@@ -372,7 +381,7 @@ function search_model()
     //Value of input search / Valor do campo pesquisa
     var input = $("#general-search-input").val();
 
-    //If page is "/" or "carros" we must search for table cars
+    //If page is "/" or "carros" it must search for table cars
     //Se page é = "/" ou é igual a "carros", procura-se por tabela carros
     switch (page) {
         case '/':
@@ -862,5 +871,18 @@ function feature_not_available()
 
 function reorder($orderBy)
 {
-    location.href = location.pathname + '/' + $orderBy;
+    var charAt = location.pathname.replace('/', '');
+    charAt = charAt.search('/');
+
+    var path = '';
+
+    if(charAt == -1)
+        location.href = location.pathname + '/' + $orderBy
+
+    else{
+
+        path = location.pathname.substr(0, charAt + 1);
+
+        location.href = path + '/' + $orderBy;
+    }
 }
