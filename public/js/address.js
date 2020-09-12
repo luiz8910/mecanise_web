@@ -8,13 +8,10 @@ $(function () {
 
         var cep = $(this).val();
 
-        var loading = $('.loading-cep');
-
         var zip = $(this)[0].value.length;
 
         if(zip === 9)
         {
-            loading.addClass('kt-spinner kt-spinner--sm kt-spinner--success kt-spinner--right kt-spinner--input');
 
             read_only(true);
 

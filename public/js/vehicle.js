@@ -1,5 +1,57 @@
 $(function () {
 
+    $("#myInput").keyup(function (e){
+        var drop = $(".dropdown-content");
+
+
+        if($(this).val() != "")
+        {
+            $(".dropdown-content a").remove();
+            $("#hidden_car_id").val("");
+
+            $.ajax({
+                url: '/search_vehicles_all/' + $(this).val(),
+                method: "GET",
+                dataType: 'json',
+                success: function (e){
+
+                    if(e.status)
+                    {
+                        console.log(e.result);
+
+                        var append = '';
+
+                        for(var i = 0; i < e.result.length; i++)
+                        {
+                            append += '<a href="javascript:" id="result_'+e.result[i].id+'" onclick="select_vehicle('+e.result[i].id+')">'+e.result[i].model+'</a>';
+                        }
+
+                        $(".dropdown-content").append(append);
+                    }
+
+                },
+                fail: function (e){
+                    console.log('fail', e);
+                    sweet_alert_error();
+                }
+            });
+        }
+    })
+        .blur(function (){
+
+            //Fix blur and selected option
+            setTimeout(function (){
+
+                $(".dropdown-content a").css('display', 'none');
+            }, 250);
+        })
+        .click(function (){
+            if($(this).val())
+                $(".dropdown-content a").css('display', 'block');
+        })
+    ;
+
+
     $("#car_id").change(function () {
         car_change();
     });
@@ -311,6 +363,8 @@ function car_change($input_id)
 
     const id = $('#'+$input_id).val();
 
+    var today = new Date();
+
     if(id)
     {
         var request = $.ajax({
@@ -330,18 +384,30 @@ function car_change($input_id)
 
                 var append = '';
 
-                var diff = e.car.end_year - e.car.start_year;
+                var diff = '';
+
+                if(e.car.start_year)
+                {
+                    if(e.car.end_year)
+                        diff = e.car.end_year - e.car.start_year;
+                    else
+                        diff = today.getFullYear() - e.car.start_year;
+                }
+                else{
+                    e.car.start_year = 1950;
+
+                    diff = today.getFullYear() - e.car.start_year;
+                }
 
                 $("#year option").remove();
 
                 if(diff > 0)
                 {
-
-                    for(var i = 0; i < diff + 1; i++)
+                    for(var i = diff; i > -1; i--)
                     {
                         var year = parseInt(e.car.start_year) + i;
 
-                        if(i === 0)
+                        if(i === diff)
                             append += '<option value="">Insira um valor</option>';
 
                         append += '<option value="'+year+'">'+year+'</option>';
@@ -367,4 +433,15 @@ function car_change($input_id)
             sweet_alert_error();
         });
     }
+}
+
+function select_vehicle($id)
+{
+    var text = $("#result_"+$id).text();
+
+    $("#hidden_car_id").val($id);
+
+    $("#myInput").val(text);
+
+    car_change('hidden_car_id');
 }

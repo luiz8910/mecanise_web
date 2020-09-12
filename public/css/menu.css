@@ -375,3 +375,60 @@ td button i{
     display: none;
     color: red;
 }
+
+.input-result{
+    position: absolute;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0 0 24px 24px;
+    box-shadow: 0 4px 6px 0 rgba(32,33,36,0.28);
+    padding-bottom: 4px;
+    overflow: visible;
+    width: auto;
+    height: 50px;
+}
+
+.input {
+    /*border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;*/
+    position: relative;
+    cursor: text;
+    border-color: rgba(223, 225, 229, 0);
+    /*box-shadow: 0 1px 6px 0 rgba(32, 33, 36, 0.28);*/
+    background: #fff;
+    display: flex;
+    border: 1px solid #dfe1e5;
+    /*border-radius: 9px;*/
+    z-index: 3;
+    height: calc(1.5em + .75rem + 2px);
+    margin: 0 auto;
+    margin-top: 17px;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-clip: padding-box;
+    /*border: 1px solid #ced4da;*/
+    border-radius: .25rem;
+}
+
+.div-input{
+    background-color: white;
+    border: none;
+    margin: 0;
+    padding: 0;
+    color: rgba(0,0,0,.87);
+    word-wrap: break-word;
+    outline: none;
+    display: flex;
+    flex: 100%;
+    -webkit-tap-highlight-color: transparent;
+    height: 34px;
+    font-size: 16px;
+}

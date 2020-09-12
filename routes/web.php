@@ -48,7 +48,7 @@ Route::group(['middleware' => 'auth'], function (){
     /**
      * Crud Vehicles
      */
-    Route::get('/veiculos', 'VehicleController@index')->name('vehicle.index');
+    Route::get('/veiculos/{orderBy?}', 'VehicleController@index')->name('vehicle.index');
 
     Route::get('/criar-veiculo', 'VehicleController@create')->name('vehicle.create');
 
@@ -62,7 +62,9 @@ Route::group(['middleware' => 'auth'], function (){
 
     Route::get('/vehicle_by_owner/{id}/{json?}', 'VehicleController@vehicle_by_owner')->name('vehicle.by.owner');
 
-    Route::get('/search-vehicles/{input}', 'VehicleController@search');
+    Route::get('/search_vehicles/{input}', 'VehicleController@search');
+
+    Route::get('/search_vehicles_all/{input}', 'VehicleController@search_all');
 
 
     /**

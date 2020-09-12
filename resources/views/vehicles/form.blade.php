@@ -1,164 +1,3 @@
-<div class="container-contact100">
-    <div class="wrap-contact100">
-        @if($edit)
-            <form class="contact100-form validate-form" id="form" method="POST" action="{{ route('vehicle.update', ['id' => $vehicle->id]) }}">
-                @method('PUT')
-        @else
-            <form class="contact100-form validate-form" id="form" method="POST" action="{{ route('vehicle.store') }}">
-        @endif
-            @csrf
-
-                <span class="contact100-form-title">
-                    @if($edit) Editar @else Novo @endif Veículo
-                </span>
-
-                <div class="wrap-input100 validate-input bg1" data-validate="Insira um valor válido">
-                    <span class="label-input100">Modelo</span>
-                    <div>
-                        <select name="car_id" id="car_id" class="form-control select-style select2" required>
-                            <option value="">Selecione um valor</option>
-                            @foreach($cars as $car)
-                                @if($edit)
-                                    <option value="{{ $car->id }}" @if($vehicle->car_id == $car->id) selected @endif>{{ $car->model }}</option>
-                                @else
-                                    <option value="{{ $car->id }}">{{ $car->model }}</option>
-                                @endif
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div class="valid-feedback" id="span-valid-model" style="display:none;">Ótimo! Este carro ainda não existe na base de dados</div>
-                    <div class="invalid-feedback" id="span-invalid-model" style="display:none;"></div>
-                    <span class="form-text text-danger" id="span_model_status" style="display:none;">Insira o modelo.</span>
-                </div>
-
-                <div class="wrap-input100 validate-input bg1 rs1-wrap-input100" data-validate = "Insira um valor válido">
-                    <span class="label-input100">Montadora</span>
-                    <input class="input100 tab-info" type="text" name="brand"
-                           id="brand" placeholder="Ex: Fiat, Chevrolet, Volkswagen " required readonly
-                           value="@if($edit){{ $vehicle->brand_name }}@else{{ old('brand') }}@endif">
-
-                    <span class="form-text text-danger" id="span_brand_status" style="display:none;">Insira uma montadora válida.</span>
-                </div>
-
-                <div class="wrap-input100 bg1 rs1-wrap-input100">
-                    <span class="label-input100">Cor</span>
-                    <div>
-                        <select class="select-style form-control select2" name="color">
-                            <option value="">Selecione um valor</option>
-                            @foreach($colors as $color)
-                                @if($edit)
-                                    <option value="{{ $color->id }}" @if($color->id == $vehicle->color) selected @endif>{{ $color->name }}</option>
-                                @else
-                                    <option value="{{ $color->id }}">{{ $color->name }}</option>
-                                @endif
-                            @endforeach
-                        </select>
-                        <span class="form-text text-danger" id="span_color_status" style="display: none;">Selecione uma opção</span>
-                        <div class="dropDownSelect2"></div>
-                    </div>
-                </div>
-
-                <div class="wrap-input100 bg1 rs1-wrap-input100">
-                    <span class="label-input100">Placa</span>
-                    <input class="input100 tab-info" type="text" name="license_plate" maxlength="8"
-                           id="license_plate" placeholder="Ex: ABC-1234" value="@if($edit){{ $vehicle->license_plate }}@else{{ old('license_plate') }}@endif">
-
-                    <span id="span_license_plate_status" style="color: red; display:none;"></span>
-                </div>
-
-                <div class="wrap-input100 bg1 rs1-wrap-input100">
-                    <span class="label-input100">Chassis</span>
-                    <input class="input100 tab-info" type="text" name="chassis"
-                           id="chassis" placeholder="Ex: 5jA mM1g5C 3R WG4610" value="@if($edit){{ $vehicle->chassis }}@else{{ old('chassis') }}@endif">
-
-                    <span class="form-text text-danger" id="span_chassis_status" style="display: none;">Insira um valor válido</span>
-                </div>
-
-                <div class="wrap-input100 bg1 rs1-wrap-input100">
-                    <span class="label-input100">Km</span>
-                    <input class="input100 tab-info number" type="text" name="km"
-                           id="km" placeholder="Ex: 150000" value="@if($edit){{ $vehicle->km }}@else{{ old('km') }}@endif">
-
-                    <span class="form-text text-danger" id="span_km_status" style="display: none;">Insira um valor válido</span>
-                </div>
-
-                <div class="wrap-input100 bg1 rs1-wrap-input100">
-                    <span class="label-input100">Ano</span>
-                    <div>
-                        <select name="year" id="year" class="form-control select-style select2">
-                            <option value="">Insira um valor</option>
-                            @if($edit)
-                                @if(count($years) > 1)
-                                    @foreach($years as $year)
-                                        <option value="{{ $year }}" @if($vehicle->year == $year) selected @endif>{{ $year }}</option>
-                                    @endforeach
-                                @else
-                                    <option value="{{ $years[0] }}" selected>{{ $years[0] }}</option>
-                                @endif
-                            @endif
-                        </select>
-                    </div>
-
-                    <span class="form-text text-danger" id="span_year_status" style="display: none;">Insira um valor válido</span>
-                </div>
-
-                <div class="wrap-input100 bg1">
-                    @if($edit)
-                        @foreach($owners as $owner)
-                            @if($owner->id == $vehicle->owner->id)
-                                <input type="hidden" value="{{ $owner->id }}" id="owner_id_input" name="owner_id">
-                                @break
-                            @endif
-                        @endforeach
-                    @else
-                        <input type="hidden" value="" id="owner_id_input" name="owner_id">
-                    @endif
-
-
-                    <span class="label-input100">Proprietário</span>
-                    <div>
-                        <select class="select-style form-control select2" id="owner_id" required>
-                            <option value="">Selecione um valor</option>
-                            @foreach($owners as $owner)
-                                @if($edit)
-                                    <option value="{{ $owner->id }}" @if($owner->id == $vehicle->owner->id) selected @endif>{{ $owner->name }}</option>
-                                @else
-                                    <option value="{{ $owner->id }}">{{ $owner->name }}</option>
-                                @endif
-                            @endforeach
-                        </select>
-                        <span class="form-text text-danger" id="span_owner_id_status" style="display: none;">Selecione uma opção</span>
-                        <div class="dropDownSelect2"></div>
-                    </div>
-
-
-                </div>
-
-
-
-                <div class="container-contact100-form-btn">
-                    <button type="button" class="btn btn-success btn-outline-info contact50-form-btn" data-target="#new_owner" data-toggle="modal"
-                            style="background-color: #28a745 !important;">
-                        <i class="fas fa-user"></i>
-                        <span style="padding-left: 10px;">Novo Proprietário</span>
-                    </button>
-
-                    <button type="button" class="contact50-form-btn next-tab" onclick="next_tab(0, 'tab-info')" disabled>
-                        <span>
-                            Salvar
-                            <i class="fa fa-long-arrow-right m-l-7" aria-hidden="true"></i>
-                        </span>
-                    </button>
-                </div>
-            </form>
-    </div>
-</div>
-
-<br><br><br>
-
-
-
 
 <div class="modal fade" id="new_owner" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
@@ -273,4 +112,186 @@
 
         </div>
     </div>
+</div>
+
+
+<div class="form-body">
+    <div class="form-title">
+        <p> @if($edit) Editar Veículo: {{ $vehicle->model }} @else Novo Veículo @endif</p>
+    </div>
+
+    <div class="form-options">
+        <div class="dropdown dropleft">
+            <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Opções
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="javascript:" id="show_new_owner">
+                    <i class="fas fa-user"></i> Novo Proprietário
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="form-wrapper">
+        @if($edit)
+            <form action="{{ route('vehicle.update', ['id' => $vehicle->id]) }}" method="POST">
+                @method('PUT')
+                @else
+                    <form action="{{ route('vehicle.store') }}" method="POST">
+                        @endif
+
+                        <div class="row">
+                            <div class="col-md-6 col-xs-6">
+                                <div class="form-group">
+                                    <label for="owner_id">Proprietário</label>
+                                    <select id="owner_id" name="owner_id" class="form-control">
+                                        <option value="">Selecione um valor</option>
+                                        @foreach($people as $person)
+                                            @if($edit)
+                                                <option value="{{ $person->id }}" @if($person->id == $vehicle->owner_id) selected @endif >{{ $person->name }}</option>
+                                            @else
+                                                <option value="{{ $person->id }}">{{ $person->name }}</option>
+                                            @endif
+                                        @endforeach
+                                    </select>
+                                    <span class="form-text text-danger" id="span_owner_id_status" style="display:none;">Escolha um proprietário.</span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 col-xs-6">
+                                <div class="form-group">
+                                    <label for="">Veículos</label>
+                                    <div class="dropdown">
+                                        <div id="myDropdown" class="dropdown-content">
+                                            <input type="hidden" name="car_id" id="hidden_car_id">
+                                            <input type="text" placeholder="Pesquise por veículos" id="myInput" style="margin-top: 3px;">
+                                            {{--<a href="#about">About</a>
+                                            <a href="#base">Base</a>
+                                            <a href="#blog">Blog</a>
+                                            <a href="#contact">Contact</a>
+                                            <a href="#custom">Custom</a>--}}
+                                        </div>
+                                    </div>
+{{--
+                                    <label for="car_id">Veículos</label>
+                                    <div class="input">
+                                        <input type="text" class="div-input" style="margin-top: -4px;">
+                                    </div>
+                                    <div class="input-result"></div>--}}
+                                    {{--<select id="car_id" name="car_id" class="form-control" required>
+                                        <option value="">Selecione um veículo</option>
+
+                                            @foreach($cars as $car)
+                                                @if($edit)
+                                                    <option value="{{ $vehicle->id }}" @if($car->id == $vehicle->car_id) selected @endif >{{ $car->model }}</option>
+                                                @else
+                                                    <option value="{{ $car->id }}">{{ $car->model }}</option>
+                                                @endif
+                                            @endforeach
+
+                                    </select>--}}
+                                    <span class="form-text text-danger" id="span_car_id_status" style="display:none;">Escolha um veículo.</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Cor</label>
+                                    <select class="select-style form-control select2" name="color">
+                                        <option value="">Selecione um valor</option>
+                                        @foreach($colors as $color)
+                                            @if($edit)
+                                                <option value="{{ $color->id }}" @if($color->id == $vehicle->color) selected @endif>{{ $color->name }}</option>
+                                            @else
+                                                <option value="{{ $color->id }}">{{ $color->name }}</option>
+                                            @endif
+                                        @endforeach
+                                    </select>
+                                    <span class="form-text text-danger" id="span_color_status" style="display: none;">Selecione uma opção</span>
+                                    <div class="dropDownSelect2"></div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 col-sm-6">
+                                <label>Km</label>
+                                <input class="form-control number" type="text" name="km"
+                                       id="km" placeholder="Ex: 150000" value="@if($edit){{ $vehicle->km }}@else{{ old('km') }}@endif">
+
+                                <span class="form-text text-danger" id="span_km_status" style="display: none;">Insira um valor válido</span>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-md-4 col-sm-6">
+                                <label>Placa</label>
+                                <input class="form-control" type="text" name="license_plate" maxlength="8"
+                                       id="license_plate" placeholder="Ex: ABC-1234" value="@if($edit){{ $vehicle->license_plate }}@else{{ old('license_plate') }}@endif">
+
+                                <span id="span_license_plate_status" style="color: red; display:none;"></span>
+                            </div>
+
+                            <div class="col-md-4 col-sm-6">
+                                <label>Chassis</label>
+                                <input class="form-control" type="text" name="chassis"
+                                       id="chassis" placeholder="Ex: 5jA mM1g5C 3R WG4610" value="@if($edit){{ $vehicle->chassis }}@else{{ old('chassis') }}@endif">
+
+                                <span class="form-text text-danger" id="span_chassis_status" style="display: none;">Insira um valor válido</span>
+                            </div>
+
+                            <div class="col-md-4 col-sm-6">
+                                <label>Ano</label>
+                                <div>
+                                    <select name="year" id="year" class="form-control select-style select2">
+                                        <option value="">Insira um valor</option>
+                                        @if($edit)
+                                            @if(count($years) > 1)
+                                                @foreach($years as $year)
+                                                    <option value="{{ $year }}" @if($vehicle->year == $year) selected @endif>{{ $year }}</option>
+                                                @endforeach
+                                            @else
+                                                <option value="{{ $years[0] }}" selected>{{ $years[0] }}</option>
+                                            @endif
+                                        @endif
+                                    </select>
+                                </div>
+
+                                <span class="form-text text-danger" id="span_year_status" style="display: none;">Insira um valor válido</span>
+                            </div>
+                        </div>
+
+
+
+                        <div class="row">
+                            <div class="col-md-12 col-xs-6">
+                                <div class="form-group">
+                                    <label for="description">Descrição</label>
+                                    <textarea type="text" id="description" name="description" class="form-control" rows="10"
+                                              placeholder="Entre com informações relevantes do veículo.">@if($edit){{ $vehicle->description }}@else{{ old('description') }}@endif</textarea>
+                                    <span class="form-text text-danger" id="span_description_status" style="display: none;"></span>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <br><br>
+                        <div class="row">
+                            <div class="col-md-12 col-xs-6">
+                                <button type="submit" class="btn btn-outline-dark btn-block btn-submit">
+                                    <i class="fas fa-check"></i>
+                                    Salvar
+                                </button>
+                            </div>
+                        </div>
+
+                    </form>
+    </div>
+
+
+
 </div>
