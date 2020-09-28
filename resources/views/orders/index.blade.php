@@ -20,7 +20,7 @@
         <tbody id="tbody-main">
         @foreach($orders as $order)
             <tr class="row100 body" id="model_{{ $order->id }}">
-                <th scope="row">{{ $order->id }}</th>
+                <th scope="row"><a style="color: #343434;" href="{{ route('order.edit', ['id' => $order->id]) }}">{{ '#' . $order->code }}</a></th>
                 <td><a href="{{ route('person.edit', ['id' => $order->owner_id]) }}" class="car_model">{{ $order->owner_name }}</a></td>
                 <td><a href="{{ route('vehicle.edit', ['id' => $order->vehicle_id]) }}">{{ $order->vehicle_name }}</a></td>
                 <td><span>{{ $order->conclusion_at }}</span></td>

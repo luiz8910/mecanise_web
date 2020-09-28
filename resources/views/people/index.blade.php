@@ -24,9 +24,15 @@
             <th scope="row"></th>
             <td><a href="{{ route('person.edit', ['id' => $person->id]) }}" class="car_model">{{ $person->name }}</a></td>
             <td>{{ $person->cel }}</td>
-            <td><a href="mailto:{{ $person->email }}"> {{ $person->email }}</a></td>
+            <td>{{ $person->email }}</td>
             <td>{{ date_format(date_create($person->created_at), 'd/m/Y') }}</td>
-            <td><a href="{{ route('vehicle.edit', ['id' => $person->vehicle_id]) }}"> {{ $person->vehicle_name }}</a></td>
+            <td>
+                @if($person->vehicle_id)
+                    <a href="{{ route('vehicle.edit', ['id' => $person->vehicle_id]) }}"> {{ $person->vehicle_name }}</a>
+                @else
+                    {{ $person->vehicle_name }}
+                @endif
+            </td>
             <td>
                 <a href="{{ route('person.edit', ['id' => $person->id]) }}" class="btn btn-sm btn-outline-info" title="Editar Cliente">
                     <i class="fas fa-edit"></i>

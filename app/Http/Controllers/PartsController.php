@@ -56,7 +56,7 @@ class PartsController extends Controller
 
         $links[] = 'https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.26.0/slimselect.min.css';
 
-        $parts = $this->repository->all();
+        $parts = $this->repository->findByField('active', 1);
 
         foreach ($parts as $part)
         {
@@ -514,7 +514,8 @@ class PartsController extends Controller
             DB::beginTransaction();
 
             try {
-                $this->repository->delete($id);
+                $x['active'] = 0;
+                $this->repository->update($x, $id);
 
                 DB::commit();
 
@@ -527,6 +528,38 @@ class PartsController extends Controller
                 return json_encode(['status' => false, 'msg' => $e->getMessage()]);
             }
         }
+    }
+
+    /*
+     * Reactivate deleted parts
+     * Reativa uma peça excluída
+     */
+    public function reactivate($id)
+    {
+        $model = $this->repository->findByField('id', $id)->first();
+
+        if($model)
+        {
+            $x['active'] = 1;
+
+            DB::beginTransaction();
+
+            try{
+                $this->repository->update($x, $id);
+
+                DB::commit();
+
+                return json_encode(['status' => true]);
+
+            }catch (\Exception $e)
+            {
+                DB::rollBack();
+
+                return json_encode(['status' => false, 'msg' => $e->getMessage()]);
+            }
+        }
+
+        return json_encode(['status' => false, 'msg' => 'Esta Peça não existe']);
     }
 
     /*public function teste($brand_id)

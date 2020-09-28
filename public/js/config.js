@@ -120,6 +120,7 @@ $(function () {
 
     });
 
+
     $("#cnpj").keyup(function (e){
 
         if($(this).val().length == 14 || ($(this).val().length == 18))
@@ -154,14 +155,23 @@ function cpf_full_length()
 {
     var loading = $('.loader-wrap');
 
+    //var cpf = $input_id ? $("#" + $input_id).val() : $("#cpf").val();
+
     if(validate_cpf())
     {
+        $("#new_owner").modal('hide');
         loading.css('display', 'block');
 
-        if(location.pathname.search('editar') != -1)
-            allowed_cpf($('#cpf').val());
+        if(location.pathname.search('veiculo') != -1)
+        {
+            if(location.pathname.search('editar') != -1)
+                allowed_cpf($("#cpf").val());
+            else
+                allowed_cpf($("#cpf").val(), $("#person_id").val());
+
+        }
         else
-            allowed_cpf($('#cpf').val(), $("#person_id").val());
+            allowed_cpf($("#cpf").val());
 
     }
     else{
@@ -179,6 +189,7 @@ function cpf_full_length()
     setTimeout(function (){
 
         loading.css('display', 'none');
+        $("#new_owner").modal('show');
     }, 2000);
 }
 
@@ -358,5 +369,11 @@ function form_config()
         console.log('fail', e);
         sweet_alert_error();
     });
+}
+
+function validateEmail($email)
+{
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test($email);
 }
 

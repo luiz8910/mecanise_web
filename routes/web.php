@@ -45,6 +45,8 @@ Route::group(['middleware' => 'auth'], function (){
 
     Route::get('/cpf_exists/{cpf}/{id?}', 'PersonController@cpf_exists');
 
+    Route::get('/verify_email/{email}', 'PersonController@verify_email');
+
     /**
      * Crud Vehicles
      */
@@ -251,6 +253,20 @@ Route::group(['middleware' => 'auth'], function (){
 
     //Excluir uma peça, Ex: Exclui uma vela do tipo NGK Green 0,7mm
     Route::delete('/single_part/{id}', 'PartsController@delete_part');
+
+
+//--------------------------------------- Outros -----------------------------------------------------------------------
+
+    /*
+     * Re-Activate
+     */
+    Route::put('/reactivate-person/{id}', 'PersonController@reactivate');
+
+    Route::put('/reactivate-vehicle/{id}', 'VehicleController@reactivate');
+
+    Route::put('/reactivate-parts/{id}', 'PartsController@reactivate');
+
+    Route::put('/reactivate-workshop/{id}', 'WorkshopController@reactivate');
 
 
 });

@@ -88,13 +88,15 @@ class PersonController extends Controller
             {
                 $people = $this->repository->findWhere([
                     'workshop_id' => $this->get_user_workshop(),
-                    'role_id' => $this->get_owner_id()
+                    'role_id' => $this->get_owner_id(),
+                    'active' => 1
                 ])->sortByDesc($orderBy);
             }
             else{
                 $people = $this->repository->findWhere([
                     'workshop_id' => $this->get_user_workshop(),
-                    'role_id' => $this->get_owner_id()
+                    'role_id' => $this->get_owner_id(),
+                    'active' => 1
                 ]);
             }
 
@@ -203,6 +205,9 @@ class PersonController extends Controller
     {
         $person = $this->repository->findByField('id', $id)->first();
 
+        if($person->active == 0)
+            $active = 0;
+
         if($person)
         {
 
@@ -223,7 +228,7 @@ class PersonController extends Controller
             $role = $role ? $role : $this->get_owner_id();
 
             return view('index', compact('links', 'route', 'person', 'roles',
-                'scripts', 'states', 'edit', 'role'));
+                'scripts', 'states', 'edit', 'role', 'active'));
         }
 
         Session::flash('error.msg', 'Usuário não existe');
@@ -398,6 +403,8 @@ class PersonController extends Controller
     {
         $data = $request->all();
 
+
+
         $person = $this->repository->findByField('id', $id)->first();
 
         //User exists
@@ -427,37 +434,36 @@ class PersonController extends Controller
                         $user = $this->users->findByField('email', $person->email)->first();
 
                         if($user)
-                        {
                             $this->users->update($data['email'], $user->id);
-                        }
+
                     }
                 }
 
-                DB::beginTransaction();
+            }
 
-                try{
+            DB::beginTransaction();
 
-                    if(isset($data['dateBirth']))
-                        $data['dateBirth'] = date_format(date_create($data['dateBirth']), 'Y-m-d');
+            try{
+
+                if(isset($data['dateBirth']))
+                    $data['dateBirth'] = date_format(date_create($data['dateBirth']), 'Y-m-d');
 
 
-                    $this->repository->update($data, $id);
+                $this->repository->update($data, $id);
 
-                    DB::commit();
+                DB::commit();
 
-                    $request->session()->flash('success.msg', 'O usuário foi alterado com sucesso');
+                $request->session()->flash('success.msg', 'O usuário foi alterado com sucesso');
 
-                    return redirect()->route('person.index');
+                return redirect()->route('person.index');
 
-                }catch (\Exception $e)
-                {
-                    DB::rollBack();
+            }catch (\Exception $e)
+            {
+                DB::rollBack();
 
-                    $request->session()->flash('error.msg', $e->getMessage());
+                $request->session()->flash('error.msg', $e->getMessage());
 
-                    return redirect()->back()->withInput();
-                }
-
+                return redirect()->back()->withInput();
             }
         }
 
@@ -477,14 +483,16 @@ class PersonController extends Controller
         {
             DB::beginTransaction();
 
-            try{
+            try {
 
                 $user = $this->users->findByField('person_id', $person->id)->first();
 
-                if($user)
-                    $this->users->delete($user->id);
+                if ($user){
+                    $x['active'] = 0;
+                    $this->users->update($x, $id);
+                }
 
-                $vehicles = $this->vehicles->findByField('owner_id', $id);
+                /*$vehicles = $this->vehicles->findByField('owner_id', $id);
 
                 foreach ($vehicles as $vehicle)
                 {
@@ -496,9 +504,10 @@ class PersonController extends Controller
                 foreach ($orders as $order)
                 {
                     $this->orders->delete($order->id);
-                }
+                }*/
 
-                $this->repository->delete($id);
+                $x['active'] = 0;
+                $this->repository->update($x, $id);
 
                 DB::commit();
 
@@ -537,5 +546,47 @@ class PersonController extends Controller
 
         return json_encode(['status' => true]);
 
+    }
+
+    /*
+     * Reactivate deleted person
+     * Reativa um usuário excluído
+     */
+    public function reactivate($id)
+    {
+        $model = $this->repository->findByField('id', $id)->first();
+
+        if($model)
+        {
+            $x['active'] = 1;
+
+            DB::beginTransaction();
+
+            try{
+                $this->repository->update($x, $id);
+
+                DB::commit();
+
+                return json_encode(['status' => true]);
+
+            }catch (\Exception $e)
+            {
+                DB::rollBack();
+
+                return json_encode(['status' => false, 'msg' => $e->getMessage()]);
+            }
+        }
+
+        return json_encode(['status' => false, 'msg' => 'Este usuário não existe']);
+    }
+
+    public function verify_email($email)
+    {
+        $person = $this->repository->findByField('email', $email)->first();
+
+        if($person)
+            return json_encode(['code' => 200]);
+
+        return json_encode(['code' => 404]);
     }
 }

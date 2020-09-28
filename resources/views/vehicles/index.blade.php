@@ -21,7 +21,7 @@
             <tr class="row100 body" id="model_{{ $vehicle->id }}">
                 <th scope="row"></th>
                 <td><a href="{{ route('vehicle.edit', ['id' => $vehicle->id]) }}" class="car_model">{{ $vehicle->model }}</a></td>
-                <td><a href="{{ route('person.edit', ['id' => $vehicle->id]) }}"> {{ $vehicle->owner_name }}</a></td>
+                <td><a href="{{ route('person.edit', ['id' => $vehicle->owner_id]) }}"> {{ $vehicle->owner_name }}</a></td>
                 <td>{{ date_format(date_create($vehicle->created_at), 'd/m/Y') }}</td>
                 <td>{{ $vehicle->last_job }}</td>
                 <td>

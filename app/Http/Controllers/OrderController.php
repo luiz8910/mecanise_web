@@ -223,9 +223,10 @@ class OrderController extends Controller
                 $vehicle->name = $this->carRepository->findByField('id', $vehicle->car_id)->first()->model;
             }
 
+            $people = $this->personRepository->findByField('workshop_id', $this->get_user_workshop());
 
             return view('index', compact('route', 'edit', 'scripts', 'owners',
-                'states', 'cars', 'colors', 'vehicles', 'order'));
+                'states', 'cars', 'colors', 'vehicles', 'order', 'people'));
         }
 
         return abort(404);
@@ -236,8 +237,11 @@ class OrderController extends Controller
     {
         DB::beginTransaction();
 
+        $data = $request->all();
+
+        //dd($data);
+
         try {
-            $data = $request->all();
 
             $data['code'] = $this->random_number(5);
 
@@ -256,9 +260,9 @@ class OrderController extends Controller
 
             $v['owner_id'] = $data['owner_id'];
 
-            $this->vehicleRepository->update($v, $data['vehicle_id']);
+            $this->vehicleRepository->update($v, $data['car_id']);
 
-            if(!$data['car_id'])
+            if(!$data['car_id'] || !isset($data['car_id']))
             {
                 $request->session()->flash('error.msg', 'Escolha um modelo válido');
 
@@ -266,12 +270,21 @@ class OrderController extends Controller
                     redirect()->back();
             }
             else{
-                if($this->carRepository->findByField('id', $data['car_id'])->first())
-                    $id = $this->repository->create($data)->id;
+                $vehicle = $this->vehicleRepository->findByField('id', $data['car_id'])->first();
 
-                DB::commit();
+                if($vehicle)
+                {
+                    $data['vehicle_id'] = $vehicle->id;
+                    $data['car_id'] = $vehicle->car_id;
 
-                $request->session()->flash('success.msg', 'A Ordem de Serviço foi criada com sucesso');
+                    $this->repository->create($data);
+
+                    DB::commit();
+
+                    $request->session()->flash('success.msg', 'A Ordem de Serviço nº '. $data['code']. ' foi criada com sucesso');
+                }
+
+                $request->session()->flash('error.msg', 'Veículo não encontrado');
 
                 return redirect()->route('order.index');
             }
@@ -308,7 +321,7 @@ class OrderController extends Controller
 
             $v['owner_id'] = $data['owner_id'];
 
-            $this->vehicleRepository->update($v, $data['vehicle_id']);
+            $this->vehicleRepository->update($v, $data['car_id']);
 
             if(!$data['car_id'])
             {
@@ -318,12 +331,24 @@ class OrderController extends Controller
                     redirect()->back();
             }
             else{
-                if($this->carRepository->findByField('id', $data['car_id'])->first())
+
+                $vehicle = $this->vehicleRepository->findByField('id', $data['car_id'])->first();
+
+                if($vehicle)
+                {
+                    $data['vehicle_id'] = $vehicle->id;
+                    $data['car_id'] = $vehicle->car_id;
+
                     $this->repository->update($data, $id);
 
-                DB::commit();
+                    $code = $this->repository->findByField('id', $id)->first()->code;
 
-                $request->session()->flash('success.msg', 'A Ordem de Serviço foi alterada com sucesso');
+                    DB::commit();
+
+                    $request->session()->flash('success.msg', 'A Ordem de Serviço nº '. $code. ' foi alterada com sucesso');
+                }
+
+                $request->session()->flash('error.msg', 'Veículo não encontrado');
 
                 return redirect()->route('order.index');
             }

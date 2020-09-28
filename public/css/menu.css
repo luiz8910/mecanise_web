@@ -279,6 +279,14 @@ td button i{
     margin-right: 30px;
     font-size: 30px;
     cursor: pointer;
+
+    /*
+    margin-top: -50px;
+    margin-right: 30px;
+    width: 270px;
+    margin-left: 80%;
+     */
+
 }
 
 .form-wrapper{
@@ -431,4 +439,11 @@ td button i{
     -webkit-tap-highlight-color: transparent;
     height: 34px;
     font-size: 16px;
+}
+
+.btn-inactive{
+    position: relative;
+    margin-left: 39%;
+    margin-top: -89px;
+    display: none;
 }

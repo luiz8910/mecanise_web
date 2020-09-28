@@ -27,7 +27,7 @@ class WorkshopController extends Controller
      */
     public function index()
     {
-        $w_shops = $this->repository->all();
+        $w_shops = $this->repository->findByField('active', 1);
 
         return view('index', compact('w_shops'));
     }
@@ -208,7 +208,8 @@ class WorkshopController extends Controller
 
             try{
 
-                $this->repository->delete($id);
+                $x['active'] = 0;
+                $this->repository->update($x, $id);
 
                 DB::commit();
 
@@ -216,6 +217,38 @@ class WorkshopController extends Controller
 
             }catch (\Exception $e){
 
+                DB::rollBack();
+
+                return json_encode(['status' => false, 'msg' => $e->getMessage()]);
+            }
+        }
+
+        return json_encode(['status' => false, 'msg' => 'Esta oficina não existe']);
+    }
+
+    /*
+     * Reactivate deleted workshop
+     * Reativa uma oficina excluída
+     */
+    public function reactivate($id)
+    {
+        $model = $this->repository->findByField('id', $id)->first();
+
+        if($model)
+        {
+            $x['active'] = 1;
+
+            DB::beginTransaction();
+
+            try{
+                $this->repository->update($x, $id);
+
+                DB::commit();
+
+                return json_encode(['status' => true]);
+
+            }catch (\Exception $e)
+            {
                 DB::rollBack();
 
                 return json_encode(['status' => false, 'msg' => $e->getMessage()]);

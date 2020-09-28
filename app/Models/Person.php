@@ -25,7 +25,7 @@ class Person extends Model implements Transformable
         'name', 'email', 'cpf', 'dateBirth', 'cel', 'cel2', 'gender',
         'description', 'workshop_id', 'zip_code', 'street', 'number',
         'district', 'city', 'state', 'address_reference', 'img_profile',
-        'cnpj', 'role_id', 'business_name'
+        'cnpj', 'role_id', 'business_name', 'active'
     ];
 
     protected $dates = ['deleted_at'];

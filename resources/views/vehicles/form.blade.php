@@ -16,19 +16,21 @@
                 <div class="row">
                     <div class="col-md-6">
                         <label for="modal_name">Nome</label>
-                        <input type="text" placeholder="Nome do Proprietário" name="name" id="modal_name" class="form-control" required>
+                        <input type="text" placeholder="Nome do Proprietário" name="name" id="modal_name" class="form-control modal_input" required>
 
                         <span style="color: red; display: none;" id="span_name">Preencha este campo</span>
                     </div>
 
                     <div class="col-md-6">
-                        <label for="modal_cpf">CPF</label>
+                        <label for="cpf">CPF</label>
                         <input type="text" placeholder="CPF do Proprietário" name="cpf" minlength="11"
-                               id="modal_cpf" class="form-control modal_input number" required>
-                        <span style="color: red; display: none;" id="span_cpf">Preencha este campo</span>
+                               id="cpf" class="form-control modal_input number" required>
+                        <span style="color: red; display: none;" id="span_cpf_status">Preencha este campo</span>
                     </div>
 
                 </div>
+
+                <br>
 
                 <div class="row">
 
@@ -44,7 +46,7 @@
                     </div>
                 </div>
 
-
+                <br>
 
                 <div class="row">
 
@@ -62,7 +64,7 @@
                         <input type="text" placeholder="Ex: Rua 1" name="street" id="street" class="form-control modal_input">
                     </div>
                 </div>
-
+                <br>
                 <div class="row">
 
                     <div class="col-md-6">
@@ -75,7 +77,7 @@
                         <input type="text" placeholder="Bairro" name="district" id="district" class="form-control modal_input">
                     </div>
                 </div>
-
+                <br>
                 <div class="row">
 
                     <div class="col-md-6">
@@ -94,6 +96,8 @@
                     </div>
                 </div>
 
+                <br>
+
             </div>
 
             <div class="modal-footer">
@@ -103,7 +107,7 @@
                     Fechar
                 </button>
 
-                <button type="button" class="btn btn-primary" onclick="new_owner()">
+                <button type="button" class="btn btn-primary" id="btn_modal" onclick="new_owner()">
                     <i class="fa fa-check"></i>
                     Salvar
                 </button>
@@ -131,6 +135,9 @@
                 </a>
             </div>
         </div>
+        <button type="button" class="btn btn-primary btn-inactive">
+            <i class="fas fa-car"></i> Ativar Veículo
+        </button>
     </div>
 
     <hr>
@@ -139,6 +146,7 @@
         @if($edit)
             <form action="{{ route('vehicle.update', ['id' => $vehicle->id]) }}" method="POST">
                 @method('PUT')
+                <input type="hidden" id="vehicle_id" value="{{ $vehicle->id }}">
                 @else
                     <form action="{{ route('vehicle.store') }}" method="POST">
                         @endif
@@ -166,8 +174,10 @@
                                     <label for="">Veículos</label>
                                     <div class="dropdown">
                                         <div id="myDropdown" class="dropdown-content">
-                                            <input type="hidden" name="car_id" id="hidden_car_id">
-                                            <input type="text" placeholder="Pesquise por veículos" id="myInput" style="margin-top: 3px;">
+                                            <input type="hidden" name="car_id" id="hidden_car_id" value="@if($edit){{ $vehicle->car_id }}@endif">
+                                            <input type="text" placeholder="Pesquise por veículos" id="myInput"
+                                                   style="margin-top: 3px;" value="@if($edit){{ $car->model }}@endif" autocomplete="off">
+
                                             {{--<a href="#about">About</a>
                                             <a href="#base">Base</a>
                                             <a href="#blog">Blog</a>

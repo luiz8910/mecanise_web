@@ -5,6 +5,7 @@
     </div>
 
     <div class="form-options">
+
         <div class="dropdown dropleft">
             <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Opções
@@ -18,6 +19,10 @@
                 </a>
             </div>
         </div>
+        <button type="button" class="btn btn-primary btn-inactive" onclick="activate();">
+            <i class="fas fa-user"></i>
+            Ativar Usuário
+        </button>
     </div>
 
     <hr>

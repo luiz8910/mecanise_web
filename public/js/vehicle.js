@@ -53,7 +53,9 @@ $(function () {
 
 
     $("#car_id").change(function () {
-        car_change();
+
+        if(location.pathname.search('os') == -1)
+            car_change();
     });
 
     $("#license_plate").keydown(function (e) {
@@ -139,11 +141,11 @@ function new_owner()
 {
     $("#span_name").css('display', 'none');
     $("#span_cel").css('display', 'none');
-    $("#span_cpf").css('display', 'none');
+    $("#span_cpf_status").css('display', 'none');
 
     var name = $("#modal_name").val();
 
-    var cpf = $("#modal_cpf").val();
+    var cpf = $("#cpf").val();
 
     var email = $("#modal_email").val();
 
@@ -163,7 +165,7 @@ function new_owner()
 
     $("#modal_name").removeClass('input-error');
     $("#modal_cel").removeClass('input-error');
-    $("#modal_cpf").removeClass('input-error');
+    $("#cpf").removeClass('input-error');
 
     if (name === "")
     {
@@ -183,9 +185,9 @@ function new_owner()
 
     if(cpf === "")
     {
-        $("#modal_cpf").addClass('input-error');
+        $("#cpf").addClass('input-error');
 
-        $("#span_cpf").css('display', 'block');
+        $("#span_cpf_status").css('display', 'block');
         return false;
     }
     else if(cpf.length < 11){
@@ -239,9 +241,9 @@ function new_owner()
 
             sweet_alert_success('O proprietário foi cadastrado com sucesso');
         }
-        else{
+        else
             sweet_alert_error('Este proprietário já está cadastrado');
-        }
+
 
     }).fail(function (e) {
         console.log('fail');

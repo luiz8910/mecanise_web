@@ -268,28 +268,29 @@
     </div>
 
     <div class="custom-container">
-        @if(Session::has('success.msg'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <strong>Sucesso</strong> {{ Session::get('success.msg') }}
+
+
+        {{--<div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>Sucesso</strong> <span>{{ Session::get('success.msg') }}</span>
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
-        @elseif(Session::has('error.msg'))
+
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 <strong>Erro!!!</strong> {{ Session::get('error.msg') }}
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-        @elseif(Session::has('warning.msg'))
+
             <div class="alert alert-warning alert-dismissible fade show" role="alert">
                 <strong>Atenção!!!</strong> {{ Session::get('warning.msg') }}
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-            </div>
-        @endif
+            </div>--}}
+
 
         @include($route)
     </div>
@@ -327,6 +328,26 @@
     @foreach($scripts as $script)
         <script src="{{ $script }}" type="text/javascript"></script>
     @endforeach
+@endif
+
+@if(Session::has('success.msg'))
+    <script>
+        $(function (){
+            sweet_alert_success('{!! Session::get('success.msg') !!}')
+        });
+        </script>
+
+@elseif(Session::has('error.msg'))
+    <script>
+        $(function (){
+            sweet_alert_error('{!! Session::get('error.msg') !!}')
+        });
+    </script>
+@endif
+
+@if(isset($active) && $active == 0)
+    <input type="hidden" id="inactive" value="1">
+    <script>resize_options_buttons()</script>
 @endif
 
 </body>

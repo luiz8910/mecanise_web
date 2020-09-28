@@ -7,6 +7,9 @@ var user_option_item = false;
 
 $(function () {
 
+    $("input").attr('autocomplete', 'off');
+    $(".modal_input").attr('autocomplete', 'password');
+
     localStorage.removeItem('open_items_menu');
     localStorage.setItem('filters', false);
 
@@ -150,10 +153,10 @@ $(function () {
     });*/
 
     //When CPF field inside a modal changes / Quando um cpf dentro do modal muda de valor
-    $("#modal_cpf").change(function () {
+    /*$("#modal_cpf").change(function () {
 
         before_validate_cpf('modal_cpf');
-    });
+    });*/
 
     //Chassis validation when input field changes
     // Quando o campo chassis tem seu valor alterado ocorre a validação do mesmo
@@ -365,7 +368,44 @@ $(function () {
             e.preventDefault();
             sweet_alert_error('Verifique os erros na página e tente novamente');
         }
-    })
+        else if($("#inactive").val() == 1)
+        {
+            e.preventDefault();
+
+            var msg = '';
+
+            if(location.pathname.search('usuario') != -1)
+
+                msg = 'Você não pode alterar um usuário inativo, Ative-o e depois altere este usuário';
+
+            else if(location.pathname.search('veiculo') != -1){
+                msg = 'Você não pode alterar um veículo inativo, Ative-o e depois altere este veículo';
+            }
+            else if(location.pathname.search('pecas') != -1){
+                msg = "Voce não pode alterar um peça inativa, Ative-a e depois altere esta peça";
+            }
+
+            sweet_alert_error(msg, 5000);
+        }
+
+    });
+
+    $("#show_new_owner").click(function (){
+        $("#new_owner").modal('show');
+    });
+
+    $("#show_new_vehicle").click(function (){
+        $("#new_vehicle").modal('show');
+    });
+
+    $("#modal_email").change(function (){
+        if(validateEmail($(this).val()))
+            verify_email($(this).val());
+
+        else
+            sweet_alert_error('Digite um email válido');
+    });
+
 });
 
 //Searchs any model / Procura dados em qualquer classe
@@ -711,10 +751,7 @@ function sweet_alert($data, $ajax) {
             request.done(function (e) {
                 if (e.status) {
 
-                    swal($data.success_msg, {
-                        icon: 'success',
-                        timer: 3000
-                    });
+                    sweet_alert_success($data.success_msg);
 
                     setTimeout(function () {
                         if ($data.reload)
@@ -745,21 +782,21 @@ function sweet_alert($data, $ajax) {
 
 }
 
-function sweet_alert_error($msg) {
+function sweet_alert_error($msg, $timer) {
     var msg = $msg ? $msg : 'Um erro desconhecido ocorreu, tente novamente mais tarde';
 
     swal(msg, {
         icon: 'error',
-        timer: 3000
+        timer: $timer ? $timer : 3000
     });
 }
 
-function sweet_alert_success($msg) {
+function sweet_alert_success($msg, $timer) {
     var msg = $msg ? $msg : 'Sucesso';
 
     swal(msg, {
         icon: 'success',
-        timer: 3000
+        timer: $timer ? $timer : 3000
     });
 }
 
@@ -914,3 +951,135 @@ function getHeight() {
         return document.body.clientHeight;
     }
 }
+
+function resize_options_buttons()
+{
+    $(".btn-inactive").css('display', 'inline-block');
+
+    $(".form-options")
+        .css('width', '300px')
+        .css('margin-left', '79%')
+        .css('float', 'left');
+
+}
+
+function activate()
+{
+    var data, ajax = false;
+
+    console.log(location.pathname);
+
+    if(location.pathname.search('usuario') != -1)
+    {
+        data = {
+            title: 'Atenção',
+            text: 'Você deseja reativar este usuário?',
+            button: "Reativar",
+            reload: true,
+            success_msg: 'O usuário foi reativado'
+        }
+
+        ajax = {
+            url: '/reactivate-person/' + $("#person_id").val(),
+            method: "PUT",
+        }
+
+
+    }else if(location.pathname.search('veiculo') != -1)
+    {
+        data = {
+            title: 'Atenção',
+            text: 'Você deseja reativar este veículo?',
+            button: "Reativar",
+            reload: true,
+            success_msg: 'O veículo foi reativado'
+        }
+
+        ajax = {
+            url: '/reactivate-vehicle/' + $("#vehicle_id").val(),
+            method: "PUT",
+        }
+    }
+    else if(location.pathname.search('peca') != -1)
+    {
+        data = {
+            title: 'Atenção',
+            text: 'Você deseja reativar esta peça?',
+            button: "Reativar",
+            reload: true,
+            success_msg: 'A peça foi reativada'
+        }
+
+        ajax = {
+            url: '/reactivate-parts/' + $("#hidden_part_id").val(),
+            method: "PUT",
+        }
+    }
+    else if(location.pathname.search('oficina') != -1)
+    {
+        data = {
+            title: 'Atenção',
+            text: 'Você deseja reativar esta oficina?',
+            button: "Reativar",
+            reload: true,
+            success_msg: 'A oficina foi reativada'
+        }
+
+        ajax = {
+            url: '/reactivate-workshop/' + $("#workshop_id").val(),
+            method: "PUT",
+        }
+    }
+
+    if(data)
+        sweet_alert(data, ajax);
+}
+
+function verify_email($email)
+{
+    var loading = $(".loader-wrap");
+    loading.css("display", "block");
+    $("#new_owner").css("display", 'none');
+
+    $.ajax({
+        url: '/verify_email/'+$email,
+        method: "GET",
+        dataType: 'json',
+        success: function (e){
+            if(e.code == 404)
+            {
+                $("#modal_email")
+                    .removeClass('has-error')
+                    .addClass('has-success');
+
+                $("#btn_modal").attr('disabled', null);
+
+                loading.css("display", "none");
+                $("#new_owner").css("display", 'block');
+            }
+
+            else if(e.code == 200)
+            {
+                $("#modal_email")
+                    .removeClass('has-success')
+                    .addClass('has-error');
+
+                $("#btn_modal").attr('disabled', true);
+
+                loading.css("display", "none");
+                $("#new_owner").css("display", 'block');
+
+                sweet_alert_error("Este email já está sendo utilizado.");
+            }
+
+        },
+        fail: function (e){
+            console.log('fail', e);
+
+            loading.css("display", "none");
+            $("#new_owner").css("display", 'block');
+        }
+    });
+}
+
+

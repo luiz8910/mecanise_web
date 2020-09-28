@@ -75,6 +75,7 @@ function find_cep($cep)
     var loading = $('.loader-wrap');
 
     loading.css('display', 'block');
+    $("#new_owner").modal('hide');
 
     //Verifica se campo cep possui valor informado.
     if ($cep !== "") {
@@ -101,6 +102,7 @@ function find_cep($cep)
                     //Atualiza os campos com os valores da consulta.
                     setTimeout(function () {
                         loading.css('display', 'none');
+                        $("#new_owner").modal('show');
                         //$(".input-address").css('display', 'block');
                         $("#street").val(dados.logradouro);
                         $("#number").val('').focus();
@@ -114,6 +116,7 @@ function find_cep($cep)
                     //CEP pesquisado não foi encontrado.
                     clean_fields();
                     loading.css('display', 'none');
+                    $("#new_owner").modal('show');
                     //$(".input-address").css('display', 'block');
                 }
             });
@@ -122,12 +125,14 @@ function find_cep($cep)
             //cep é inválido.
             clean_fields();
             loading.css('display', 'none');
+            $("#new_owner").modal('show');
             //$(".input-address").css('display', 'block');
         }
     } //end if.
     else {
         //cep sem valor, limpa formulário.
         loading.css('display', 'none');
+        $("#new_owner").modal('show');
         //$(".input-address").css('display', 'block');
         clean_fields();
     }

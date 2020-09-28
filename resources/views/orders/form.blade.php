@@ -243,7 +243,7 @@
                         @endif
 
                         <div class="row">
-                            <div class="col-md-5 col-xs-6">
+                            <div class="col-md-6 col-xs-6">
                                 <div class="form-group">
                                     <label for="owner_id">Proprietário</label>
                                     <select id="owner_id" name="owner_id" class="form-control" required>
@@ -260,14 +260,16 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-5 col-xs-6">
+                            <div class="col-md-6 col-xs-6">
                                 <div class="form-group">
                                     <label for="car_id">Veículos</label>
                                     <select id="car_id" name="car_id" class="form-control" required>
                                         <option value="">Selecione um proprietário primeiro</option>
                                         @if($edit)
                                             @foreach($vehicles as $vehicle)
-                                                <option value="{{ $vehicle->id }}" @if($vehicle->id == $order->vehicle_id) selected @endif >{{ $vehicle->model }}</option>
+                                                @if($vehicle->id == $order->vehicle_id)
+                                                    <option value="{{ $vehicle->id }}" selected >{{ $vehicle->name }}</option>
+                                                @endif
                                             @endforeach
                                         @endif
                                     </select>
@@ -277,20 +279,20 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-md-5 col-xs-6">
+                            <div class="col-md-6 col-xs-6">
                                 <div class="form-group">
                                     <label for="start_year">Realizado em:</label>
-                                    <input type="text" id="done_at" name="done_at" class="form-control date number"
+                                    <input type="text" id="done_at" name="done_at" class="form-control date number" maxlength="10"
                                            placeholder="Ex: Digite a data em que o serviço começou" value="@if($edit){{ $order->done_at }}@else{{ old('done_at') }}@endif">
                                     <span id="span_done_at_status" style="color: red; display:none;"></span>
                                 </div>
                             </div>
 
-                            <div class="col-md-5 col-xs-6">
+                            <div class="col-md-6 col-xs-6">
                                 <div class="form-group">
                                     <label for="end_year">Finalizado em:</label>
                                     <input type="text" id="conclusion_at" name="conclusion_at" class="form-control date number"
-                                           placeholder="Ex: Digite a data em que o serviço foi concluído"
+                                           placeholder="Ex: Digite a data em que o serviço foi concluído" maxlength="10"
                                            value="@if($edit){{ $order->conclusion_at }}@else{{ old('conclusion_at') }}@endif">
                                     <span id="span_conclusion_at_status" style="color: red; display:none;"></span>
                                 </div>
@@ -298,11 +300,81 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-md-10 col-xs-6">
+                            <div class="col-md-4 col-xs-6">
+                                <div class="form-group">
+                                    <label for="parts_description">Peça</label>
+                                    <input type="text" id="parts_description" name="parts_description" class="form-control" maxlength="10"
+                                           placeholder="Ex: Digite o nome da peça ou produto" >
+                                    <span id="span_price_parts_status" style="color: red; display:none;"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 col-xs-6">
+                                <div class="form-group">
+                                    <label for="end_year">Quantidade</label>
+                                    <input type="text" id="quantity" name="quantity" class="form-control number"
+                                           placeholder="Ex: Quantidade" maxlength="10"
+                                           value="">
+                                    <span id="span_conclusion_at_status" style="color: red; display:none;"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 col-xs-6">
+                                <div class="form-group">
+                                    <label for="end_year">Valor por Unidade</label>
+                                    <input type="text" id="conclusion_at" name="conclusion_at" class="form-control number"
+                                           placeholder="Ex: R$500,00" maxlength="10"
+                                           value="">
+                                    <span id="span_conclusion_at_status" style="color: red; display:none;"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12 col-xs-6">
+                                <div class="form-group">
+                                    <br><br>
+                                    <table class="table">
+                                        <thead class="thead-dark">
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">First</th>
+                                            <th scope="col">Last</th>
+                                            <th scope="col">Handle</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <th scope="row">1</th>
+                                            <td>Mark</td>
+                                            <td>Otto</td>
+                                            <td>@mdo</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">2</th>
+                                            <td>Jacob</td>
+                                            <td>Thornton</td>
+                                            <td>@fat</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">3</th>
+                                            <td>Larry</td>
+                                            <td>the Bird</td>
+                                            <td>@twitter</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12 col-xs-6">
                                 <div class="form-group">
                                     <label for="description">Descrição</label>
                                     <textarea type="text" id="description" name="description" class="form-control" rows="10"
-                                              placeholder="Entre com informações relevantes para a Ordem de Serviço.">@if($edit){{ $car->description }}@else{{ old('description') }}@endif</textarea>
+                                              placeholder="Entre com informações relevantes para a Ordem de Serviço.">@if($edit){{ $order->description }}@else{{ old('description') }}@endif</textarea>
                                     <span class="form-text text-danger" id="span_description_status" style="display: none;"></span>
                                 </div>
                             </div>
@@ -311,7 +383,7 @@
 
                         <br><br>
                         <div class="row">
-                            <div class="col-md-10 col-xs-6">
+                            <div class="col-md-12 col-xs-6">
                                 <button type="submit" class="btn btn-outline-dark btn-block btn-submit">
                                     <i class="fas fa-check"></i>
                                     Salvar

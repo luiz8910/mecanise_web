@@ -76,6 +76,7 @@ $(function () {
         car_change('car_id_modal');
     });
 
+
     $("#owner_id").change(function () {
         //$("#car_id_input").val($(this).val());
         $.ajax({
@@ -83,7 +84,7 @@ $(function () {
             method: 'GET',
             dataType: 'json',
             success: function (e){
-                if(e.status && e.vehicles.length > 0)
+                if(e.status)
                 {
                     $("#car_id option").remove();
                     var append = '';
@@ -93,7 +94,34 @@ $(function () {
                         append += '<option value="'+e.vehicles[i].id+'">'+e.vehicles[i].name+'</option>'
                     }
 
-                    $("#car_id").append(append);
+                    $("#car_id").append(append).trigger('change');
+                }
+                else
+                {
+                    swal({
+                        title: "Atenção",
+                        text: "Este cliente não tem nenhum veículo cadastrado, quer cadastrar um agora?",
+                        icon: "warning",
+                        buttons: {
+                            cancel: {
+                                text: "Cancelar",
+                                value: null,
+                                visible: true,
+                                closeModal: true,
+                            },
+                            confirm: {
+                                text: "Cadastrar",
+                                value: true,
+                                visible: true,
+                                closeModal: true
+                            }
+                        }
+
+                    }).then((value) => {
+                        if(value)
+                            $("#new_owner").modal('show');
+
+                    });
                 }
             },
             fail: function (e){
@@ -102,13 +130,7 @@ $(function () {
         });
     });
 
-    $("#show_new_owner").click(function (){
-        $("#new_owner").modal('show');
-    });
 
-    $("#show_new_vehicle").click(function (){
-        $("#new_vehicle").modal('show');
-    });
 
 });
 

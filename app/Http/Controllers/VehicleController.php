@@ -22,27 +22,27 @@ class VehicleController extends Controller
     use Config;
 
     private $repository;
-    private $personRepository;
+    private $person;
     /**
      * @var CarRepository
      */
-    private $carRepository;
+    private $car;
     /**
      * @var WorkshopRepository
      */
-    private $workshopRepository;
+    private $workshop;
     /**
      * @var StatesRepository
      */
-    private $statesRepository;
+    private $states;
     /**
      * @var ColorsRepository
      */
-    private $colorsRepository;
+    private $colors;
     /**
      * @var CarBrandsRepository
      */
-    private $brandsRepository;
+    private $brands;
     /**
      * @var ConfigRepository
      */
@@ -52,20 +52,20 @@ class VehicleController extends Controller
      */
     private $order;
 
-    public function __construct(VehicleRepository $repository, PersonRepository $personRepository,
-                                CarRepository $carRepository, WorkshopRepository $workshopRepository,
-                                StatesRepository $statesRepository, ColorsRepository $colorsRepository,
-                                CarBrandsRepository $brandsRepository, ConfigRepository $config,
+    public function __construct(VehicleRepository $repository, PersonRepository $person,
+                                CarRepository $car, WorkshopRepository $workshop,
+                                StatesRepository $states, ColorsRepository $colors,
+                                CarBrandsRepository $brands, ConfigRepository $config,
                                 OrderRepository $order)
     {
 
         $this->repository = $repository;
-        $this->personRepository = $personRepository;
-        $this->carRepository = $carRepository;
-        $this->workshopRepository = $workshopRepository;
-        $this->statesRepository = $statesRepository;
-        $this->colorsRepository = $colorsRepository;
-        $this->brandsRepository = $brandsRepository;
+        $this->person = $person;
+        $this->car = $car;
+        $this->workshop = $workshop;
+        $this->states = $states;
+        $this->colors = $colors;
+        $this->brands = $brands;
         $this->config = $config;
         $this->order = $order;
     }
@@ -76,9 +76,12 @@ class VehicleController extends Controller
      */
     public function index($orderBy = null)
     {
-        $vehicles = $this->repository->findByField('workshop_id', $this->get_user_workshop());
+        $vehicles = $this->repository->findWhere([
+            'workshop_id' => $this->get_user_workshop(),
+            'active' => 1
+        ]);
 
-        $workshop = $this->workshopRepository->findByField('id', $this->get_user_workshop())->first();
+        $workshop = $this->workshop->findByField('id', $this->get_user_workshop())->first();
 
         $offset = $this->config->findByField('key', 'pagination')->first() ?
             $this->config->findByField('key', 'pagination')->first()->value : 10;
@@ -91,14 +94,14 @@ class VehicleController extends Controller
 
             foreach ($vehicles as $vehicle)
             {
-                $car = $this->carRepository->findByField('id', $vehicle->car_id)->first();
+                $car = $this->car->findByField('id', $vehicle->car_id)->first();
 
                 if($car) {
 
                     $vehicle->model = $car->model;
 
-                    $vehicle->owner_name = $this->personRepository->findByField('id', $vehicle->owner_id)->first() ?
-                        $this->personRepository->findByField('id', $vehicle->owner_id)->first()->name : 'Veículo sem proprietário';
+                    $vehicle->owner_name = $this->person->findByField('id', $vehicle->owner_id)->first() ?
+                        $this->person->findByField('id', $vehicle->owner_id)->first()->name : 'Veículo sem proprietário';
 
                     $vehicle->last_job = $this->order->findByField('vehicle_id')->first() ?
                         date_format(date_create($this->order->findByField('vehicle_id')->first()->done_at), 'd/m/Y')
@@ -125,7 +128,7 @@ class VehicleController extends Controller
      */
     public function create()
     {
-        $cars =  $this->carRepository->orderBy('model')->all();
+        $cars =  $this->car->orderBy('model')->all();
 
         $brands = DB::table('cars')
                         ->whereNull('deleted_at')
@@ -138,16 +141,17 @@ class VehicleController extends Controller
 
         $edit = false;
 
-        $people = $this->personRepository->orderBy('name')->findWhere(['workshop_id' => $this->get_user_workshop(), 'role_id' => $this->get_owner_id()]);
+        $people = $this->person->orderBy('name')->findWhere(['workshop_id' => $this->get_user_workshop(), 'role_id' => $this->get_owner_id()]);
 
-        $states = $this->statesRepository->orderBy('state')->all();
+        $states = $this->states->orderBy('state')->all();
 
-        $colors = $this->colorsRepository->orderBy('name')->all();
+        $colors = $this->colors->orderBy('name')->all();
 
         $scripts[] = '../../js/vehicle.js';
         $scripts[] = '../../js/address.js';
         $scripts[] = '../../js/mask.js';
         $scripts[] = '../../js/search.js';
+        $scripts[] = '../../js/config.js';
         $links[] = '../../css/search.css';
 
         return view('index', compact('cars', 'route', 'scripts',
@@ -160,28 +164,30 @@ class VehicleController extends Controller
      */
     public function edit($id)
     {
-        $cars = $brands = $this->carRepository->all();
+        $cars = $brands = $this->car->all();
 
         $route = 'vehicles.form';
 
         $edit = true;
 
-        $states = $this->statesRepository->orderBy('state')->all();
+        $states = $this->states->orderBy('state')->all();
 
         //$scripts[] = '../../assets/js/pages/custom/user/add-user.js';
         $scripts[] = '../../js/vehicle.js';
         $scripts[] = '../../js/address.js';
         $scripts[] = '../../js/mask.js';
         $scripts[] = '../../js/search.js';
+        $scripts[] = '../../js/config.js';
         $links[] = '../../css/search.css';
 
         $vehicle = $this->repository->findByField('id', $id)->first();
 
-        $owners = $this->personRepository->findWhere(['workshop_id' => $this->get_user_workshop(), 'role_id' => 4]);
+        $people = $this->person->orderBy('name')
+            ->findWhere(['workshop_id' => $this->get_user_workshop(), 'role_id' => 4]);
 
-        $colors = $this->colorsRepository->orderBy('name')->all();
+        $colors = $this->colors->orderBy('name')->all();
 
-        $car = $this->carRepository->findByField('id', $vehicle->car_id)->first();
+        $car = $this->car->findByField('id', $vehicle->car_id)->first();
 
         for ($i = $car->start_year; $i < ($car->end_year + 1); $i++)
         {
@@ -190,12 +196,15 @@ class VehicleController extends Controller
 
         if($vehicle)
         {
-            $brand_id = $this->carRepository->findByField('id', $vehicle->car_id)->first()->brand;
+            if($vehicle->active == 0)
+                $active = 0;
 
-            $vehicle->brand_name = $this->brandsRepository->findByField('id', $brand_id)->first()->name;
+            $brand_id = $this->car->findByField('id', $vehicle->car_id)->first()->brand;
+
+            $vehicle->brand_name = $this->brands->findByField('id', $brand_id)->first()->name;
 
             return view('index', compact('cars', 'route', 'edit', 'scripts',
-                'vehicle', 'brands', 'states', 'owners', 'colors', 'years', 'links'));
+                'vehicle', 'brands', 'states', 'people', 'colors', 'years', 'links', 'car', 'active'));
         }
 
         return abort(404);
@@ -210,7 +219,7 @@ class VehicleController extends Controller
     {
         $data = $request->all();
 
-        dd($data);
+        //dd($data);
 
         $data['workshop_id'] = $this->get_user_workshop();
 
@@ -219,16 +228,16 @@ class VehicleController extends Controller
         try{
             if($data['car_id'])
             {
-                $car = $this->carRepository->findByField('id', $data['car_id'])->first();
+                $car = $this->car->findByField('id', $data['car_id'])->first();
 
                 if($car)
                     $id = $this->repository->create($data)->id;
             }
             else{
 
-                $data['car_id'] = $this->carRepository->create($data)->id;
+                $data['car_id'] = $this->car->create($data)->id;
 
-                $car = $this->carRepository->findByField('id', $data['car_id'])->first();
+                $car = $this->car->findByField('id', $data['car_id'])->first();
 
                 $id = $this->repository->create($data)->id;
             }
@@ -236,6 +245,7 @@ class VehicleController extends Controller
             DB::commit();
 
             $request->session()->flash('success.msg', 'Veículo cadastrado com sucesso');
+
 
             return isset($data['origin']) ? json_encode(['status' => true, 'id' => $id, 'name' => $car->model]) : redirect()->route('vehicle.index');
 
@@ -295,7 +305,8 @@ class VehicleController extends Controller
         try{
             if($this->repository->findByField('id', $id)->first())
             {
-                $this->repository->delete($id);
+                $x['active'] = 0;
+                $this->repository->update($x, $id);
 
                 DB::commit();
 
@@ -349,15 +360,15 @@ class VehicleController extends Controller
         foreach ($cars as $car)
         {
 
-            $car->brand_name = $this->brandsRepository->findByField('id', $car->brand)->first() ?
-                $this->brandsRepository->findByField('id', $car->brand)->first()->name : "Montadora não encontrada";
+            $car->brand_name = $this->brands->findByField('id', $car->brand)->first() ?
+                $this->brands->findByField('id', $car->brand)->first()->name : "Montadora não encontrada";
 
             $vehicles = $this->repository->findByField('car_id', $car->id);
 
             if(count($vehicles) > 0)
                 foreach ($vehicles as $vehicle) {
-                    $vehicle->owner_name = $this->personRepository->findByField('id', $vehicle->owner_id)->first() ?
-                        $this->personRepository->findByField('id', $vehicle->owner_id)->first()->name : "Proprietário não encontrado";
+                    $vehicle->owner_name = $this->person->findByField('id', $vehicle->owner_id)->first() ?
+                        $this->person->findByField('id', $vehicle->owner_id)->first()->name : "Proprietário não encontrado";
 
                     $car->vehicle = $vehicle;
 
@@ -405,5 +416,69 @@ class VehicleController extends Controller
         return json_encode(['status' => false, 'result' => $result, 'count' => 0]);
     }
 
+    /*
+     * Reactivate deleted vehicle
+     * Reativa um veículo excluído
+     */
+    public function reactivate($id)
+    {
+        $model = $this->repository->findByField('id', $id)->first();
+
+        if($model)
+        {
+            $x['active'] = 1;
+
+            DB::beginTransaction();
+
+            try{
+                $this->repository->update($x, $id);
+
+                DB::commit();
+
+                return json_encode(['status' => true]);
+
+            }catch (\Exception $e)
+            {
+                DB::rollBack();
+
+                return json_encode(['status' => false, 'msg' => $e->getMessage()]);
+            }
+        }
+
+        return json_encode(['status' => false, 'msg' => 'Este veículo não existe']);
+    }
+
+    public function vehicle_by_owner($owner_id, $json = null)
+    {
+        $vehicles = $this->repository->findByField('owner_id', $owner_id);
+
+        if(count($vehicles) > 0)
+        {
+            foreach ($vehicles as $vehicle)
+            {
+                $vehicle->name = $this->car->findByField('id', $vehicle->car_id)->first() ?
+                    $this->car->findByField('id', $vehicle->car_id)->first()->model : 'Veículo desconhecido';
+            }
+
+            return json_encode(['status' => true, 'vehicles' => $vehicles]);
+        }
+
+        else
+            return json_encode(['status' => false, 'msg' => 'Nenhum veículo foi encontrado']);
+
+    }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

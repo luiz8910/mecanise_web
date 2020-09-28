@@ -23,7 +23,7 @@ class Parts extends Model implements Transformable
      */
     protected $fillable = [
         'part_id', 'universal_code', 'brand_code', 'car_id', 'brand_parts_id',
-        'start_year', 'end_year', 'notes', 'system_id', 'type'
+        'start_year', 'end_year', 'notes', 'system_id', 'type', 'active'
     ];
 
 }
