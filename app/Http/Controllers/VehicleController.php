@@ -196,6 +196,8 @@ class VehicleController extends Controller
 
         if($vehicle)
         {
+            $active = 1;
+
             if($vehicle->active == 0)
                 $active = 0;
 

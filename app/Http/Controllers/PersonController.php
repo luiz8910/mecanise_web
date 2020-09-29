@@ -186,6 +186,7 @@ class PersonController extends Controller
         $scripts[] = '../../js/address.js';
         $scripts[] = '../../js/config.js';
         $scripts[] = '../../js/mask.js';
+        $links[] = '';
 
         $route = 'people.form';
 
@@ -197,7 +198,7 @@ class PersonController extends Controller
 
         $role = $role ? $role : $this->get_owner_id();
 
-        return view('index', compact( 'route', 'roles', 'scripts', 'states', 'edit', 'role'));
+        return view('index', compact( 'links', 'route', 'roles', 'scripts', 'states', 'edit', 'role'));
     }
 
     //$id = person id
@@ -216,6 +217,7 @@ class PersonController extends Controller
             $scripts[] = '../../js/address.js';
             $scripts[] = '../../js/config.js';
             $scripts[] = '../../js/mask.js';
+            $links[] = '';
 
             $route = 'people.form';
 

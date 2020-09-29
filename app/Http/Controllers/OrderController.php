@@ -199,6 +199,7 @@ class OrderController extends Controller
         $scripts[] = '../../js/zipcode.js';
         $scripts[] = '../../js/mask.js';
         $scripts[] = '../../js/jquery.maskMoney.js';
+        $links[] = '';
 
         $order = $this->repository->findByField('id', $id)->first();
 
@@ -228,7 +229,7 @@ class OrderController extends Controller
             $people = $this->personRepository->findByField('workshop_id', $this->get_user_workshop());
 
             return view('index', compact('route', 'edit', 'scripts', 'owners',
-                'states', 'cars', 'colors', 'vehicles', 'order', 'people'));
+                'states', 'cars', 'colors', 'vehicles', 'order', 'people', 'links'));
         }
 
         return abort(404);
