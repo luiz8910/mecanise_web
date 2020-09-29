@@ -264,8 +264,7 @@ class PersonController extends Controller
 
                     DB::commit();
 
-                    $request->session()->flash('success.msg', 'O usuário '.$data['name']. ' foi cadastrado com sucesso,
-                        agora cadastre um veículo para a pessoa');
+                    $request->session()->flash('success.msg', 'O usuário '.$data['name']. ' foi cadastrado com sucesso, agora cadastre um veículo para a pessoa');
 
                     return isset($data['origin']) ?
                         json_encode(['status' => true, 'id' => $person->id])
@@ -276,8 +275,7 @@ class PersonController extends Controller
 
                     DB::commit();
 
-                    $request->session()->flash('success.msg', 'O usuário '.$data['name']. ' foi cadastrado com sucesso,
-                        agora cadastre um veículo para a pessoa');
+                    $request->session()->flash('success.msg', 'O usuário '.$data['name']. ' foi cadastrado com sucesso, agora cadastre um veículo para a pessoa');
 
                     return isset($data['origin']) ?
                         json_encode(['status' => true, 'id' => $id])
@@ -311,8 +309,7 @@ class PersonController extends Controller
 
                     DB::commit();
 
-                    $request->session()->flash('success.msg', 'O usuário '.$data['name']. ' foi cadastrado com sucesso,
-                        agora cadastre um veículo para a pessoa');
+                    $request->session()->flash('success.msg', 'O usuário '.$data['name']. ' foi cadastrado com sucesso, agora cadastre um veículo para a pessoa');
 
                     return isset($data['origin'])
                         ? json_encode(['status' => true, 'id' => $person_id])

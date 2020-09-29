@@ -191,10 +191,12 @@ class VehicleController extends Controller
 
         $car = $this->car->findByField('id', $vehicle->car_id)->first();
 
-        for ($i = $car->start_year; $i < ($car->end_year + 1); $i++)
-        {
-            $years[] = $i;
-        }
+        $years = [];
+
+        if($car->start_year && $car->end_year)
+            for ($i = $car->start_year; $i < ($car->end_year + 1); $i++)
+                $years[] = $i;
+
 
         if($vehicle)
         {
