@@ -300,33 +300,57 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-md-4 col-xs-6">
+                            <div class="col-md-3 col-xs-6">
                                 <div class="form-group">
-                                    <label for="parts_description">Peça</label>
-                                    <input type="text" id="parts_description" name="parts_description" class="form-control" maxlength="10"
-                                           placeholder="Ex: Digite o nome da peça ou produto" >
-                                    <span id="span_price_parts_status" style="color: red; display:none;"></span>
+                                    <label for="parts_description">Peça / Produto</label>
+                                    <input type="text" id="parts_description" class="form-control item_order" maxlength="200"
+                                           placeholder="Digite o nome da peça" >
+                                    <span id="span_parts_description_status" style="color: red; display:none;"></span>
                                 </div>
                             </div>
 
-                            <div class="col-md-4 col-xs-6">
+                            <div class="col-md-1 col-xs-6">
                                 <div class="form-group">
-                                    <label for="end_year">Quantidade</label>
-                                    <input type="text" id="quantity" name="quantity" class="form-control number"
-                                           placeholder="Ex: Quantidade" maxlength="10"
+                                    <label for="end_year">Qtde.</label>
+                                    <input type="text" id="quantity" class="form-control number item_order"
+                                           placeholder="1,00" maxlength="10"
                                            value="">
-                                    <span id="span_conclusion_at_status" style="color: red; display:none;"></span>
+                                    <span id="span_quantity_status" style="color: red; display:none;"></span>
                                 </div>
                             </div>
 
-                            <div class="col-md-4 col-xs-6">
+                            <div class="col-md-3 col-xs-6">
                                 <div class="form-group">
-                                    <label for="end_year">Valor por Unidade</label>
-                                    <input type="text" id="conclusion_at" name="conclusion_at" class="form-control number"
+                                    <label for="end_year">Valor Unitário</label>
+                                    <input type="text" id="price_unity" class="form-control number item_order"
                                            placeholder="Ex: R$500,00" maxlength="10"
                                            value="">
-                                    <span id="span_conclusion_at_status" style="color: red; display:none;"></span>
+                                    <span id="span_price_unity_status" style="color: red; display:none;"></span>
                                 </div>
+                            </div>
+
+                            <div class="col-md-3 col-xs-6">
+                                <div class="form-group">
+                                    <label for="type_item">Tipo</label>
+                                    <select id="type_item" class="form-control">
+                                        <option value="">Selecione uma opção</option>
+                                        <option value="Peça">Peça</option>
+                                        <option value="Produto">Produto</option>
+                                        <option value="Mão de Obra">Mão de Obra</option>
+                                    </select>
+                                    <span id="span_type_item_status" style="color: red; display:none;"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-2 col-xs-6">
+                                <div class="form-group">
+                                    <label for=""></label>
+                                    <button type="button" class="btn btn-primary btn-block" onclick="add_item_order();" style="display:block; margin-top: 37px;">
+                                        <i class="fas fa-plus"></i>
+                                        Adicionar
+                                    </button>
+                                </div>
+
                             </div>
                         </div>
 
@@ -337,31 +361,15 @@
                                     <table class="table">
                                         <thead class="thead-dark">
                                         <tr>
-                                            <th scope="col">#</th>
-                                            <th scope="col">First</th>
-                                            <th scope="col">Last</th>
-                                            <th scope="col">Handle</th>
+                                            <th scope="col">Peça</th>
+                                            <th scope="col">Quantidade</th>
+                                            <th scope="col">Valor</th>
+                                            <th scope="col">Valor Total</th>
+                                            <th scope="col"></th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr>
-                                            <th scope="row">1</th>
-                                            <td>Mark</td>
-                                            <td>Otto</td>
-                                            <td>@mdo</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">2</th>
-                                            <td>Jacob</td>
-                                            <td>Thornton</td>
-                                            <td>@fat</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">3</th>
-                                            <td>Larry</td>
-                                            <td>the Bird</td>
-                                            <td>@twitter</td>
-                                        </tr>
+
                                         </tbody>
                                     </table>
 

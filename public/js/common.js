@@ -129,6 +129,12 @@ $(function () {
 
     });
 
+    //Float number only / Somente numeros decimais
+    $(".float-number").keyup(function (e){
+
+
+    });
+
     $(".tab-info").keyup(function () {
         $('.input-group').removeClass('border-red');
 

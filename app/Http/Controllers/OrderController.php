@@ -160,6 +160,7 @@ class OrderController extends Controller
         $scripts[] = '../../js/vehicle.js';
         $scripts[] = '../../js/zipcode.js';
         $scripts[] = '../../js/mask.js';
+        $scripts[] = '../../js/jquery.maskMoney.js';
 
         $people = $this->personRepository->findWhere(['workshop_id' => $this->get_user_workshop(), 'role_id' => 4]);
 
@@ -197,6 +198,7 @@ class OrderController extends Controller
         $scripts[] = '../../js/vehicle.js';
         $scripts[] = '../../js/zipcode.js';
         $scripts[] = '../../js/mask.js';
+        $scripts[] = '../../js/jquery.maskMoney.js';
 
         $order = $this->repository->findByField('id', $id)->first();
 

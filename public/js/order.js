@@ -131,6 +131,26 @@ $(function () {
     });
 
 
+    $("#quantity").maskMoney({thousands:'.', decimal:','});
+    $("#price_unity").maskMoney({prefix:'R$ ', allowNegative: false, thousands:'.', decimal:','});
+
+    $(".item_order").keyup(function (e){
+        if($(this).val() != "")
+        {
+            var id = $(this)[0].id;
+
+            $("#span_"+id+"_status").css('display', 'none');
+            $(this).removeClass('has-error').addClass("has-success");
+        }
+    });
+
+    $("#type_item").change(function (){
+        if($(this).val() != "")
+        {
+            $("#span_type_item_status").css('display', 'none');
+            $(this).removeClass('has-error').addClass("has-success");
+        }
+    })
 
 });
 
@@ -218,4 +238,62 @@ function delete_order($id)
     }
 
     sweet_alert(data, ajax);
+}
+
+function add_item_order()
+{
+    var parts = $("#parts_description");
+    var quantity = $("#quantity");
+    var price_unity = $("#price_unity");
+    var type_item = $("#type_item");
+    var stop = false;
+
+    if(parts.val() == "")
+    {
+        parts.addClass("has-error");
+        $("#span_parts_description_status").css('display', 'block').text('Preencha o campo peça');
+        stop = true;
+    }
+    if(quantity.val() == "")
+    {
+        quantity.addClass("has-error");
+        $("#span_quantity_status").css('display', 'block').text("Preencha o campo quantidade");
+        stop = true;
+    }
+    if(price_unity.val() == "")
+    {
+        price_unity.addClass("has-error");
+        $("#span_price_unity_status").css('display', 'block').text("Preencha o campo valor unitário");
+        stop = true;
+    }
+    if(type_item.val() == "")
+    {
+        type_item.addClass('has-error');
+        $("#span_type_item_status").css('display', 'block').text("Preencha o campo tipo");
+        stop = true;
+    }
+
+    if(stop)
+        return;
+
+
+    var price = price_unity.val().replace('R$', "");
+
+    var append = "<tr>";
+
+    append += "<th scope='row'>"+parts.val()+"</th>";
+    append += "<td>"+quantity.val()+"</td>";
+    append += "<td>"+price_unity.val()+"</td>";
+    append += "<td>R$"+(parseFloat(price) * parseFloat(quantity.val())).toFixed(2)+"</td>";
+    append += '<td><button class="btn btn-info btn-sm"><i class="fas fa-edit"></i></button>';
+    append += '<button class="btn btn-danger btn-sm" style="margin-left: 5px;"><i class="fas fa-trash"></i></button></td>';
+    append += "</tr>";
+
+    $("tbody").append(append);
+
+    parts.val("").removeClass('has-success').focus();
+    price_unity.val("").removeClass('has-success');
+    quantity.val("").removeClass('has-success');
+    type_item.val("").removeClass('has-success');
+
 }
