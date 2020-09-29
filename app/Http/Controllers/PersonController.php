@@ -206,6 +206,8 @@ class PersonController extends Controller
     {
         $person = $this->repository->findByField('id', $id)->first();
 
+        $active = 1;
+
         if($person->active == 0)
             $active = 0;
 
