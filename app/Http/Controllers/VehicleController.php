@@ -126,7 +126,7 @@ class VehicleController extends Controller
      * Create a new vehicle
      * @return View
      */
-    public function create()
+    public function create($person_id = null)
     {
         $cars =  $this->car->orderBy('model')->all();
 
@@ -147,6 +147,8 @@ class VehicleController extends Controller
 
         $colors = $this->colors->orderBy('name')->all();
 
+        $owner = $person_id ? $this->person->findByField('id', $person_id)->first() : null;
+
         $scripts[] = '../../js/vehicle.js';
         $scripts[] = '../../js/address.js';
         $scripts[] = '../../js/mask.js';
@@ -155,7 +157,7 @@ class VehicleController extends Controller
         $links[] = '../../css/search.css';
 
         return view('index', compact('cars', 'route', 'scripts',
-            'edit', 'brands', 'states', 'people', 'colors', 'links'));
+            'edit', 'brands', 'states', 'people', 'colors', 'links', 'owner'));
     }
 
     /**

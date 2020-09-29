@@ -161,7 +161,11 @@
                                             @if($edit)
                                                 <option value="{{ $person->id }}" @if($person->id == $vehicle->owner_id) selected @endif >{{ $person->name }}</option>
                                             @else
-                                                <option value="{{ $person->id }}">{{ $person->name }}</option>
+                                                @if(isset($owner) && $owner->id == $person->id)
+                                                    <option value="{{ $person->id }}" selected >{{ $person->name }}</option>
+                                                @else
+                                                    <option value="{{ $person->id }}">{{ $person->name }}</option>
+                                                @endif
                                             @endif
                                         @endforeach
                                     </select>

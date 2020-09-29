@@ -52,7 +52,7 @@ Route::group(['middleware' => 'auth'], function (){
      */
     Route::get('/veiculos/{orderBy?}', 'VehicleController@index')->name('vehicle.index');
 
-    Route::get('/criar-veiculo', 'VehicleController@create')->name('vehicle.create');
+    Route::get('/criar-veiculo/{person_id?}', 'VehicleController@create')->name('vehicle.create');
 
     Route::get('/editar-veiculo/{id}', 'VehicleController@edit')->name('vehicle.edit');
 

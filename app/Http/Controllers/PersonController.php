@@ -264,18 +264,24 @@ class PersonController extends Controller
 
                     DB::commit();
 
-                    $request->session()->flash('success.msg', 'O usuário foi cadastrado com sucesso');
+                    $request->session()->flash('success.msg', 'O usuário '.$data['name']. ' foi cadastrado com sucesso,
+                        agora cadastre um veículo para a pessoa');
 
-                    return isset($data['origin']) ? json_encode(['status' => true, 'id' => $person->id]) : redirect()->route('person.index');
+                    return isset($data['origin']) ?
+                        json_encode(['status' => true, 'id' => $person->id])
+                        : redirect()->route('vehicle.create', ['person_id' => $person->id]);
                 }
                 else{
                     $id = $this->repository->create($data)->id;
 
                     DB::commit();
 
-                    $request->session()->flash('success.msg', 'O usuário foi cadastrado com sucesso');
+                    $request->session()->flash('success.msg', 'O usuário '.$data['name']. ' foi cadastrado com sucesso,
+                        agora cadastre um veículo para a pessoa');
 
-                    return isset($data['origin']) ? json_encode(['status' => true, 'id' => $id]) : redirect()->route('person.index');
+                    return isset($data['origin']) ?
+                        json_encode(['status' => true, 'id' => $id])
+                        : redirect()->route('vehicle.create', ['person_id' => $id]);
 
                 }
             }
@@ -305,9 +311,12 @@ class PersonController extends Controller
 
                     DB::commit();
 
-                    $request->session()->flash('success.msg', 'O usuário foi cadastrado com sucesso');
+                    $request->session()->flash('success.msg', 'O usuário '.$data['name']. ' foi cadastrado com sucesso,
+                        agora cadastre um veículo para a pessoa');
 
-                    return isset($data['origin']) ? json_encode(['status' => true, 'id' => $person_id]) : redirect()->route('person.index');
+                    return isset($data['origin'])
+                        ? json_encode(['status' => true, 'id' => $person_id])
+                        : redirect()->route('vehicle.create', ['person_id' => $person_id]);
 
                 }
             }
