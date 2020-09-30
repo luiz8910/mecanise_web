@@ -193,7 +193,14 @@ class VehicleController extends Controller
 
         $years = [];
 
-        if($car->start_year && $car->end_year)
+        if($car->start_year && !$car->end_year)
+        {
+            $end_year = date_format(date_create(), "Y");
+
+            for ($i = $car->start_year; $i < ($end_year + 1); $i++)
+                $years[] = $i;
+        }
+        elseif ($car->start_year && $car->end_year)
             for ($i = $car->start_year; $i < ($car->end_year + 1); $i++)
                 $years[] = $i;
 
