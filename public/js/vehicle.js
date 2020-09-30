@@ -52,22 +52,13 @@ $(function () {
     ;
 
 
-    $("#car_id").change(function () {
+    $("#car_id_modal").change(function () {
 
-        if(location.pathname.search('os') == -1)
-            car_change();
+        //if(location.pathname.search('os') == -1)
+            car_change('car_id_modal');
     });
 
-    $("#license_plate").keyup(function (e) {
 
-        var value = $(this).val();
-
-        $(this).val(value.toUpperCase());
-
-        //if((value.length === 3) && (parseInt(e.which) !== 8))
-          //  $(this).val(value.toUpperCase() + '-');
-
-    });
 
     /*$("#license_plate").keydown(function (e) {
         var value = $(this).val();
@@ -241,7 +232,9 @@ function new_owner()
 
             $("#owner_id_input").val(e.id);
 
-            sweet_alert_success('O proprietário foi cadastrado com sucesso');
+            sweet_alert_success('O proprietário foi cadastrado com sucesso, cadastre um veículo para este proprietário.');
+
+            $("#new_vehicle").modal('show');
         }
         else
             sweet_alert_error('Este proprietário já está cadastrado');
@@ -368,6 +361,8 @@ function car_change($input_id)
     const id = $('#'+$input_id).val();
 
     var today = new Date();
+
+    console.log(id);
 
     if(id)
     {

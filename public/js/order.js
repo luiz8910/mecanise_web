@@ -71,9 +71,9 @@ $(function () {
         });
     });*/
 
-    $("#car_id_modal").change(function () {
+    $("#car_id").change(function () {
 
-        car_change('car_id_modal');
+        car_change();
     });
 
 
@@ -91,7 +91,7 @@ $(function () {
 
                     for(var i = 0; i < e.vehicles.length; i++)
                     {
-                        append += '<option value="'+e.vehicles[i].id+'">'+e.vehicles[i].name+'</option>'
+                        append += '<option value="'+e.vehicles[i].car_id+'">'+e.vehicles[i].name+'</option>'
                     }
 
                     $("#car_id").append(append).trigger('change');
@@ -119,7 +119,7 @@ $(function () {
 
                     }).then((value) => {
                         if(value)
-                            $("#new_owner").modal('show');
+                            $("#new_vehicle").modal('show');
 
                     });
                 }
@@ -168,14 +168,16 @@ function new_vehicle()
 
     var license_plate = $("#license_plate").val();
 
-    var owner_id = $("#owner_id_input").val() != "" ? $("#owner_id_input").val() : 0;
+    var owner_id = $("#owner_id").val() != "" ? $("#owner_id").val() : 0;
 
     if(model === "")
     {
         sweet_alert_error('Preencha o campo modelo');
 
-        return false;
+        return;
     }
+
+    console.log('model: ' + model);
 
     $.ajax({
         url: '/vehicle',
@@ -205,7 +207,7 @@ function new_vehicle()
 
             $("#vehicle_id_input").val(e.id);
 
-            $("#car_id_input").val(model);
+            $("#car_id").val(model);
 
             sweet_alert_success('O veículo foi cadastrado com sucesso');
         }

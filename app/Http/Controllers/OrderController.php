@@ -161,6 +161,8 @@ class OrderController extends Controller
         $scripts[] = '../../js/zipcode.js';
         $scripts[] = '../../js/mask.js';
         $scripts[] = '../../js/jquery.maskMoney.js';
+        $scripts[] = '../../js/config.js';
+        $scripts[] = '../../js/address.js';
 
         $people = $this->personRepository->findWhere(['workshop_id' => $this->get_user_workshop(), 'role_id' => 4]);
 
@@ -199,6 +201,8 @@ class OrderController extends Controller
         $scripts[] = '../../js/zipcode.js';
         $scripts[] = '../../js/mask.js';
         $scripts[] = '../../js/jquery.maskMoney.js';
+        $scripts[] = '../../js/config.js';
+        $scripts[] = '../../js/address.js';
         $links[] = '';
 
         $order = $this->repository->findByField('id', $id)->first();
@@ -261,9 +265,9 @@ class OrderController extends Controller
 
             $data['conclusion_at'] = $data['conclusion_at'] ? date_format(date_create($data['conclusion_at']), 'Y-m-d') : null;
 
-            $v['owner_id'] = $data['owner_id'];
+            //$v['owner_id'] = $data['owner_id'];
 
-            $this->vehicleRepository->update($v, $data['car_id']);
+            //$this->vehicleRepository->update($v, $data['car_id']);
 
             if(!$data['car_id'] || !isset($data['car_id']))
             {
@@ -273,7 +277,7 @@ class OrderController extends Controller
                     redirect()->back();
             }
             else{
-                $vehicle = $this->vehicleRepository->findByField('id', $data['car_id'])->first();
+                $vehicle = $this->vehicleRepository->findByField('car_id', $data['car_id'])->first();
 
                 if($vehicle)
                 {
@@ -284,10 +288,10 @@ class OrderController extends Controller
 
                     DB::commit();
 
-                    $request->session()->flash('success.msg', 'A Ordem de Serviço nº '. $data['code']. ' foi criada com sucesso');
+                    $request->session()->flash('success.msg', 'A Ordem de Serviço nº ' .$data['code']. ' foi criada com sucesso');
                 }
-
-                $request->session()->flash('error.msg', 'Veículo não encontrado');
+                else
+                    $request->session()->flash('error.msg', 'Veículo não encontrado');
 
                 return redirect()->route('order.index');
             }
@@ -298,6 +302,7 @@ class OrderController extends Controller
 
             $error = $e->getMessage(); //'Um erro desconhecido aconteceu, tente novamente mais tarde';
 
+            dd($e);
             $request->session()->flash('error.msg', $error);
 
             return isset($data['origin']) ? json_encode(['status' => false, 'msg' => $error]):redirect()->back();
@@ -307,10 +312,13 @@ class OrderController extends Controller
 
     public function update(Request $request, $id)
     {
+        $data = $request->all();
+
+        //dd($data);
+
         DB::beginTransaction();
 
         try {
-            $data = $request->all();
 
             $data['workshop_id'] = $this->get_user_workshop();
 
@@ -322,9 +330,9 @@ class OrderController extends Controller
 
             $data['conclusion_at'] = $data['conclusion_at'] ? date_format(date_create($data['conclusion_at']), 'Y-m-d') : null;
 
-            $v['owner_id'] = $data['owner_id'];
+            //$v['owner_id'] = $data['owner_id'];
 
-            $this->vehicleRepository->update($v, $data['car_id']);
+            //$this->vehicleRepository->update($v, $data['car_id']);
 
             if(!$data['car_id'])
             {
@@ -335,7 +343,7 @@ class OrderController extends Controller
             }
             else{
 
-                $vehicle = $this->vehicleRepository->findByField('id', $data['car_id'])->first();
+                $vehicle = $this->vehicleRepository->findByField('car_id', $data['car_id'])->first();
 
                 if($vehicle)
                 {
@@ -350,8 +358,9 @@ class OrderController extends Controller
 
                     $request->session()->flash('success.msg', 'A Ordem de Serviço nº '. $code. ' foi alterada com sucesso');
                 }
+                else
+                    $request->session()->flash('error.msg', 'Veículo não encontrado');
 
-                $request->session()->flash('error.msg', 'Veículo não encontrado');
 
                 return redirect()->route('order.index');
             }

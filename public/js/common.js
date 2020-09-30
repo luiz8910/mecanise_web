@@ -413,7 +413,16 @@ $(function () {
             sweet_alert_error('Digite um email válido');
     });
 
+    $("#license_plate").keyup(function (e) {
 
+        var value = $(this).val();
+
+        $(this).val(value.toUpperCase());
+
+        //if((value.length === 3) && (parseInt(e.which) !== 8))
+        //  $(this).val(value.toUpperCase() + '-');
+
+    });
 
 });
 

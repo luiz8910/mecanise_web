@@ -26,7 +26,7 @@
                 <td><span>{{ $order->conclusion_at }}</span></td>
                 <td>
                     <div class="row">
-                        <div class="dropdown">
+                        {{--<div class="dropdown">
                             <button
                                 class="btn btn-default btn-outline-primary btn-sm dropdown-toggle"
                                 type="button"
@@ -48,7 +48,7 @@
                                     Retorno
                                 </a>
                             </div>
-                        </div>
+                        </div>--}}
                     <a href="{{ route('order.edit', ['id' => $order->id]) }}" class="btn btn-sm btn-outline-info" title="Editar Ordem de Serviço">
                         <i class="fas fa-edit"></i>
                     </a>

@@ -260,32 +260,33 @@ class VehicleController extends Controller
                 if($car)
                     $id = $this->repository->create($data)->id;
             }
-            else{
+            /*else{
 
                 $data['car_id'] = $this->car->create($data)->id;
 
                 $car = $this->car->findByField('id', $data['car_id'])->first();
 
                 $id = $this->repository->create($data)->id;
-            }
+            }*/
 
             DB::commit();
 
             $request->session()->flash('success.msg', 'Veículo cadastrado com sucesso');
 
-
-            return isset($data['origin']) ? json_encode(['status' => true, 'id' => $id, 'name' => $car->model]) : redirect()->route('vehicle.index');
+            return isset($data['origin']) ? json_encode(['status' => true, 'id' => $data['car_id'], 'name' => $car->model]) : redirect()->route('vehicle.index');
 
         }catch (\Exception $e)
         {
             DB::rollBack();
 
-            $request->session()->flash('error.msg', 'Um erro ocorreu, tente novamente mais tarde');
+            $request->session()->flash('error.msg', $e->getMessage());
+
+            return isset($data['origin']) ?
+                json_encode(['status' => false, 'msg' => $e->getMessage()])
+                : redirect()->back()->withInput();
         }
 
-        return isset($data['origin']) ?
-            json_encode(['status' => false, 'msg' => 'Um erro desconhecido ocorreu, tente novamente mais tarde'])
-            : redirect()->back()->withInput();
+
 
     }
 

@@ -18,14 +18,14 @@
                         <label for="modal_name">Nome</label>
                         <input type="text" placeholder="Nome do Proprietário" name="name" id="modal_name" class="form-control" required>
 
-                        <span style="color: red; display: none;" id="span_name">Preencha este campo</span>
+                        <span style="color: red; display: none;" id="span_name_status">Preencha este campo</span>
                     </div>
 
                     <div class="col-md-6">
                         <label for="modal_cpf">CPF</label>
                         <input type="text" placeholder="CPF do Proprietário" name="cpf" minlength="11"
-                               id="modal_cpf" class="form-control modal_input number" required>
-                        <span style="color: red; display: none;" id="span_cpf">Preencha este campo</span>
+                               id="cpf" class="form-control modal_input number" required>
+                        <span style="color: red; display: none;" id="span_cpf_status">Preencha este campo</span>
                     </div>
 
                 </div>
@@ -35,12 +35,13 @@
                     <div class="col-md-6">
                         <label for="modal_email">Email</label>
                         <input type="email" placeholder="Email do Proprietário" name="email" id="modal_email" class="form-control modal_input">
+                        <span style="color: red; display: none;" id="span_email_status">Preencha este campo</span>
                     </div>
 
                     <div class="col-md-6">
                         <label for="modal_cel">Celular</label>
                         <input type="text" placeholder="Celular do Proprietário" name="cel" id="modal_cel" class="form-control modal_input phone" required>
-                        <span style="color: red; display: none;" id="span_cel">Preencha este campo</span>
+                        <span style="color: red; display: none;" id="span_cel_status">Preencha este campo</span>
                     </div>
                 </div>
 
@@ -52,7 +53,8 @@
                         <label for="zip_code">CEP</label>
 
                         <div class="spinner_zip_code">
-                            <input type="text" placeholder="Ex: 18000-000" name="zip_code" id="zip_code" class="form-control modal_input">
+                            <input type="text" placeholder="Ex: 18000-000" name="zip_code" id="zip_code" maxlength="9"
+                                   class="form-control modal_input">
                         </div>
 
                     </div>
@@ -67,7 +69,7 @@
 
                     <div class="col-md-6">
                         <label for="number">Número</label>
-                        <input type="text" placeholder="Ex: 500" name="number" id="number" class="form-control modal_input">
+                        <input type="text" placeholder="Ex: 500" name="number" id="number" class="form-control modal_input number">
                     </div>
 
                     <div class="col-md-6">
@@ -138,7 +140,7 @@
                                 <option value="{{ $car->id }}">{{ $car->model }}</option>
                             @endforeach
                         </select>
-                        <span style="color: red; display: none;" id="span_car_id_modal">Preencha este campo</span>
+                        <span style="color: red; display: none;" id="span_car_id_modal_status">Preencha este campo</span>
                     </div>
 
                     <input type="hidden" id="brand">
@@ -146,9 +148,9 @@
 
                     <div class="col-md-6">
                         <label for="license_plate">Placa</label>
-                        <input type="text" placeholder="Ex: ABC-1234" minlength="8"
-                               id="license_plate" class="form-control modal_input number">
-                        <span style="color: red; display: none;" id="span_license_plate">Preencha este campo</span>
+                        <input type="text" placeholder="Ex: ABC-1234" maxlength="7"
+                               id="license_plate" class="form-control modal_input">
+                        <span style="color: red; display: none;" id="span_license_plate_status">Preencha este campo</span>
                     </div>
 
                 </div>
@@ -156,15 +158,15 @@
                 <div class="row">
 
                     <div class="col-md-6">
-                        <label for="chassis">Chassis</label>
-                        <input type="email" placeholder="Exemplo: 5jA mM1g5C 3R Wg4610" id="chassis" class="form-control modal_input">
-                        <span style="color: red; display: none;" id="span_chassis">Preencha este campo</span>
+                        <label for="chassis">Número do Chassis</label>
+                        <input type="text" maxlength="17" placeholder="Exemplo: 5jA mM1g5C 3R Wg4610" id="chassis" class="form-control modal_input">
+                        <span style="color: red; display: none;" id="span_chassis_status">Preencha este campo</span>
                     </div>
 
                     <div class="col-md-6">
                         <label for="km">KM</label>
-                        <input type="text" placeholder="Ex: 150.000" id="km" class="form-control number modal_input">
-                        <span style="color: red; display: none;" id="span_cel">Preencha este campo</span>
+                        <input type="text" placeholder="Ex: 150.000" id="km" class="form-control point-number modal_input">
+                        <span style="color: red; display: none;" id="span_km_status">Preencha este campo</span>
                     </div>
                 </div>
 
@@ -268,7 +270,7 @@
                                         @if($edit)
                                             @foreach($vehicles as $vehicle)
                                                 @if($vehicle->id == $order->vehicle_id)
-                                                    <option value="{{ $vehicle->id }}" selected >{{ $vehicle->name }}</option>
+                                                    <option value="{{ $order->car_id }}" selected >{{ $vehicle->name }}</option>
                                                 @endif
                                             @endforeach
                                         @endif
