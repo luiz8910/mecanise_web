@@ -268,8 +268,50 @@
                                                 @foreach($years as $year)
                                                     <option value="{{ $year }}" @if($vehicle->year == $year) selected @endif>{{ $year }}</option>
                                                 @endforeach
+
                                             @else
-                                                <option value="{{ $years[0] }}" selected>{{ $years[0] }}</option>
+                                            @if(count($years) == 0)
+
+                                                <script>
+                                                    //Fills the select #year in vehicles/form
+                                                    function fill_year_input($year)
+                                                    {
+
+                                                        var append = '';
+                                                        //Initial year
+                                                        var init_year = 1950;
+
+                                                        //Date object
+                                                        var today = new Date();
+
+                                                        //Actual year
+                                                        var end_year = today.getFullYear();
+
+                                                        console.log(end_year);
+
+                                                        //List from actual year to 1950
+                                                        for (var i = end_year; i > (init_year - 1); i--)
+                                                        {
+
+                                                            //If $year = i then select this option
+                                                            if(i == $year)
+                                                                append += '<option value="'+i+'" selected>'+i+'</option>';
+
+                                                            else //If not, display others options
+                                                                append += '<option value="'+i+'">'+i+'</option>';
+                                                        }
+
+                                                        //Append to select #year
+                                                        $('#year').append(append);
+                                                    }
+
+                                                    fill_year_input('{!! $vehicle->year !!}');
+
+                                                </script>
+
+                                                @else
+                                                    <option value="{{ $years[0] }}" selected>{{ $years[0] }}</option>
+                                                @endif
                                             @endif
                                         @endif
                                     </select>
