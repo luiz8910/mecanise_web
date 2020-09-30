@@ -58,7 +58,18 @@ $(function () {
             car_change();
     });
 
-    $("#license_plate").keydown(function (e) {
+    $("#license_plate").keyup(function (e) {
+
+        var value = $(this).val();
+
+        $(this).val(value.toUpperCase());
+
+        //if((value.length === 3) && (parseInt(e.which) !== 8))
+          //  $(this).val(value.toUpperCase() + '-');
+
+    });
+
+    /*$("#license_plate").keydown(function (e) {
         var value = $(this).val();
 
         console.log(e.which);
@@ -92,15 +103,6 @@ $(function () {
 
         }
 
-    }).keyup(function (e) {
-
-        var value = $(this).val();
-
-        $(this).val(value.toUpperCase());
-
-        if((value.length === 3) && (parseInt(e.which) !== 8))
-            $(this).val(value.toUpperCase() + '-');
-
     }).blur(function () {
 
         var len = $(this).val().length;
@@ -114,7 +116,7 @@ $(function () {
             $("#span_license_plate_status").css('display', 'none');
             $("#input-license_plate").removeClass('border-red');
         }
-    });
+    });*/
 
 
 

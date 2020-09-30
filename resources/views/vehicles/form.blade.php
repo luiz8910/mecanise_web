@@ -244,7 +244,7 @@
                         <div class="row">
                             <div class="col-md-4 col-sm-6">
                                 <label>Placa</label>
-                                <input class="form-control" type="text" name="license_plate" maxlength="8"
+                                <input class="form-control" type="text" name="license_plate" maxlength="7"
                                        id="license_plate" placeholder="Ex: ABC-1234" value="@if($edit){{ $vehicle->license_plate }}@else{{ old('license_plate') }}@endif">
 
                                 <span id="span_license_plate_status" style="color: red; display:none;"></span>
