@@ -233,7 +233,7 @@
 
                             <div class="col-md-6 col-sm-6">
                                 <label>Km</label>
-                                <input class="form-control number" type="text" name="km"
+                                <input class="form-control point-number" type="text" name="km"
                                        id="km" placeholder="Ex: 150000" value="@if($edit){{ $vehicle->km }}@else{{ old('km') }}@endif">
 
                                 <span class="form-text text-danger" id="span_km_status" style="display: none;">Insira um valor válido</span>
@@ -251,8 +251,8 @@
                             </div>
 
                             <div class="col-md-4 col-sm-6">
-                                <label>Chassis</label>
-                                <input class="form-control" type="text" name="chassis"
+                                <label>Número do Chassis</label>
+                                <input class="form-control" type="text" name="chassis" maxlength="17"
                                        id="chassis" placeholder="Ex: 5jA mM1g5C 3R WG4610" value="@if($edit){{ $vehicle->chassis }}@else{{ old('chassis') }}@endif">
 
                                 <span class="form-text text-danger" id="span_chassis_status" style="display: none;">Insira um valor válido</span>

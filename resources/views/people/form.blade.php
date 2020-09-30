@@ -133,7 +133,7 @@
                                 <div class="form-group">
                                     <label for="district">Bairro</label>
                                     <input type="text" id="district" name="district" class="form-control"
-                                           placeholder="Ex: (15)999999999" value="@if($edit){{ $person->district }}@else{{ old('district') }}@endif">
+                                           placeholder="Ex: Jardim São Paulo" value="@if($edit){{ $person->district }}@else{{ old('district') }}@endif">
                                     <span id="span_district_status" style="color: red; display:none;"></span>
                                 </div>
                             </div>

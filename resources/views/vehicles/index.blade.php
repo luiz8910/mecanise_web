@@ -8,6 +8,7 @@
             <th scope="col">Proprietário</th>
             <th scope="col">Veículo Cadastrado em<i class="fas fa-chevron-down re-order" onclick="reorder('created_at')"></i></th>
             <th scope="col">Último Serviço<i class="fas fa-chevron-down re-order" onclick="reorder('last_job')"></i></th>
+            <th scope="col">Cód. OS</th>
             <th scope="col">
                 <a href="{{ route('vehicle.create') }}" class="btn btn-success btn-sm" title="Criar Veículo" style="margin-left: 30px; padding-right: 0px;">
                     <i class="fas fa-plus"></i>
@@ -24,6 +25,13 @@
                 <td><a href="{{ route('person.edit', ['id' => $vehicle->owner_id]) }}"> {{ $vehicle->owner_name }}</a></td>
                 <td>{{ date_format(date_create($vehicle->created_at), 'd/m/Y') }}</td>
                 <td>{{ $vehicle->last_job }}</td>
+                <td>
+                    @if($vehicle->order_id)
+                        <a href="{{ route('order.edit', ['id' => $vehicle->order_id]) }}">#{{ $vehicle->order }}</a>
+                    @else
+                        {{ $vehicle->order }}
+                    @endif
+                </td>
                 <td>
                     <a href="{{ route('vehicle.edit', ['id' => $vehicle->id]) }}" class="btn btn-sm btn-outline-info" title="Editar Veículo">
                         <i class="fas fa-edit"></i>

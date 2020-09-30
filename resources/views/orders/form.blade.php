@@ -281,7 +281,7 @@
                         <div class="row">
                             <div class="col-md-6 col-xs-6">
                                 <div class="form-group">
-                                    <label for="start_year">Realizado em:</label>
+                                    <label for="done_at">Data de Abertura:</label>
                                     <input type="text" id="done_at" name="done_at" class="form-control date number" maxlength="10"
                                            placeholder="Ex: Digite a data em que o serviço começou" value="@if($edit){{ $order->done_at }}@else{{ old('done_at') }}@endif">
                                     <span id="span_done_at_status" style="color: red; display:none;"></span>

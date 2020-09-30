@@ -103,9 +103,21 @@ class VehicleController extends Controller
                     $vehicle->owner_name = $this->person->findByField('id', $vehicle->owner_id)->first() ?
                         $this->person->findByField('id', $vehicle->owner_id)->first()->name : 'Veículo sem proprietário';
 
-                    $vehicle->last_job = $this->order->findByField('vehicle_id')->first() ?
-                        date_format(date_create($this->order->findByField('vehicle_id')->first()->done_at), 'd/m/Y')
-                        : 'Não consta OS para este veículo';
+                    $order = $this->order->findByField('vehicle_id', $vehicle->id)->first();
+
+                    if($order)
+                    {
+                        $vehicle->last_job = date_format(date_create($order->done_at), 'd/m/Y');
+                        $vehicle->order = $order->code;
+                        $vehicle->order_id = $order->id;
+                    }
+                    else
+                    {
+                        $vehicle->order_id = null;
+                        $vehicle->order = "N/A";
+                        $vehicle->last_job = 'Não consta';
+                    }
+
                 }
             }
 
@@ -154,6 +166,7 @@ class VehicleController extends Controller
         $scripts[] = '../../js/mask.js';
         $scripts[] = '../../js/search.js';
         $scripts[] = '../../js/config.js';
+        $scripts[] = '../../js/jquery.maskMoney.js';
         $links[] = '../../css/search.css';
 
         return view('index', compact('cars', 'route', 'scripts',
@@ -180,6 +193,7 @@ class VehicleController extends Controller
         $scripts[] = '../../js/mask.js';
         $scripts[] = '../../js/search.js';
         $scripts[] = '../../js/config.js';
+        $scripts[] = '../../js/jquery.maskMoney.js';
         $links[] = '../../css/search.css';
 
         $vehicle = $this->repository->findByField('id', $id)->first();

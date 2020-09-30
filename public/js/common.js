@@ -123,15 +123,16 @@ $(function () {
     //Used to limit user typing to numbers
     //Limita o usuário a digitar apenas números
     $(".number").keypress(function (e) {
-
         if (e.which < 48 || e.which > 57)
             return false;
 
     });
 
-    //Float number only / Somente numeros decimais
-    $(".float-number").keyup(function (e){
-
+    //Numeros com milhares
+    $(".point-number").keypress(function (e){
+        if (e.which < 48 || e.which > 57)
+            if(e.which != 46)
+                return false;
 
     });
 
@@ -411,6 +412,8 @@ $(function () {
         else
             sweet_alert_error('Digite um email válido');
     });
+
+
 
 });
 

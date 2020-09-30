@@ -1,7 +1,7 @@
 $(function () {
 
 
-    if(location.pathname.search('editar') == -1)
+    /*if(location.pathname.search('editar') == -1)
     {
         var today = new Date();
 
@@ -17,7 +17,7 @@ $(function () {
 
         $("#done_at").val(today);
         $("#conclusion_at").val(today);
-    }
+    }*/
 
     /*$("#owner_id").change(function () {
 
@@ -276,15 +276,31 @@ function add_item_order()
     if(stop)
         return;
 
-
     var price = price_unity.val().replace('R$', "");
+    price = price.replace('.', '');
+    price = price.replace(',', '.');
+    //price = price.replace('-', ',');
+
+    var q = quantity.val().replace(".", '');
+    q = q.replace(',', '.');
+    //q = q.replace('-', ',');
+
+    console.log("original: " + price_unity.val());
+    console.log("price: " + parseFloat(price));
+    console.log("quantity original: " + q);
+    console.log("quantity: " + parseFloat(q));
+
+    var total = (parseFloat(price) * parseFloat(q)).toFixed(2);
+    total = total.replace(',', '-');
+    total = total.replace('.', ',');
+    tatal = total.replace('-', '.');
 
     var append = "<tr>";
 
     append += "<th scope='row'>"+parts.val()+"</th>";
     append += "<td>"+quantity.val()+"</td>";
     append += "<td>"+price_unity.val()+"</td>";
-    append += "<td>R$"+(parseFloat(price) * parseFloat(quantity.val())).toFixed(2)+"</td>";
+    append += "<td>R$ "+total+"</td>";
     append += '<td><button class="btn btn-info btn-sm"><i class="fas fa-edit"></i></button>';
     append += '<button class="btn btn-danger btn-sm" style="margin-left: 5px;"><i class="fas fa-trash"></i></button></td>';
     append += "</tr>";
