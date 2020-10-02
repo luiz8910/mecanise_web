@@ -47,6 +47,8 @@ Route::group(['middleware' => 'auth'], function (){
 
     Route::get('/verify_email/{email}', 'PersonController@verify_email');
 
+    Route::get('/search_people_all/{input}', 'PersonController@search_all');
+
     /**
      * Crud Vehicles
      */

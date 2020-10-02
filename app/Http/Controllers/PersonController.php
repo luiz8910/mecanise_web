@@ -97,7 +97,7 @@ class PersonController extends Controller
                     'workshop_id' => $this->get_user_workshop(),
                     'role_id' => $this->get_owner_id(),
                     'active' => 1
-                ]);
+                ])->sortBy("name");
             }
 
 
@@ -598,5 +598,36 @@ class PersonController extends Controller
             return json_encode(['code' => 200]);
 
         return json_encode(['code' => 404]);
+    }
+
+    public function search_all($input)
+    {
+        $people = DB::table('people')
+            ->where([
+                ['name', 'like', $input."%"],
+                'deleted_at' => null
+            ])
+            //->whereIn('id', $o)
+            ->limit(10)
+            ->orderBy('name')
+            ->get();
+
+
+        $result = [];
+
+        //dd($cars);
+
+        if(count($people) > 0)
+        {
+            foreach ($people as $person)
+            {
+                $result[] = $person;
+            }
+
+            return json_encode(['status' => true, 'result' => $result]);
+        }
+
+
+        return json_encode(['status' => false, 'result' => $result, 'count' => 0]);
     }
 }

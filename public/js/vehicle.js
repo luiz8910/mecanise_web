@@ -22,9 +22,8 @@ $(function () {
                         var append = '';
 
                         for(var i = 0; i < e.result.length; i++)
-                        {
                             append += '<a href="javascript:" id="result_'+e.result[i].id+'" onclick="select_vehicle('+e.result[i].id+')">'+e.result[i].model+'</a>';
-                        }
+
 
                         $(".dropdown-content").append(append);
                     }

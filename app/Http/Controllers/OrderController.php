@@ -163,6 +163,8 @@ class OrderController extends Controller
         $scripts[] = '../../js/jquery.maskMoney.js';
         $scripts[] = '../../js/config.js';
         $scripts[] = '../../js/address.js';
+        $scripts[] = '../../js/search.js';
+        $links[] = '../../css/search.css';
 
         $people = $this->personRepository->findWhere(['workshop_id' => $this->get_user_workshop(), 'role_id' => 4]);
 
@@ -187,7 +189,7 @@ class OrderController extends Controller
         }
 
         return view('index', compact('route', 'edit', 'scripts', 'people', 'states',
-            'cars', 'colors', 'vehicles'));
+            'cars', 'colors', 'vehicles', 'links'));
     }
 
     public function edit($id)
@@ -203,7 +205,8 @@ class OrderController extends Controller
         $scripts[] = '../../js/jquery.maskMoney.js';
         $scripts[] = '../../js/config.js';
         $scripts[] = '../../js/address.js';
-        $links[] = '';
+        $scripts[] = '../../js/search.js';
+        $links[] = '../../css/search.css';
 
         $order = $this->repository->findByField('id', $id)->first();
 
@@ -211,6 +214,9 @@ class OrderController extends Controller
         {
             $order->done_at = date_format(date_create($order->done_at), 'd/m/Y');
             $order->conclusion_at = date_format(date_create($order->conclusion_at), 'd/m/Y');
+            $order->owner_name = $this->personRepository->findByField('id', $order->owner_id)->first() ?
+                $this->personRepository->findByField('id', $order->owner_id)->first()->name
+                : "Proprietário desconhecido";
 
             $owners = $this->personRepository->findWhere(['workshop_id' => $this->get_user_workshop(), 'role_id' => 4]);
 

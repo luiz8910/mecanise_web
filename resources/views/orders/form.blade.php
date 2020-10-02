@@ -245,7 +245,30 @@
                         @endif
 
                         <div class="row">
+
                             <div class="col-md-6 col-xs-6">
+                                <div class="form-group">
+                                    <label for="">Proprietário</label>
+                                    <div class="dropdown">
+                                        <div id="dropdown_owner" class="dropdown-content">
+                                            <input type="hidden" name="owner_id" id="owner_id" value="@if($edit){{ $order->owner_id }}@endif">
+                                            <input type="text" placeholder="Pesquise por pessoas" id="input_owner" class="myInput"
+                                                   style="margin-top: 3px;" value="@if($edit){{ $order->owner_name }}@endif">
+
+                                            {{--<a href="#about">About</a>
+                                            <a href="#base">Base</a>
+                                            <a href="#blog">Blog</a>
+                                            <a href="#contact">Contact</a>
+                                            <a href="#custom">Custom</a>--}}
+                                        </div>
+                                    </div>
+
+                                    <span class="form-text text-danger" id="span_car_id_status" style="display:none;">Escolha um veículo.</span>
+                                </div>
+                            </div>
+
+
+                            {{--<div class="col-md-6 col-xs-6">
                                 <div class="form-group">
                                     <label for="owner_id">Proprietário</label>
                                     <select id="owner_id" name="owner_id" class="form-control" required>
@@ -260,7 +283,7 @@
                                     </select>
                                     <span class="form-text text-danger" id="span_owner_id_status" style="display:none;">Escolha um proprietário.</span>
                                 </div>
-                            </div>
+                            </div>--}}
 
                             <div class="col-md-6 col-xs-6">
                                 <div class="form-group">

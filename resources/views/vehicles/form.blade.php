@@ -179,7 +179,7 @@
                                     <div class="dropdown">
                                         <div id="myDropdown" class="dropdown-content">
                                             <input type="hidden" name="car_id" id="hidden_car_id" value="@if($edit){{ $vehicle->car_id }}@endif">
-                                            <input type="text" placeholder="Pesquise por veículos" id="myInput"
+                                            <input type="text" placeholder="Pesquise por veículos" id="myInput" class="myInput"
                                                    style="margin-top: 3px;" value="@if($edit){{ $car->model }}@endif" autocomplete="off">
 
                                             {{--<a href="#about">About</a>

@@ -6,7 +6,6 @@
         <th scope="col">#</th>
         <th scope="col">Nome <i class="fas fa-chevron-down re-order" onclick="reorder('name')"></i></th>
         <th scope="col">Telefone  </th>
-        <th scope="col">Email </th>
         <th scope="col">Cliente desde<i class="fas fa-chevron-down re-order" onclick="reorder('created_at')"></i></th>
         <th scope="col">Veículo</th>
         {{--<th scope="col">Último Serviço<i class="fas fa-chevron-down re-order" onclick="reorder('last_job')"></i></th>--}}
@@ -24,7 +23,6 @@
             <th scope="row"></th>
             <td><a href="{{ route('person.edit', ['id' => $person->id]) }}" class="car_model">{{ $person->name }}</a></td>
             <td>{{ $person->cel }}</td>
-            <td>{{ $person->email }}</td>
             <td>{{ date_format(date_create($person->created_at), 'd/m/Y') }}</td>
             <td>
                 @if($person->vehicle_id)

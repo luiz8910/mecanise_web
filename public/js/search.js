@@ -6,17 +6,21 @@ $(function (){
 
     $(".dropdown-content").css("width", field_width);
 
-    $("#myInput").css('width', field_width - 2);
+    $(".myInput").css('width', field_width - 2);
 });
 
-function filterFunction() {
+function filterFunction($input, $dropdown) {
+
     var input, filter, ul, li, a, i;
 
-    input = document.getElementById("myInput");
+    $input = $input ? $input : 'myInput';
+    $dropdown = $dropdown ? $dropdown : 'myDropdown';
+
+    input = document.getElementById($input);
 
     filter = input.value.toUpperCase();
 
-    div = document.getElementById("myDropdown");
+    div = document.getElementById($dropdown);
 
     a = div.getElementsByTagName("a");
 

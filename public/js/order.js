@@ -70,6 +70,104 @@ $(function () {
             sweet_alert_error();
         });
     });*/
+    localStorage.clear();
+
+    $("#input_owner").keypress(function (e){
+        var drop = $(".dropdown-content");
+
+        if($(this).val() != "")
+        {
+            $(".dropdown-content a").remove();
+            $("#owner_id").val("");
+
+            //Digita rápido agora usuário corno Filha da puta do caraio
+            //Timestamp UNIX
+            var timestamp = new Date().getTime();
+
+            console.log(timestamp);
+
+            //Whether execute or not the ajax request
+            //Verifica se deve executar a requisição ajax
+            var request = false;
+
+            //If timestamp was previously stored
+            if(localStorage.getItem('timestamp'))
+            {
+                var ts_storage = localStorage.getItem('timestamp');
+
+                console.log("ts_storage: " + ts_storage);
+
+                //If 500 ms was passed since last character typed
+                if(parseInt(timestamp) - parseInt(ts_storage) > 500)
+                    request = true;
+
+
+                console.log("result: " + (parseInt(timestamp) - parseInt(ts_storage)));
+
+                localStorage.removeItem('timestamp');
+                localStorage.setItem('timestamp', timestamp);
+
+            }
+            //If not, means the first character was typed, then the request is permitted
+            else
+            {
+                localStorage.setItem('timestamp', timestamp);
+
+                request = true;
+            }
+
+            console.log('request: ' + request);
+            console.log('post timestamp: ' + localStorage.getItem('timestamp'));
+
+            if(request)
+            {
+                $.ajax({
+                    url: '/search_people_all/' + $(this).val(),
+                    method: "GET",
+                    dataType: 'json',
+                    success: function (e){
+
+                        if(e.status)
+                        {
+                            console.log(e.result);
+
+                            var append = '';
+
+                            for(var i = 0; i < e.result.length; i++)
+                            {
+                                append += '<a href="javascript:" id="result_'+e.result[i].id+'" onclick="select_owner('+e.result[i].id+')">'+e.result[i].name+'</a>';
+                            }
+
+                            $(".dropdown-content").append(append);
+                        }
+
+                    },
+                    fail: function (e){
+                        console.log('fail', e);
+                        sweet_alert_error();
+                    }
+                });
+            }
+            else
+                return false;
+        }
+        else
+            localStorage.clear();
+
+    })
+        .blur(function (){
+
+            //Fix blur and selected option
+            setTimeout(function (){
+
+                $(".dropdown-content a").css('display', 'none');
+            }, 250);
+        })
+        .click(function (){
+            if($(this).val())
+                $(".dropdown-content a").css('display', 'block');
+        })
+    ;
 
     $("#car_id").change(function () {
 
@@ -315,3 +413,15 @@ function add_item_order()
     type_item.val("").removeClass('has-success');
 
 }
+
+function select_owner($id)
+{
+    var text = $("#result_"+$id).text();
+
+    $("#owner_id").val($id);
+
+    $("#input_owner").val(text);
+
+    //car_change('hidden_car_id');
+}
+
