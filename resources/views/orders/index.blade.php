@@ -2,17 +2,52 @@
 
 <div class="col-md-10">
     <p class="text-center" style="font-size: 30px;">Ordens de Serviços em Aberto: {{ $qtde_model }}</p>
+
+    <div class="text-center">
+        <div class="btn-group">
+            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Ordenar
+            </button>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="javascript:" onclick="reorder(null, 'os')">Mais Recentes</a>
+                <a class="dropdown-item" href="javascript:" onclick="reorder('owner_name')">Por Proprietário</a>
+                <a class="dropdown-item" href="javascript:" onclick="reorder('vehicle_name')">Por Veículo</a>
+                <a class="dropdown-item" href="javascript:" onclick="reorder('conclusion_at')">Por data de término</a>
+            </div>
+        </div>
+
+        <div class="btn-group">
+            <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-left: 10px;">
+                Filtrar
+            </button>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="javascript:" onclick="filter('opened', 'os')">OS em Aberto</a>
+                <a class="dropdown-item" href="javascript:" onclick="filter('closed', 'os')">OS concluídas</a>
+                <a class="dropdown-item" href="javascript:" style="color: red;">OS por proprietário</a>
+                <a class="dropdown-item" href="javascript:" onclick="filter('this_week', 'os')">OS Concluídas nesta semana</a>
+                <a class="dropdown-item" href="javascript:" style="color: red;" {{--onclick="filter('past_week', 'os')"--}}>OS Concluídas na semana passada</a>
+                <a class="dropdown-item" href="javascript:" style="color: red;" {{--onclick="filter('this_month', 'os')"--}}>OS Concluídas neste mês</a>
+                <a class="dropdown-item" href="javascript:" onclick="filter('past_month', 'os')">OS Concluídas no mês passado</a>
+                <a class="dropdown-item" href="javascript:" style="color: red;">Escolha o período</a>
+            </div>
+        </div>
+
+        <a href="{{ route('order.create') }}" class="btn btn-success" title="Criar Ordem de Serviço" style="margin-left: 10px;">
+            <i class="fas fa-plus"></i>
+            Nova OS
+        </a>
+    </div>
+
+
     <table class="table table-style table-hover">
         <thead class="">
         <tr>
             <th scope="col">#</th>
-            <th scope="col">Proprietário <i class="fas fa-chevron-down re-order" onclick="reorder('owner_name')"></i></th>
-            <th scope="col">Veículo <i class="fas fa-chevron-down re-order" onclick="reorder('vehicle_name')"></i> </th>
-            <th scope="col">Finalizado em <i class="fas fa-chevron-down re-order" onclick="reorder('done_at')"></i></th>
+            <th scope="col">Proprietário <i class="fas fa-chevron-down re-order" onclick="reorder('owner_name', 'os')"></i></th>
+            <th scope="col">Veículo <i class="fas fa-chevron-down re-order" onclick="reorder('vehicle_name', 'os')"></i> </th>
+            <th scope="col">Finalizado em <i class="fas fa-chevron-down re-order" onclick="reorder('conclusion_at', 'os')"></i></th>
             <th scope="col">
-                <a href="{{ route('order.create') }}" class="btn btn-success btn-sm" title="Criar Ordem de Serviço" style="margin-left: 30px; padding-right: 0px;">
-                    <i class="fas fa-plus"></i>
-                </a>
+
             </th>
         </tr>
         </thead>

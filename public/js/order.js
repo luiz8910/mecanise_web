@@ -70,7 +70,7 @@ $(function () {
             sweet_alert_error();
         });
     });*/
-    localStorage.clear();
+    localStorage.removeItem('timestamp');
 
     $("#input_owner").keypress(function (e){
         var drop = $(".dropdown-content");
@@ -418,10 +418,10 @@ function select_owner($id)
 {
     var text = $("#result_"+$id).text();
 
-    $("#owner_id").val($id);
+    $("#owner_id").val($id).trigger('change');
 
     $("#input_owner").val(text);
 
-    //car_change('hidden_car_id');
+    //car_change('car_id');
 }
 

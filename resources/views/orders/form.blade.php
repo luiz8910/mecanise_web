@@ -263,7 +263,7 @@
                                         </div>
                                     </div>
 
-                                    <span class="form-text text-danger" id="span_car_id_status" style="display:none;">Escolha um veículo.</span>
+                                    <span class="form-text text-danger" id="span_owner_id_status" style="display:none;">Escolha um veículo.</span>
                                 </div>
                             </div>
 
@@ -307,7 +307,7 @@
                             <div class="col-md-6 col-xs-6">
                                 <div class="form-group">
                                     <label for="done_at">Data de Abertura:</label>
-                                    <input type="text" id="done_at" name="done_at" class="form-control date number" maxlength="10"
+                                    <input type="text" id="done_at" name="done_at" class="form-control date number" maxlength="10" required
                                            placeholder="Ex: Digite a data em que o serviço começou" value="@if($edit){{ $order->done_at }}@else{{ old('done_at') }}@endif">
                                     <span id="span_done_at_status" style="color: red; display:none;"></span>
                                 </div>

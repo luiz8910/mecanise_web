@@ -924,22 +924,63 @@ function feature_not_available()
     sweet_alert_error('Este recurso ainda não está disponível, tente novamente mais tarde');
 }
 
-function reorder($orderBy)
+function reorder($orderBy, $page)
 {
-    var charAt = location.pathname.replace('/', '');
+    localStorage.setItem('orderBy', $orderBy);
+
+    if($orderBy)
+    {
+
+        var charAt = location.pathname.replace('/', '');
+        charAt = charAt.search('/');
+
+        var path = '';
+
+        if(charAt == -1)
+            location.href = location.pathname + '/' + $orderBy
+
+        else{
+
+            path = location.pathname.substr(0, charAt + 1);
+
+            location.href = path + '/' + $orderBy;
+        }
+    }
+    else{
+
+        location.href = '/' + $page;
+    }
+
+
+
+}
+
+function filter($filterBy, $page)
+{
+
+    if(localStorage.getItem('orderBy'))
+        //console.log(localStorage.getItem('orderBy'));
+        location.href = '/' + $page + '/' + localStorage.getItem('orderBy') + '/' + $filterBy;
+
+    else
+        //console.log('aqui');
+        location.href = '/' + $page + '/' + null + '/' + $filterBy;
+
+    /*var charAt = location.pathname.replace('/', '');
     charAt = charAt.search('/');
 
     var path = '';
 
     if(charAt == -1)
-        location.href = location.pathname + '/' + $orderBy
+        //console.log(charAt);
+        location.href = location.pathname + '/' + null + '/' + $filterBy;
 
     else{
 
         path = location.pathname.substr(0, charAt + 1);
 
-        location.href = path + '/' + $orderBy;
-    }
+        location.href = path + '/' + $filterBy;
+    }*/
 }
 
 function getWidth() {

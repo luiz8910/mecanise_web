@@ -67,10 +67,16 @@ class OrderController extends Controller
         $this->configRepository = $configRepository;
     }
 
-    public function index($filter = null)
+    public function index($orderBy = null, $filter = null)
     {
+        $route = 'orders.index';
+
+        $scripts[] = '../../js/order.js';
+
         if($filter)
         {
+            $today = date_create();
+
             if ($filter == "opened")
             {
                 $orders = $this->repository->findWhere([
@@ -85,6 +91,61 @@ class OrderController extends Controller
                     ['conclusion_at', '<>', null]
                 ]);
             }
+            elseif ($filter == "this_week")
+            {
+                //Storing actual day without change variable $today
+                $t = date_create();
+
+                //Dia da semana / Week day number
+                //1 for Monday, 7 for Sunday
+                $w_today = date('N');
+
+                //A way to find the previous monday
+                date_add($t, date_interval_create_from_date_string('-'. $w_today. ' days'));
+                //Gets tomorrow date
+                date_add($today, date_interval_create_from_date_string('1 day'));
+
+                //dd($today);
+
+                $orders = DB::table('orders')
+                    ->whereNull('deleted_at')
+                    ->whereDate('conclusion_at', '>', date_format($t, 'Y-m-d') . ' 00:00:00')
+                    ->whereDate('conclusion_at', '<', date_format($today, 'Y-m-d') . ' 00:00:00')
+                    ->where(['workshop_id' => $this->get_user_workshop()])
+                    ->get();
+            }
+            elseif($filter == "past_week")
+            {
+
+            }
+            elseif($filter == 'this_month')
+            {
+
+            }
+            elseif($filter == 'past_month')
+            {
+
+                $this_month = date('n');
+
+                //If this month is january, the past month is december of previous year
+                if($this_month == 1)
+                {
+                    $past_month = '12';
+                    $year = date('Y') - 1;
+                }
+                //Gets the previuos month of the same year
+                else{
+                    $past_month = $this_month - 1;
+                    $year = date('Y');
+                }
+
+                $orders = DB::table('orders')
+                    ->where(['workshop_id' => $this->get_user_workshop()])
+                    ->whereNull('deleted_at')
+                    ->whereMonth('conclusion_at', $past_month)
+                    ->whereYear('conclusion_at', $year)
+                    ->get();
+            }
             elseif ($filter == "deleted")
             {
 
@@ -93,15 +154,13 @@ class OrderController extends Controller
                                 ->whereNotNull('deleted_at')
                                 ->get();
             }
+
         }
         else
             $orders = $this->repository->findByField('workshop_id', $this->get_user_workshop());
 
 
-        $route = 'orders.index';
-
-        $scripts[] = '../../js/order.js';
-
+        //dd($orders);
 
         foreach ($orders as $order)
         {
@@ -139,7 +198,13 @@ class OrderController extends Controller
                 date_format(date_create($order->conclusion_at), 'd/m/Y') : 'Em Aberto';
         }
 
-        $orders->sortByDesc('created_at');
+        $orderBy = $orderBy ? $orderBy : 'created_at';
+
+        if($orderBy == 'created_at')
+            $orders = $orders->sortByDesc($orderBy);
+
+        else
+            $orders = $orders->sortBy($orderBy);
 
         $qtde_model = count($this->repository->findByField('conclusion_at', null));
 
