@@ -315,7 +315,7 @@
 
                             <div class="col-md-6 col-xs-6">
                                 <div class="form-group">
-                                    <label for="end_year">Finalizado em:</label>
+                                    <label for="conclusion_at">Finalizado em:</label>
                                     <input type="text" id="conclusion_at" name="conclusion_at" class="form-control date number"
                                            placeholder="Ex: Digite a data em que o serviço foi concluído" maxlength="10"
                                            value="@if($edit){{ $order->conclusion_at }}@else{{ old('conclusion_at') }}@endif">
@@ -336,7 +336,7 @@
 
                             <div class="col-md-1 col-xs-6">
                                 <div class="form-group">
-                                    <label for="end_year">Qtde.</label>
+                                    <label for="quantity">Qtde.</label>
                                     <input type="text" id="quantity" class="form-control number item_order"
                                            placeholder="1,00" maxlength="10"
                                            value="">
@@ -346,7 +346,7 @@
 
                             <div class="col-md-3 col-xs-6">
                                 <div class="form-group">
-                                    <label for="end_year">Valor Unitário</label>
+                                    <label for="price_unity">Valor Unitário</label>
                                     <input type="text" id="price_unity" class="form-control number item_order"
                                            placeholder="Ex: R$500,00" maxlength="10"
                                            value="">
@@ -357,7 +357,7 @@
                             <div class="col-md-3 col-xs-6">
                                 <div class="form-group">
                                     <label for="type_item">Tipo</label>
-                                    <select id="type_item" class="form-control">
+                                    <select id="type_item" class="form-control item_order">
                                         <option value="">Selecione uma opção</option>
                                         <option value="Peça">Peça</option>
                                         <option value="Produto">Produto</option>
@@ -370,7 +370,7 @@
                             <div class="col-md-2 col-xs-6">
                                 <div class="form-group">
                                     <label for=""></label>
-                                    <button type="button" class="btn btn-primary btn-block" onclick="add_item_order();" style="display:block; margin-top: 37px;">
+                                    <button type="button" id="add_item" class="btn btn-primary btn-block" onclick="add_item_order();" style="display:block; margin-top: 37px;">
                                         <i class="fas fa-plus"></i>
                                         Adicionar
                                     </button>
@@ -379,7 +379,7 @@
                             </div>
                         </div>
 
-                        <div class="row">
+                        <div class="row" id="items_table" style="display:none;">
                             <div class="col-md-12 col-xs-6">
                                 <div class="form-group">
                                     <br><br>
@@ -399,6 +399,13 @@
                                     </table>
 
                                 </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <input type="hidden" id="hidden_total">
+                                <p id="total" class="p-total"></p>
                             </div>
                         </div>
 

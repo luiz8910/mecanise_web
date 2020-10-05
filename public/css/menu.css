@@ -447,3 +447,9 @@ td button i{
     margin-top: -89px;
     display: none;
 }
+
+.p-total{
+    float: right;
+    font-size: 25px;
+    margin-top: 50px;
+}

@@ -17,7 +17,8 @@
         </div>
 
         <div class="btn-group">
-            <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-left: 10px;">
+            <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false" style="margin-left: 10px;">
                 Filtrar
             </button>
             <div class="dropdown-menu">
@@ -25,8 +26,8 @@
                 <a class="dropdown-item" href="javascript:" onclick="filter('closed', 'os')">OS concluídas</a>
                 <a class="dropdown-item" href="javascript:" style="color: red;">OS por proprietário</a>
                 <a class="dropdown-item" href="javascript:" onclick="filter('this_week', 'os')">OS Concluídas nesta semana</a>
-                <a class="dropdown-item" href="javascript:" style="color: red;" {{--onclick="filter('past_week', 'os')"--}}>OS Concluídas na semana passada</a>
-                <a class="dropdown-item" href="javascript:" style="color: red;" {{--onclick="filter('this_month', 'os')"--}}>OS Concluídas neste mês</a>
+                <a class="dropdown-item" href="javascript:" onclick="filter('past_week', 'os')" >OS Concluídas na semana passada</a>
+                <a class="dropdown-item" href="javascript:" onclick="filter('this_month', 'os')" >OS Concluídas neste mês</a>
                 <a class="dropdown-item" href="javascript:" onclick="filter('past_month', 'os')">OS Concluídas no mês passado</a>
                 <a class="dropdown-item" href="javascript:" style="color: red;">Escolha o período</a>
             </div>

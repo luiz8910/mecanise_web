@@ -1,7 +1,7 @@
 $(function () {
 
 
-    /*if(location.pathname.search('editar') == -1)
+    if(location.pathname.search('editar') == -1)
     {
         var today = new Date();
 
@@ -16,8 +16,8 @@ $(function () {
         today = day + '/' + month + '/' + today.getFullYear();
 
         $("#done_at").val(today);
-        $("#conclusion_at").val(today);
-    }*/
+        //$("#conclusion_at").val(today);
+    }
 
     /*$("#owner_id").change(function () {
 
@@ -230,7 +230,7 @@ $(function () {
 
 
     $("#quantity").maskMoney({thousands:'.', decimal:','});
-    $("#price_unity").maskMoney({prefix:'R$ ', allowNegative: false, thousands:'.', decimal:','});
+    $("#price_unity").maskMoney({prefix:'R$ ', allowNegative: false, allowZero: true, thousands:'.', decimal:','});
 
     $(".item_order").keyup(function (e){
         if($(this).val() != "")
@@ -248,7 +248,20 @@ $(function () {
             $("#span_type_item_status").css('display', 'none');
             $(this).removeClass('has-error').addClass("has-success");
         }
-    })
+    });
+
+    $("body").keypress(function (e){
+        //If any item_order class has focus and the user press enter,
+        // the method add_item_order() will be fired.
+        if(e.which == 13 && $(".item_order").is(":focus"))
+        {
+            e.preventDefault();
+            $("#add_item").focus();
+            add_item_order();
+        }
+
+    });
+
 
 });
 
@@ -348,6 +361,8 @@ function add_item_order()
     var type_item = $("#type_item");
     var stop = false;
 
+    console.log(price_unity.val());
+
     if(parts.val() == "")
     {
         parts.addClass("has-error");
@@ -373,8 +388,12 @@ function add_item_order()
         stop = true;
     }
 
+    //If error return false;
     if(stop)
         return;
+
+    $("#items_table").css('display', 'block');
+    $("#total").css("display", 'block');
 
     var price = price_unity.val().replace('R$', "");
     price = price.replace('.', '');
@@ -393,24 +412,55 @@ function add_item_order()
     var total = (parseFloat(price) * parseFloat(q)).toFixed(2);
     total = total.replace(',', '-');
     total = total.replace('.', ',');
-    tatal = total.replace('-', '.');
+    total = total.replace('-', '.');
 
-    var append = "<tr>";
+    var code = (Math.floor(Math.random() * 10000) + 1).toString();
+    var append = '<tr id="'+code+'">';
 
     append += "<th scope='row'>"+parts.val()+"</th>";
     append += "<td>"+quantity.val()+"</td>";
     append += "<td>"+price_unity.val()+"</td>";
-    append += "<td>R$ "+total+"</td>";
-    append += '<td><button class="btn btn-info btn-sm"><i class="fas fa-edit"></i></button>';
-    append += '<button class="btn btn-danger btn-sm" style="margin-left: 5px;"><i class="fas fa-trash"></i></button></td>';
+    append += "<td id='td_total_"+code+"'>R$ "+total+"</td>";
+    append += '<td><button type="button" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></button>';
+    append += '<button type="button" class="btn btn-danger btn-sm" onclick="delete_item('+code+')" style="margin-left: 5px;"><i class="fas fa-trash"></i></button></td>';
     append += "</tr>";
 
     $("tbody").append(append);
+
+    var value = $("#hidden_total").val() ? parseFloat($("#hidden_total").val()) : 0;
+
+    value = parseFloat(value) + parseFloat(total);
+    $("#hidden_total").val(value.toFixed(2));
+    $("#total").text('Total: R$ ' + value.toFixed(2));
 
     parts.val("").removeClass('has-success').focus();
     price_unity.val("").removeClass('has-success');
     quantity.val("").removeClass('has-success');
     type_item.val("").removeClass('has-success');
+
+}
+
+function delete_item($code)
+{
+    var line_total = $("#td_total_" + $code).text();
+
+    line_total = parseFloat(line_total.replace('R$', ""));
+
+    var total = parseFloat($("#hidden_total").val());
+
+    total -= line_total;
+
+    $("#hidden_total").val(total);
+
+    $("#total").text('Total: R$ ' + total.toFixed(2));
+
+    $("#"+$code).remove();
+
+    if($("tbody tr").length == 0)
+    {
+        $("#total").css("display", 'none');
+        $("#items_table").css('display', 'none');
+    }
 
 }
 

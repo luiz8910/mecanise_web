@@ -102,6 +102,32 @@ class OrderController extends Controller
 
                 //A way to find the previous monday
                 date_add($t, date_interval_create_from_date_string('-'. $w_today. ' days'));
+
+                //Gets tomorrow date
+                date_add($today, date_interval_create_from_date_string('1 day'));
+
+                //dd($today);
+
+                $orders = DB::table('orders')
+                    ->whereNull('deleted_at')
+                    ->whereDate('conclusion_at', '>', date_format($t, 'Y-m-d') . ' 00:00:00')
+                    ->whereDate('conclusion_at', '<', date_format($today, 'Y-m-d') . ' 00:00:00')
+                    ->where(['workshop_id' => $this->get_user_workshop()])
+                    ->get();
+
+            }
+            elseif($filter == "past_week")
+            {
+                //Storing actual day without change variable $today
+                $t = date_create();
+
+                //Dia da semana / Week day number
+                //1 for Monday, 7 for Sunday
+                $w_today = date('N');
+
+                //A way to find the previous monday
+                date_add($t, date_interval_create_from_date_string('-'. ($w_today * 2). ' days'));
+
                 //Gets tomorrow date
                 date_add($today, date_interval_create_from_date_string('1 day'));
 
@@ -114,12 +140,17 @@ class OrderController extends Controller
                     ->where(['workshop_id' => $this->get_user_workshop()])
                     ->get();
             }
-            elseif($filter == "past_week")
-            {
-
-            }
             elseif($filter == 'this_month')
             {
+                $this_month = date('n');
+                $year = date_format(date_create(), "Y");
+
+                $orders = DB::table('orders')
+                    ->where(['workshop_id' => $this->get_user_workshop()])
+                    ->whereNull('deleted_at')
+                    ->whereMonth('conclusion_at', $this_month)
+                    ->whereYear('conclusion_at', $year)
+                    ->get();
 
             }
             elseif($filter == 'past_month')
@@ -133,7 +164,7 @@ class OrderController extends Controller
                     $past_month = '12';
                     $year = date('Y') - 1;
                 }
-                //Gets the previuos month of the same year
+                //Gets the previous month of the same year
                 else{
                     $past_month = $this_month - 1;
                     $year = date('Y');
