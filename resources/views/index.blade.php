@@ -123,115 +123,74 @@
 
                 <div class="items">
                     <ul>
-                        <li class="li-items" >
-                            <a href="javascript:" class="a-item main-item" id="item-users">
-                                <i class="fas fa-users"></i>
-                                <span class="span-item-name">Usuários</span> <span class="span-item"> > </span>
+                        <li class="li-items">
+                            <a href="javascript:" class="a-item main-item" id="item-users" style="color: red;">
+                                <i class="fas fa-list"></i>
+                                <span class="span-item-name">Painel Geral</span>
                             </a>
-
-                            <ul id="ul-users" class="ul-subitem">
-                                <li class="li-items"><a href="{{ route('person.index') }}" class="a-item">
-                                        <i class="fas fa-list"></i> Usuários
-                                    </a></li>
-                                <li class="li-items"><a href="javascript:" class="a-item">
-                                        <i class="fas fa-users"></i> Funcionários
-                                    </a></li>
-                                <li class="li-items"><a href="{{ route('person.create') }}" class="a-item">
-                                        <i class="fas fa-plus"></i> Novo Usuário
-                                    </a></li>
-                                <li class="li-items"><a href="javascript:" class="a-item">
-                                        <i class="fas fa-plus"></i> Novo Funcionário
-                                    </a></li>
-                            </ul>
                         </li>
 
                         <br>
 
                         <li class="li-items" >
-                            <a href="javascript:" class="a-item main-item" id="item-os">
+                            <a href="{{ route('order.index', ['orderBy' => 'null', 'filter' => 'opened']) }}"
+                               class="a-item main-item" id="item-os">
                                 <i class="fas fa-file-alt"></i>
-                                <span class="span-item-name">Orçamentos</span> <span class="span-item"> > </span>
+                                <span class="span-item-name">Ordens de Serviço</span>
                             </a>
-
-                            <ul id="ul-os" class="ul-subitem">
-                                <li class="li-items">
-                                    <a href="{{ route('order.index') }}" class="a-item">
-                                        <i class="fas fa-list"></i> Lista Geral
-                                    </a>
-                                </li>
-                                <li class="li-items">
-                                    <a href="{{ route('order.create')}}" class="a-item">
-                                        <i class="fas fa-plus"></i> Nova OS
-                                    </a>
-                                </li>
-                                <li class="li-items">
-                                    <a href="javascript:" class="a-item">
-                                        <i class="fas fa-trash"></i> OS Excluídas
-                                    </a>
-                                </li>
-                            </ul>
                         </li>
 
                         <br>
 
                         <li class="li-items" >
-                            <a href="javascript:" class="a-item main-item" id="item-vehicles">
+                            <a href="{{ route('order.index', ['orderBy' => 'null', 'filter' => 'closed']) }}"
+                               class="a-item main-item" id="item-os">
+                                <i class="fas fa-file-alt"></i>
+                                <span class="span-item-name">Orçamentos</span>
+                            </a>
+                        </li>
+
+                        <br>
+                        <li class="li-items" >
+                            <a href="{{ route('person.index') }}"
+                               class="a-item main-item" id="item-os">
+                                <i class="fas fa-file-alt"></i>
+                                <span class="span-item-name">Clientes</span>
+                            </a>
+                        </li>
+
+                        <br>
+                        <li class="li-items" >
+                            <a href="{{ route('vehicle.index') }}" class="a-item main-item" id="item-vehicles">
                                 <i class="fas fa-car"></i>
-                                <span class="span-item-name">Veículos</span> <span class="span-item"> > </span>
+                                <span class="span-item-name">Veículos</span>
                             </a>
-
-                            <ul id="ul-vehicles" class="ul-subitem">
-                                <li class="li-items">
-                                    <a href="{{ route('vehicle.index')}}" class="a-item">
-                                        <i class="fas fa-list"></i> Lista Geral
-                                    </a>
-                                </li>
-                                <li class="li-items">
-                                    <a href="{{ route('vehicle.create') }}" class="a-item">
-                                        <i class="fas fa-plus"></i> Novo Veículo
-                                    </a>
-                                </li>
-                                <li class="li-items">
-                                    <a href="javascript:" class="a-item">
-                                        <i class="fas fa-trash"></i> Veículos Excluídos
-                                    </a>
-                                </li>
-
-                            </ul>
                         </li>
 
-                        <li class="li-items" style="margin-top: 30px;">
-                            <a href="javascript:" class="a-item main-item" id="item-parts">
-                                <i class="fas fa-wrench"></i>
-                                <span class="span-item-name">Peças</span> <span class="span-item"> > </span>
+                        <br>
+                        <li class="li-items">
+                            <a href="javascript:" class="a-item main-item" id="item-vehicles" style="color: red;">
+                                <i class="fas fa-car"></i>
+                                <span class="span-item-name">Produtos</span>
                             </a>
-
-                            <ul class="ul-subitem" id="ul-parts">
-                                <li class="li-items">
-                                    <a href="{{ route('parts.index') }}" class="a-item">
-                                        <i class="fas fa-list"></i>Peças por Carros
-                                    </a>
-                                </li>
-
-                                <li class="li-items">
-                                    <a href="{{ route('parts.list') }}" class="a-item">
-                                        <i class="fas fa-list-alt"></i>Peças
-                                    </a>
-                                </li>
-
-                                <li class="li-items">
-                                    <a href="{{ route('parts.create') }}" class="a-item">
-                                        <i class="fas fa-wrench"></i>Criar Peça
-                                    </a>
-                                </li>
-
-                                <li class="li-items">
-                                    <a href="javascript:" class="a-item">
-                                        <i class="fas fa-copyright"></i>Marcas
-                                    </a>
-                                </li>
-                            </ul>
                         </li>
+
+                        <br>
+                        <li class="li-items">
+                            <a href="javascript:" class="a-item main-item" id="item-vehicles" style="color: red;">
+                                <i class="fas fa-car"></i>
+                                <span class="span-item-name">Serviços</span>
+                            </a>
+                        </li>
+
+                        <br>
+                        <li class="li-items" >
+                            <a href="javascript:" class="a-item main-item" id="item-vehicles" style="color: red;">
+                                <i class="fas fa-car"></i>
+                                <span class="span-item-name">Funcionários</span>
+                            </a>
+                        </li>
+
 
                         <li class="li-items" style="margin-top: 30px;">
                             <a href="javascript:" class="a-item main-item" id="item-cars">
