@@ -453,3 +453,8 @@ td button i{
     font-size: 25px;
     margin-top: 50px;
 }
+
+.select2{
+    margin-top: 27px;
+    padding: 2px;
+}

@@ -19,6 +19,8 @@ $(function () {
         //$("#conclusion_at").val(today);
     }
 
+    $("#owner_id").select2();
+
     /*$("#owner_id").change(function () {
 
         //id = owner id
@@ -70,10 +72,51 @@ $(function () {
             sweet_alert_error();
         });
     });*/
-    localStorage.removeItem('timestamp');
 
-    $("#input_owner").keypress(function (e){
-        var drop = $(".dropdown-content");
+    //localStorage.removeItem('timestamp');
+
+
+    /*$("#input_owner").keyup(function (e){
+
+        $(".dropdown-content a").remove();
+        $("#owner_id").val("");
+
+        if($(this).val() != "")
+        {
+
+            $.ajax({
+                url: '/search_people_all/' + $(this).val(),
+                method: "GET",
+                dataType: 'json',
+                success: function (e){
+
+                    if(e.status)
+                    {
+                        console.log(e.result);
+
+                        var append = '';
+
+                        for(var i = 0; i < e.result.length; i++)
+                        {
+                            append += '<a href="javascript:" id="result_' + e.result[i].id + '" onclick="select_owner(' + e.result[i].id + ')">' + e.result[i].name + '</a>';
+                        }
+
+                        $(".dropdown-content").append(append);
+
+                        $(".dropdown-content a").css('display', 'block');
+
+                    }
+
+                },
+                fail: function (e){
+                    console.log('fail', e);
+                    sweet_alert_error();
+                }
+            });
+        }
+
+
+        /!*var drop = $(".dropdown-content");
 
         if($(this).val() != "")
         {
@@ -121,38 +164,13 @@ $(function () {
 
             if(request)
             {
-                $.ajax({
-                    url: '/search_people_all/' + $(this).val(),
-                    method: "GET",
-                    dataType: 'json',
-                    success: function (e){
 
-                        if(e.status)
-                        {
-                            console.log(e.result);
-
-                            var append = '';
-
-                            for(var i = 0; i < e.result.length; i++)
-                            {
-                                append += '<a href="javascript:" id="result_'+e.result[i].id+'" onclick="select_owner('+e.result[i].id+')">'+e.result[i].name+'</a>';
-                            }
-
-                            $(".dropdown-content").append(append);
-                        }
-
-                    },
-                    fail: function (e){
-                        console.log('fail', e);
-                        sweet_alert_error();
-                    }
-                });
             }
             else
                 return false;
         }
         else
-            localStorage.clear();
+            localStorage.clear();*!/
 
     })
         .blur(function (){
@@ -167,7 +185,7 @@ $(function () {
             if($(this).val())
                 $(".dropdown-content a").css('display', 'block');
         })
-    ;
+    ;*/
 
     $("#car_id").change(function () {
 
@@ -361,7 +379,6 @@ function add_item_order()
     var type_item = $("#type_item");
     var stop = false;
 
-    console.log(price_unity.val());
 
     if(parts.val() == "")
     {
@@ -403,11 +420,6 @@ function add_item_order()
     var q = quantity.val().replace(".", '');
     q = q.replace(',', '.');
     //q = q.replace('-', ',');
-
-    console.log("original: " + price_unity.val());
-    console.log("price: " + parseFloat(price));
-    console.log("quantity original: " + q);
-    console.log("quantity: " + parseFloat(q));
 
     var total = (parseFloat(price) * parseFloat(q)).toFixed(2);
     total = total.replace(',', '-');
@@ -475,3 +487,7 @@ function select_owner($id)
     //car_change('car_id');
 }
 
+function search_owner($input)
+{
+
+}
