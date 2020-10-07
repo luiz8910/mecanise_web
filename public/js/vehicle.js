@@ -1,5 +1,8 @@
 $(function () {
 
+    $("#car_id").select2();
+    $("#owner_id").select2();
+
     $("#myInput").keyup(function (e){
         var drop = $(".dropdown-content");
 
@@ -55,7 +58,7 @@ $(function () {
 
         //if(location.pathname.search('os') == -1)
             car_change('car_id_modal');
-    });
+    }).select2();
 
 
 

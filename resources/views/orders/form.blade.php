@@ -1,3 +1,67 @@
+<div class="modal fade" id="edit_item" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Editar</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="code">
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="modal_parts">Peça/Produto</label>
+                        <input type="text" id="modal_parts" class="form-control">
+                        <span class="span_modal_error" id="span_modal_parts" style="color: red; display:none;">
+                            Preencha este campo
+                        </span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="modal_quantity">Quantidade</label>
+                        <input type="text" id="modal_quantity" class="form-control">
+                        <span class="span_modal_error" id="span_modal_quantity" style="color: red; display:none;">
+                            Preencha este campo
+                        </span>
+                    </div>
+                </div>
+
+                <br>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="modal_price_unity">Valor Unitário</label>
+                        <input type="text" id="modal_price_unity" class="form-control">
+                        <span class="span_modal_error" id="span_modal_price_unity" style="color: red; display:none;">
+                            Preencha este campo
+                        </span>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="modal_type_item">Tipo</label>
+                        <select id="modal_type_item" class="form-control">
+                            <option value="Peça">Peça</option>
+                            <option value="Produto">Produto</option>
+                            <option value="Mão de Obra">Mão de Obra</option>
+                        </select>
+                        <span class="span_modal_error" id="span_modal_type_item" style="color:red; display:none;">
+                            Escolha uma opção
+                        </span>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary" onclick="save_item();">Salvar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 <div class="modal fade" id="new_owner" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
@@ -134,7 +198,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <label for="car_id_modal">Modelo *</label>
-                        <select id="car_id_modal" class="form-control">
+                        <select id="car_id_modal" class="form-control select2-modal">
                             <option value="">Selecione um valor</option>
                             @foreach($cars as $car)
                                 <option value="{{ $car->id }}">{{ $car->model }}</option>
@@ -249,7 +313,8 @@
                             <div class="col-md-6 col-xs-6">
                                 <div class="form-group">
                                     <label for="owner_id">Proprietário</label>
-                                    <select class="form-control select2" name="owner_id" id="owner_id">
+                                    <select class="form-control select_2" name="owner_id" id="owner_id">
+                                        <option value="">Selecione um proprietário</option>
                                         @foreach($people as $person)
                                             @if($edit)
                                                 <option value="{{ $person->id }}" @if($person->id == $order->owner_id) selected @endif >{{ $person->name }}</option>
@@ -303,6 +368,8 @@
                                             @foreach($vehicles as $vehicle)
                                                 @if($vehicle->id == $order->vehicle_id)
                                                     <option value="{{ $order->car_id }}" selected >{{ $vehicle->name }}</option>
+                                                @else
+                                                    <option value="{{ $vehicle->car_id }}">{{ $vehicle->name }}</option>
                                                 @endif
                                             @endforeach
                                         @endif
@@ -446,3 +513,5 @@
 
 
 </div>
+
+

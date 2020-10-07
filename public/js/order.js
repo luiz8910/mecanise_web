@@ -21,6 +21,7 @@ $(function () {
 
     $("#owner_id").select2();
 
+
     /*$("#owner_id").change(function () {
 
         //id = owner id
@@ -248,7 +249,9 @@ $(function () {
 
 
     $("#quantity").maskMoney({thousands:'.', decimal:','});
+    $("#modal_quantity").maskMoney({thousands:'.', decimal:','});
     $("#price_unity").maskMoney({prefix:'R$ ', allowNegative: false, allowZero: true, thousands:'.', decimal:','});
+    $("#modal_price_unity").maskMoney({prefix:'R$ ', allowNegative: false, allowZero: true, thousands:'.', decimal:','});
 
     $(".item_order").keyup(function (e){
         if($(this).val() != "")
@@ -421,20 +424,24 @@ function add_item_order()
     q = q.replace(',', '.');
     //q = q.replace('-', ',');
 
+    //Substitui virgulas por pontos
     var total = (parseFloat(price) * parseFloat(q)).toFixed(2);
     total = total.replace(',', '-');
     total = total.replace('.', ',');
     total = total.replace('-', '.');
 
-    var code = (Math.floor(Math.random() * 10000) + 1).toString();
+    //Generates a random number
+    var code = (Math.floor(Math.random() * 100000) + 1).toString();
+
     var append = '<tr id="'+code+'">';
 
-    append += "<th scope='row'>"+parts.val()+"</th>";
-    append += "<td>"+quantity.val()+"</td>";
-    append += "<td>"+price_unity.val()+"</td>";
+    append += "<th scope='row' id='parts_"+code+"'>"+parts.val()+"</th>";
+    append += "<td id='quantity_"+code+"'>"+quantity.val()+"</td>";
+    append += "<td id='price_unity_"+code+"'>"+price_unity.val()+"</td>";
     append += "<td id='td_total_"+code+"'>R$ "+total+"</td>";
-    append += '<td><button type="button" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></button>';
+    append += '<td><button type="button" class="btn btn-info btn-sm" onclick="edit_item('+code+')"><i class="fas fa-edit"></i></button>';
     append += '<button type="button" class="btn btn-danger btn-sm" onclick="delete_item('+code+')" style="margin-left: 5px;"><i class="fas fa-trash"></i></button></td>';
+    append += '<input type="hidden" id="type_item_'+code+'" value="'+type_item.val()+'">';
     append += "</tr>";
 
     $("tbody").append(append);
@@ -449,6 +456,105 @@ function add_item_order()
     price_unity.val("").removeClass('has-success');
     quantity.val("").removeClass('has-success');
     type_item.val("").removeClass('has-success');
+
+}
+
+
+function edit_item($code)
+{
+    var parts = $("#parts_"+$code).text();
+    var quantity = $("#quantity_"+$code).text();
+    var price_unity = $("#price_unity_"+$code).text();
+    var type_item = $("#type_item_"+$code).val();
+    var total = $("#td_total_"+$code).text();
+
+
+    $("#edit_item").modal('show');
+    $("#code").val($code);
+    $("#modal_parts").val(parts);
+    $("#modal_quantity").val(quantity);
+    $("#modal_price_unity").val(price_unity);
+    $("#modal_type_item").val(type_item);
+
+}
+
+function save_item()
+{
+
+    var code = $("#code").val();
+    var parts = $("#modal_parts").val();
+    var quantity = $("#modal_quantity").val();
+    var price_unity = $("#modal_price_unity").val();
+    var type_item = $("#modal_type_item").val();
+    var stop = false;
+
+    if(parts == '')
+    {
+        $("#span_modal_parts").css("display", 'block');
+        stop = true;
+    }
+    if(quantity == "")
+    {
+        $("#span_modal_quantity").css("display", 'block');
+        stop = true;
+    }
+    if(price_unity == "")
+    {
+        $("#span_modal_price_unity").css("display", 'block');
+        stop = true;
+    }
+    if(type_item == "")
+    {
+        $("#span_modal_type_item").css("display", 'block');
+        stop = true;
+    }
+
+    if(stop)
+    {
+        $("#edit_item").modal('show');
+        return;
+    }
+    else
+        $(".span_modal_error").css('display', 'none');
+
+    var h_total = $("#hidden_total").val();
+
+    var total = $("#td_total_"+code).text().replace('R$', '');
+
+    console.log(total);
+    $("#hidden_total").val(parseFloat(h_total) - parseFloat(total));
+
+    $("#parts_"+code).text(parts);
+    $("#quantity_"+code).text(quantity);
+    $("#price_unity_"+code).text(price_unity);
+    $("#type_item_"+code).val(type_item);
+
+    var price = price_unity.replace('R$', "");
+    price = price.replace('.', '');
+    price = price.replace(',', '.');
+    //price = price.replace('-', ',');
+
+    var q = quantity.replace(".", '');
+    q = q.replace(',', '.');
+    //q = q.replace('-', ',');
+
+    //Substitui virgulas por pontos
+    total = (parseFloat(price) * parseFloat(q)).toFixed(2);
+    total = total.replace(',', '-');
+    total = total.replace('.', ',');
+    total = total.replace('-', '.');
+
+    $("#td_total_"+code).text("R$" + total);
+
+    var value = $("#hidden_total").val() ? parseFloat($("#hidden_total").val()) : 0;
+
+    value = parseFloat(value) + parseFloat(total);
+    $("#hidden_total").val(value.toFixed(2));
+    $("#total").text('Total: R$ ' + value.toFixed(2));
+
+    $("#edit_item").modal("hide");
+
+    return true;
 
 }
 

@@ -454,7 +454,12 @@ td button i{
     margin-top: 50px;
 }
 
-.select2{
+.select_2{
     margin-top: 27px;
     padding: 2px;
+}
+
+.select2-modal{
+    margin-bottom: 15px;
+    width: 370px;
 }

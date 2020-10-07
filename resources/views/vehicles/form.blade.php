@@ -155,7 +155,7 @@
                             <div class="col-md-6 col-xs-6">
                                 <div class="form-group">
                                     <label for="owner_id">Proprietário</label>
-                                    <select id="owner_id" name="owner_id" class="form-control">
+                                    <select id="owner_id" name="owner_id" class="form-control select_2" required>
                                         <option value="">Selecione um valor</option>
                                         @foreach($people as $person)
                                             @if($edit)
@@ -175,38 +175,41 @@
 
                             <div class="col-md-6 col-xs-6">
                                 <div class="form-group">
-                                    <label for="">Veículos</label>
+                                    <label for="car_id">Veículo</label>
+                                    <select id="car_id" name="car_id" class="form-control select_2" required>
+                                        <option value="">Selecione um veículo</option>
+
+                                        @foreach($cars as $car)
+                                            @if($edit)
+                                                <option value="{{ $vehicle->id }}" @if($car->id == $vehicle->car_id) selected @endif >{{ $car->model }}</option>
+                                            @else
+                                                <option value="{{ $car->id }}">{{ $car->model }}</option>
+                                            @endif
+                                        @endforeach
+
+                                    </select>
+
+                                    {{--<label for="">Veículos</label>
                                     <div class="dropdown">
                                         <div id="myDropdown" class="dropdown-content">
                                             <input type="hidden" name="car_id" id="hidden_car_id" value="@if($edit){{ $vehicle->car_id }}@endif">
                                             <input type="text" placeholder="Pesquise por veículos" id="myInput" class="myInput"
                                                    style="margin-top: 3px;" value="@if($edit){{ $car->model }}@endif" autocomplete="off">
 
-                                            {{--<a href="#about">About</a>
+                                            --}}{{--<a href="#about">About</a>
                                             <a href="#base">Base</a>
                                             <a href="#blog">Blog</a>
                                             <a href="#contact">Contact</a>
-                                            <a href="#custom">Custom</a>--}}
+                                            <a href="#custom">Custom</a>--}}{{--
                                         </div>
-                                    </div>
+                                    </div>--}}
 {{--
                                     <label for="car_id">Veículos</label>
                                     <div class="input">
                                         <input type="text" class="div-input" style="margin-top: -4px;">
                                     </div>
                                     <div class="input-result"></div>--}}
-                                    {{--<select id="car_id" name="car_id" class="form-control" required>
-                                        <option value="">Selecione um veículo</option>
-
-                                            @foreach($cars as $car)
-                                                @if($edit)
-                                                    <option value="{{ $vehicle->id }}" @if($car->id == $vehicle->car_id) selected @endif >{{ $car->model }}</option>
-                                                @else
-                                                    <option value="{{ $car->id }}">{{ $car->model }}</option>
-                                                @endif
-                                            @endforeach
-
-                                    </select>--}}
+                                    {{----}}
                                     <span class="form-text text-danger" id="span_car_id_status" style="display:none;">Escolha um veículo.</span>
                                 </div>
                             </div>
@@ -216,7 +219,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Cor</label>
-                                    <select class="select-style form-control select2" name="color">
+                                    <select class="select-style form-control" name="color">
                                         <option value="">Selecione um valor</option>
                                         @foreach($colors as $color)
                                             @if($edit)
@@ -261,7 +264,7 @@
                             <div class="col-md-4 col-sm-6">
                                 <label>Ano</label>
                                 <div>
-                                    <select name="year" id="year" class="form-control select-style select2">
+                                    <select name="year" id="year" class="form-control select-style">
                                         <option value="">Insira um valor</option>
                                         @if($edit)
                                             @if(count($years) > 1)
