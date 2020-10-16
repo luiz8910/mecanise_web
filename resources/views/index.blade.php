@@ -13,8 +13,7 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600">
     <script src="../../js/font-awesome.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
-
-
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
 
 
     {{--<!--===============================================================================================-->
@@ -285,6 +284,7 @@
 <!--===============================================================================================-->
 <script type='text/javascript' src='//igorescobar.github.io/jQuery-Mask-Plugin/js/jquery.mask.min.js'></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+<script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 @if(isset($scripts))
     @foreach($scripts as $script)

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Repositories\CarRepository;
 use App\Repositories\ColorsRepository;
 use App\Repositories\ConfigRepository;
+use App\Repositories\OrderItemRepository;
 use App\Repositories\OrderRepository;
 use App\Repositories\PersonRepository;
 use App\Repositories\StatesRepository;
@@ -50,11 +51,16 @@ class OrderController extends Controller
      * @var ConfigRepository
      */
     private $configRepository;
+    /**
+     * @var OrderItemRepository
+     */
+    private $orderItem;
 
     public function __construct(OrderRepository $repository, PersonRepository $personRepository,
                                 CarRepository $carRepository, VehicleRepository $vehicleRepository,
                                 WorkshopRepository $workshopRepository, StatesRepository $statesRepository,
-                                ColorsRepository $colorsRepository, ConfigRepository $configRepository)
+                                ColorsRepository $colorsRepository, ConfigRepository $configRepository,
+                                OrderItemRepository $orderItem)
     {
 
         $this->repository = $repository;
@@ -65,6 +71,7 @@ class OrderController extends Controller
         $this->statesRepository = $statesRepository;
         $this->colorsRepository = $colorsRepository;
         $this->configRepository = $configRepository;
+        $this->orderItem = $orderItem;
     }
 
     public function index($orderBy = null, $filter = null)
@@ -334,8 +341,19 @@ class OrderController extends Controller
 
             $people = $this->personRepository->findByField('workshop_id', $this->get_user_workshop());
 
+            $order_item = $this->orderItem->findByField('order_id', $id);
+
+            $total = 0;
+
+            foreach ($order_item as $oi){
+
+                $oi->total = $oi->quantity * $oi->price_unity;
+                $oi->code = $this->random_number(5);
+                $total += $oi->total;
+            }
+
             return view('index', compact('route', 'edit', 'scripts', 'owners',
-                'states', 'cars', 'colors', 'vehicles', 'order', 'people', 'links'));
+                'states', 'cars', 'colors', 'vehicles', 'order', 'people', 'links', 'order_item', 'total'));
         }
 
         return abort(404);
@@ -346,9 +364,15 @@ class OrderController extends Controller
     {
         DB::beginTransaction();
 
-        $data = $request->all();
+        $data = $request->only([
+            'owner_id', 'car_id', 'done_at', 'conclusion_at', 'description'
+        ]);
 
-        //dd($data);
+        $items = $request->only([
+            'parts', 'quantity', 'price_unity', 'type'
+        ]);
+
+        //dd($items);
 
         try {
 
@@ -388,6 +412,20 @@ class OrderController extends Controller
 
                     $this->repository->create($data);
 
+                    $order_id = $this->repository->findByField('code', $data['code'])->first()->id;
+
+                    for ($i = 0; $i < count($items['parts']); $i++)
+                    {
+                        $x['parts'] = $items['parts'][$i];
+                        $x['quantity'] = str_replace(',', '.', $items['quantity'][$i]);
+                        $x['price_unity'] = str_replace(',', '.', $items['price_unity'][$i]);
+                        $x['price_unity'] = (float)trim(str_replace('R$', '', $items['price_unity'][$i]));
+                        $x['type'] = $items['type'][$i];
+                        $x['order_id'] = $order_id;
+
+                        $this->orderItem->create($x);
+                    }
+
                     DB::commit();
 
                     $request->session()->flash('success.msg', 'A Ordem de Serviço nº ' .$data['code']. ' foi criada com sucesso');
@@ -414,9 +452,15 @@ class OrderController extends Controller
 
     public function update(Request $request, $id)
     {
-        $data = $request->all();
+        $data = $request->only([
+            'owner_id', 'car_id', 'done_at', 'conclusion_at', 'description'
+        ]);
 
-        //dd($data);
+        $items = $request->only([
+            'parts', 'quantity', 'price_unity', 'type'
+        ]);
+
+        //dd($items);
 
         DB::beginTransaction();
 
@@ -454,6 +498,24 @@ class OrderController extends Controller
 
                     $this->repository->update($data, $id);
 
+                    $order = $this->orderItem->findByField('order_id', $id);
+
+                    if(count($order) > 0)
+                        foreach ($order as $o)
+                            $this->orderItem->delete($o->id);
+
+                    for ($i = 0; $i < count($items['parts']); $i++)
+                    {
+                        $x['parts'] = $items['parts'][$i];
+                        $x['quantity'] = str_replace(',', '.', $items['quantity'][$i]);
+                        $x['price_unity'] = str_replace(',', '.', $items['price_unity'][$i]);
+                        $x['price_unity'] = (float)trim(str_replace('R$', '', $items['price_unity'][$i]));
+                        $x['type'] = $items['type'][$i];
+                        $x['order_id'] = $id;
+
+                        $this->orderItem->create($x);
+                    }
+
                     $code = $this->repository->findByField('id', $id)->first()->code;
 
                     DB::commit();
@@ -474,6 +536,8 @@ class OrderController extends Controller
             $error = $e->getMessage(); //'Um erro desconhecido aconteceu, tente novamente mais tarde';
 
             $request->session()->flash('error.msg', $error);
+
+            dd($error);
 
             return isset($data['origin']) ? json_encode(['status' => false, 'msg' => $error]):redirect()->back();
         }

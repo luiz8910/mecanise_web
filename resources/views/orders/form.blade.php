@@ -313,7 +313,7 @@
                             <div class="col-md-6 col-xs-6">
                                 <div class="form-group">
                                     <label for="owner_id">Proprietário</label>
-                                    <select class="form-control select_2" name="owner_id" id="owner_id">
+                                    <select class="form-control select2" name="owner_id" id="owner_id">
                                         <option value="">Selecione um proprietário</option>
                                         @foreach($people as $person)
                                             @if($edit)
@@ -455,7 +455,7 @@
                             </div>
                         </div>
 
-                        <div class="row" id="items_table" style="display:none;">
+                        <div class="row" id="items_table" @if($edit && count($order_item) > 0) style="display:block;" @else style="display: none;" @endif>
                             <div class="col-md-12 col-xs-6">
                                 <div class="form-group">
                                     <br><br>
@@ -470,7 +470,25 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-
+                                        @if($edit && count($order_item) > 0)
+                                            @foreach($order_item as $oi)
+                                                <tr id="{{ $oi->code }}">
+                                                    <input type="hidden" id="input_parts_item_{{ $oi->code }}" name="parts[]" value="{{ $oi->parts }}">
+                                                    <input type="hidden" id="input_quantity_item_{{ $oi->code }}" name="quantity[]" value="{{ str_replace('.', ',', $oi->quantity) }}">
+                                                    <input type="hidden" id="input_price_unity_item_{{ $oi->code }}" name="price_unity[]" value="{{ str_replace('.', ',', $oi->price_unity) }}">
+                                                    <input type="hidden" id="type_item_{{ $oi->code }}" name="type[]" value="{{ $oi->type }}">
+                                                    <th scope='row' id='parts_{{ $oi->code }}'>{{ $oi->parts }}</th>
+                                                    <td id='quantity_{{ $oi->code }}'>{{ str_replace('.', ',', $oi->quantity) }}</td>
+                                                    <td id="price_unity_{{ $oi->code }}">R${{ str_replace('.', ',', $oi->price_unity) }}</td>
+                                                    <td id='td_total_{{ $oi->code }}'>R$ {{ str_replace('.', ',', number_format($oi->total, 2)) }}</td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-info btn-sm" onclick="edit_item({!! $oi->code !!})"><i class="fas fa-edit"></i></button>
+                                                        <button type="button" class="btn btn-danger btn-sm" onclick="delete_item({!! $oi->code !!})" style="margin-left: 5px;"><i class="fas fa-trash"></i></button>
+                                                    </td>
+                                                    <input type="hidden" id="type_item_{{ $oi->code }}" value="{{ $oi->type }}">
+                                                </tr>
+                                            @endforeach
+                                        @endif
                                         </tbody>
                                     </table>
 
@@ -480,8 +498,13 @@
 
                         <div class="row">
                             <div class="col-md-12">
-                                <input type="hidden" id="hidden_total">
-                                <p id="total" class="p-total"></p>
+                                @if(isset($total) && $total > 0)
+                                    <input type="hidden" id="hidden_total" value="{{ $total }}">
+                                    <p id="total" class="p-total">R${{ str_replace('.', ',', number_format($total, 2)) }}</p>
+                                @else
+                                    <input type="hidden" id="hidden_total">
+                                    <p id="total" class="p-total"></p>
+                                @endif
                             </div>
                         </div>
 

@@ -389,7 +389,7 @@ function add_item_order()
         $("#span_parts_description_status").css('display', 'block').text('Preencha o campo peça');
         stop = true;
     }
-    if(quantity.val() == "")
+    if(quantity.val() == "" || quantity.val() == '0,00')
     {
         quantity.addClass("has-error");
         $("#span_quantity_status").css('display', 'block').text("Preencha o campo quantidade");
@@ -441,7 +441,10 @@ function add_item_order()
     append += "<td id='td_total_"+code+"'>R$ "+total+"</td>";
     append += '<td><button type="button" class="btn btn-info btn-sm" onclick="edit_item('+code+')"><i class="fas fa-edit"></i></button>';
     append += '<button type="button" class="btn btn-danger btn-sm" onclick="delete_item('+code+')" style="margin-left: 5px;"><i class="fas fa-trash"></i></button></td>';
-    append += '<input type="hidden" id="type_item_'+code+'" value="'+type_item.val()+'">';
+    append += '<input type="hidden" id="input_parts_item_'+code+'" name="parts[]" value="'+parts.val()+'">';
+    append += '<input type="hidden" id="input_quantity_item_'+code+'" name="quantity[]" value="'+quantity.val()+'">';
+    append += '<input type="hidden" id="input_price_unity_item_'+code+'" name="price_unity[]" value="'+price_unity.val()+'">';
+    append += '<input type="hidden" id="type_item_'+code+'" name="type[]" value="'+type_item.val()+'">';
     append += "</tr>";
 
     $("tbody").append(append);
@@ -517,17 +520,21 @@ function save_item()
     else
         $(".span_modal_error").css('display', 'none');
 
+
     var h_total = $("#hidden_total").val();
 
     var total = $("#td_total_"+code).text().replace('R$', '');
 
-    console.log(total);
     $("#hidden_total").val(parseFloat(h_total) - parseFloat(total));
 
     $("#parts_"+code).text(parts);
     $("#quantity_"+code).text(quantity);
     $("#price_unity_"+code).text(price_unity);
     $("#type_item_"+code).val(type_item);
+
+    $("#input_parts_item_"+code).val(parts);
+    $("#input_quantity_item_"+code).val(quantity);
+    $("#input_price_unity_item_"+code).val(price_unity);
 
     var price = price_unity.replace('R$', "");
     price = price.replace('.', '');
@@ -591,9 +598,4 @@ function select_owner($id)
     $("#input_owner").val(text);
 
     //car_change('car_id');
-}
-
-function search_owner($input)
-{
-
 }

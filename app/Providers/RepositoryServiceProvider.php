@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 
+use App\Repositories\OrderItemRepository;
+use App\Repositories\OrderItemRepositoryEloquent;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -35,6 +37,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(\App\Repositories\PartsNameRepository::class, \App\Repositories\PartsNameRepositoryEloquent::class);
         $this->app->bind(\App\Repositories\PartsBrandsRepository::class, \App\Repositories\PartsBrandsRepositoryEloquent::class);
         $this->app->bind(\App\Repositories\SystemRepository::class, \App\Repositories\SystemRepositoryEloquent::class);
+        $this->app->bind(OrderItemRepository::class, OrderItemRepositoryEloquent::class);
     }
 
     /**

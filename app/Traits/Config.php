@@ -27,7 +27,7 @@ trait Config
         return implode($pass); //turn the array into a string
     }
 
-//Returns the first name
+    //Returns the first name
     public function first_name($name)
     {
         $array = explode(" ", $name);
@@ -35,7 +35,7 @@ trait Config
         return $array[0];
     }
 
-//Returns the first character of a string
+    //Returns the first character of a string
     public function initials($name)
     {
         $f_char = substr($name, 0, 1);
@@ -43,13 +43,13 @@ trait Config
         return strtoupper($f_char);
     }
 
-//Return owner id in table roles
+    //Return owner id in table roles
     public function get_owner_id()
     {
         return Roles::where(['name' => 'Proprietario'])->first()->id;
     }
 
-//Return system operator id in table roles
+    //Return system operator id in table roles
     public function get_operator_id()
     {
         return Roles::where(['name' => 'Operador'])->first()->id;
