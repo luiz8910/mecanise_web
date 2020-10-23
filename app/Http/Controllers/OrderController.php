@@ -414,17 +414,18 @@ class OrderController extends Controller
 
                     $order_id = $this->repository->findByField('code', $data['code'])->first()->id;
 
-                    for ($i = 0; $i < count($items['parts']); $i++)
-                    {
-                        $x['parts'] = $items['parts'][$i];
-                        $x['quantity'] = str_replace(',', '.', $items['quantity'][$i]);
-                        $x['price_unity'] = str_replace(',', '.', $items['price_unity'][$i]);
-                        $x['price_unity'] = (float)trim(str_replace('R$', '', $items['price_unity'][$i]));
-                        $x['type'] = $items['type'][$i];
-                        $x['order_id'] = $order_id;
+                    if(isset($items['parts']))
+                        for ($i = 0; $i < count($items['parts']); $i++)
+                        {
+                            $x['parts'] = $items['parts'][$i];
+                            $x['quantity'] = str_replace(',', '.', $items['quantity'][$i]);
+                            $x['price_unity'] = str_replace(',', '.', $items['price_unity'][$i]);
+                            $x['price_unity'] = (float)trim(str_replace('R$', '', $items['price_unity'][$i]));
+                            $x['type'] = $items['type'][$i];
+                            $x['order_id'] = $order_id;
 
-                        $this->orderItem->create($x);
-                    }
+                            $this->orderItem->create($x);
+                        }
 
                     DB::commit();
 
@@ -504,17 +505,18 @@ class OrderController extends Controller
                         foreach ($order as $o)
                             $this->orderItem->delete($o->id);
 
-                    for ($i = 0; $i < count($items['parts']); $i++)
-                    {
-                        $x['parts'] = $items['parts'][$i];
-                        $x['quantity'] = str_replace(',', '.', $items['quantity'][$i]);
-                        $x['price_unity'] = str_replace(',', '.', $items['price_unity'][$i]);
-                        $x['price_unity'] = (float)trim(str_replace('R$', '', $items['price_unity'][$i]));
-                        $x['type'] = $items['type'][$i];
-                        $x['order_id'] = $id;
+                    if(isset($items['parts']))
+                        for ($i = 0; $i < count($items['parts']); $i++)
+                        {
+                            $x['parts'] = $items['parts'][$i];
+                            $x['quantity'] = str_replace(',', '.', $items['quantity'][$i]);
+                            $x['price_unity'] = str_replace(',', '.', $items['price_unity'][$i]);
+                            $x['price_unity'] = (float)trim(str_replace('R$', '', $items['price_unity'][$i]));
+                            $x['type'] = $items['type'][$i];
+                            $x['order_id'] = $id;
 
-                        $this->orderItem->create($x);
-                    }
+                            $this->orderItem->create($x);
+                        }
 
                     $code = $this->repository->findByField('id', $id)->first()->code;
 
