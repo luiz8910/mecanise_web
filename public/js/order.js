@@ -426,6 +426,7 @@ function add_item_order()
 
     //Substitui virgulas por pontos
     var total = (parseFloat(price) * parseFloat(q)).toFixed(2);
+
     total = total.replace(',', '-');
     total = total.replace('.', ',');
     total = total.replace('-', '.');
@@ -451,7 +452,12 @@ function add_item_order()
 
     var value = $("#hidden_total").val() ? parseFloat($("#hidden_total").val()) : 0;
 
-    value = parseFloat(value) + parseFloat(total);
+    total = total.replace(',', '.');
+
+    console.log('value: ' +value);
+    console.log('total: ' +parseFloat(total));
+    value = value + parseFloat(total);
+    console.log(value);
     $("#hidden_total").val(value.toFixed(2));
     $("#total").text('Total: R$ ' + value.toFixed(2));
 
