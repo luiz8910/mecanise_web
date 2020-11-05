@@ -91,8 +91,8 @@
             </div>
 
             <div class="text-center">
-                <a href="#" class="txt2 hov1">
-                    Não tem uma conta? Cadastre-se aqui
+                <a href="{{ route('password.forgot') }}" class="txt2 hov1">
+                    Esqueceu sua senha? Recupere-a aqui
                 </a>
             </div>
         </form>

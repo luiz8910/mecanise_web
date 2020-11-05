@@ -12,6 +12,7 @@ use App\Repositories\UserRepository;
 use App\Repositories\VehicleRepository;
 use App\Repositories\WorkshopRepository;
 use App\Traits\Config;
+use App\Traits\Login;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -19,7 +20,7 @@ use Illuminate\Support\Facades\Session;
 
 class PersonController extends Controller
 {
-    use Config;
+    use Config, Login;
 
     /**
      * @var PersonRepository
@@ -629,5 +630,87 @@ class PersonController extends Controller
 
 
         return json_encode(['status' => false, 'result' => $result, 'count' => 0]);
+    }
+
+    public function store_admin(Request $request)
+    {
+        $data = $request->all();
+
+        DB::beginTransaction();
+
+        try {
+            $data['role_id'] = $this->get_operator_id();
+
+            if ($this->repository->findByField('email', $data['email'])->first())
+                $request->session()->flash('error.msg', 'O usuário já existe na base de dados');
+
+            else{
+
+                if(isset($data['dateBirth']))
+                    $data['dateBirth'] = date_format(date_create($data['dateBirth']), 'Y-m-d');
+
+                $data['person_id'] = $this->repository->create($data)->id;
+
+                $this->new_user($data);
+
+                DB::commit();
+
+                $request->session()->flash('success.msg', 'O usuário '.$data['name']. ' foi cadastrado com sucesso');
+            }
+
+        }catch (\Exception $e) {
+            DB::rollBack();
+
+            $request->session()->flash('error.msg', $e->getMessage());
+        }
+
+        return redirect()->back();
+    }
+
+    public function update_admin(Request $request, $id)
+    {
+        $data = $request->all();
+
+        $person = $this->repository->findByField('id', $id)->first();
+
+        if($person)
+        {
+            DB::beginTransaction();
+
+            try {
+                $data['role_id'] = $this->get_operator_id();
+
+                if ($this->repository->findWhere(['email', $data['email']])->first())
+                    $request->session()->flash('error.msg', 'O usuário já existe na base de dados');
+
+                else{
+
+                    if(isset($data['dateBirth']))
+                        $data['dateBirth'] = date_format(date_create($data['dateBirth']), 'Y-m-d');
+
+                    $this->repository->update($data, $id);
+
+                    $u['email'] = $data['email'];
+
+                    $this->users->update($u, $person->user->id);
+
+                    DB::commit();
+
+                    $request->session()->flash('success.msg', 'O usuário '.$data['name']. ' foi alterado com sucesso.');
+                }
+
+            }catch (\Exception $e) {
+                DB::rollBack();
+
+                $request->session()->flash('error.msg', $e->getMessage());
+            }
+
+        }
+        else
+            $request->session()->flash('error.msg', 'Este usuário não existe');
+
+
+        return redirect()->back();
+
     }
 }
