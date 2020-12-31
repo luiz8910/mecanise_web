@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="mecanise" uuid="978e48b2-b578-4e80-9a20-32bc8be67d3c">
+    <data-source source="LOCAL" name="mecanise@localhost" uuid="23624e90-e751-4b34-a9b6-cc793f16cc2a">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://localhost:3308/mecanise</jdbc-url>
+      <jdbc-url>jdbc:mysql://localhost:3306/mecanise</jdbc-url>
       <driver-properties>
         <property name="serverTimezone" value="UTC" />
       </driver-properties>

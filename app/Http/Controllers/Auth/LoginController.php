@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Mail\ForgotPassword;
 use App\Mail\PasswordChanged;
 use App\Repositories\UserRepository;
+use App\Repositories\WorkshopRepository;
 use App\Traits\Config;
 use App\Traits\Login;
 use Carbon\Carbon;
@@ -42,16 +43,33 @@ class LoginController extends Controller
      * @var UserRepository
      */
     private $users;
+    /**
+     * @var WorkshopRepository
+     */
+    private $workshops;
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct(UserRepository $users)
+    public function __construct(UserRepository $users, WorkshopRepository $workshops)
     {
         $this->middleware('guest')->except('logout');
         $this->users = $users;
+        $this->workshops = $workshops;
+    }
+
+    /**
+     * Show the application's login form.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showLoginForm()
+    {
+        $workshops = $this->workshops->orderBy('name')->all();
+
+        return view('auth.login', compact('workshops'));
     }
 
     public function login(Request $request)
@@ -76,12 +94,21 @@ class LoginController extends Controller
                 'status' => 1
             ])->first();
 
-        //dd($user);
+        $workshop = $this->workshops->findByField('id', $request->get('workshop_id'))->first();
+
+        if(!$workshop)
+        {
+            $request->session()->flash('error.msg', 'Escolha sua organização');
+
+            return false;
+        }
 
         if($user)
-            if ($this->attemptLogin($request)) {
-                return $this->sendLoginResponse($request);
-            }
+            if($user->workshop_id == $workshop->id)
+                if ($this->attemptLogin($request))
+                    return $this->sendLoginResponse($request);
+
+
 
         // If the login attempt was unsuccessful we will increment the number of attempts
         // to login and redirect the user back to the login form. Of course, when this

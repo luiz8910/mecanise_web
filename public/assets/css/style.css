@@ -8248,7 +8248,7 @@ canvas {
   line-height: 60px;
   height: 60px;
   width: 230px;
-  background-image: url("http://itapesegdistribuidora.com.br/images/logo.png");
+  background-image: url("../../logo/logo_bw.jpeg");
   background-repeat: no-repeat;
   background-position: 20px center;
   padding: 0 20px;
@@ -8256,7 +8256,7 @@ canvas {
 }
 @media (-webkit-min-device-pixel-ratio: 2), (-o-min-device-pixel-ratio: 2/1), (min-resolution: 192dpi) {
   .be-top-header .navbar-header .navbar-brand {
-    background-image: url("http://itapesegdistribuidora.com.br/images/logo.png");
+    background-image: url("../../logo/logo_bw.jpeg");
     background-size: 102px 27px;
   }
 }
@@ -8503,11 +8503,11 @@ canvas {
   background-color: #4285f4;
 }
 .be-color-header .be-top-header .navbar-header .navbar-brand {
-  background-image: url("http://itapesegdistribuidora.com.br/images/logo.png");
+  background-image: url("../../logo/logo_bw.jpeg");
 }
 @media (-webkit-min-device-pixel-ratio: 2), (-o-min-device-pixel-ratio: 2/1), (min-resolution: 192dpi) {
   .be-color-header .be-top-header .navbar-header .navbar-brand {
-    background-image: url("http://itapesegdistribuidora.com.br/images/logo.png");
+    background-image: url("../../logo/logo_bw.jpeg");
   }
 }
 .be-color-header .be-top-header .page-title {
@@ -11570,7 +11570,7 @@ li.L9 {
 .invoice-logo {
   height: 54px;
   min-width: 204px;
-  background-image: url("http://itapesegdistribuidora.com.br/images/logo.png");
+  background-image: url("../../logo/logo_bw.jpeg");
   background-repeat: no-repeat;
   background-position: 0 ;
 }
@@ -11578,7 +11578,7 @@ li.L9 {
   .invoice-logo {
     height: 27px;
     width: 102px;
-    background-image: url("http://itapesegdistribuidora.com.br/images/logo.png");
+    background-image: url("../../logo/logo_bw.jpeg");
   }
 }
 @media (max-width: 480px) {

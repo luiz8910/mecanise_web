@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="shortcut icon" href="https://mecanise.com.br/logo/logo_bw.jpeg">
-    <title>Itapeseg</title>
+    <title>Mecanise</title>
     <link rel="stylesheet" type="text/css" href="../../assets/lib/perfect-scrollbar/css/perfect-scrollbar.min.css"/>
     <link rel="stylesheet" type="text/css"
           href="../../assets/lib/material-design-icons/css/material-design-iconic-font.min.css"/>

@@ -171,12 +171,24 @@ class PersonController extends Controller
     {
         $workshop = $this->workshops->findByField('id', $this->get_user_workshop())->first();
 
+        $route = 'users.index';
+
         if($workshop)
-            $people = $this->repository->findByField('role_id', 2);
+            $people = $this->repository->findWhere([
+                'role_id' => 2,
+                'workshop_id' => $this->get_user_workshop()
+            ]);
 
+        return view('index', compact('people', 'route'));
+    }
 
-        return $people;
-        //TODO: return view
+    public function create_employee()
+    {
+        $route = 'users.form';
+
+        $edit = false;
+
+        return view('index', compact('route','edit'));
     }
 
     public function create($role = null)
@@ -630,6 +642,13 @@ class PersonController extends Controller
 
 
         return json_encode(['status' => false, 'result' => $result, 'count' => 0]);
+    }
+
+    public function new_admin_user()
+    {
+        $route = 'admin.new_user';
+
+        return view('admin', compact('route'));
     }
 
     public function store_admin(Request $request)

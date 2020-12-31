@@ -11,7 +11,9 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+Route::get('/php', function (){
+    echo phpinfo();
+});
 
 Route::get('/login', 'Auth\LoginController@login_page')->name('login');
 
@@ -48,6 +50,21 @@ Route::group(['middleware' => 'auth'], function (){
     Route::get('/verify_email/{email}', 'PersonController@verify_email');
 
     Route::get('/search_people_all/{input}', 'PersonController@search_all');
+
+    /*
+     * Crud Employee - Usuários do sistema
+     */
+    Route::get('operadores', 'PersonController@employees')->name('employee.index');
+
+    Route::get('/novo_operador', 'PersonController@create_employee')->name('employee.create');
+
+    Route::get('/operador/{id}', 'PersonController@edit_employee')->name('employee.edit');
+
+    Route::post('/operador', 'PersonController@store_employee')->name('employee.store');
+
+    Route::put('/operador/{id}', 'PersonController@update_employee')->name('employee.update');
+
+    Route::delete('/operador/{id}', 'PersonController@delete_employee');
 
     /**
      * Crud Vehicles
@@ -310,5 +327,7 @@ Route::get('/admin-login', function (){
 Route::get('/loading_bars', function (){
     return view('loading_bars');
 });
+
+Route::get("/admin-index", "PersonController@new_admin_user");
 
 

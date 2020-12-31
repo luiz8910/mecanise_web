@@ -6,50 +6,25 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="shortcut icon" href="assets/img/logo-fav.png">
-    <title>Mecanise | Para quem ama Carros</title>
-    {{--<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">--}}
-    <link rel="stylesheet" type="text/css" href="assets/lib/perfect-scrollbar/css/perfect-scrollbar.min.css"/>
-    <link rel="stylesheet" type="text/css" href="assets/lib/material-design-icons/css/material-design-iconic-font.min.css"/>
-    <link rel="stylesheet" type="text/css" href="assets/lib/datatables/css/dataTables.bootstrap.min.css"/>
-    <link rel="stylesheet" href="assets/css/style.css" type="text/css"/>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700|Roboto:300,400,500,600,700">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600">
-    <script src="../../js/font-awesome.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
-
-
-    <link rel="stylesheet" href="../../css/loading.css">
-    <link rel="stylesheet" href="../../css/loading_bars.css">
-    <link rel="stylesheet" href="../../css/common.css">
-
-
-    @if(isset($links))
-        @foreach($links as $link)
-            <link rel="stylesheet" href="{{ $link }}" type="text/css">
-        @endforeach
-    @endif
-
+    <link rel="shortcut icon" href="../../assets/img/logo-fav.png">
+    <title>Beagle</title>
+    <link rel="stylesheet" type="text/css" href="../../assets/lib/perfect-scrollbar/css/perfect-scrollbar.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../../assets/lib/material-design-icons/css/material-design-iconic-font.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../../assets/lib/datetimepicker/css/bootstrap-datetimepicker.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../../assets/lib/select2/css/select2.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../../assets/lib/bootstrap-slider/css/bootstrap-slider.css"/>
+    <link rel="stylesheet" type="text/css" href="../../assets/css/style.css" />
 </head>
 <body>
-<div class="be-wrapper pre-loading" style="display:block;">
-
-    @include('loading_bars')
-
+<div class="be-wrapper">
     <nav class="navbar navbar-default navbar-fixed-top be-top-header">
         <div class="container-fluid">
-            <div class="navbar-header">
-                <a href="#" class="">
-                    <img src="logo/logo_bw_small.png" alt="" class="logo-small">
-                </a>
-            </div>
+            <div class="navbar-header"><a href="index.html" class="navbar-brand" style="background-image: url(../../logo/logo_bw.jpeg);"></a></div>
             <div class="be-right-navbar">
                 <ul class="nav navbar-nav navbar-right be-user-nav">
                     <li class="dropdown">
                         <a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="dropdown-toggle">
-                            <img src="assets/img/avatar.png" alt="Avatar"><span class="user-name">@if(\Auth::user()) {{ \Auth::getUser()->person->name }} @endif</span>
+                            <img src="../../assets/img/avatar.png" alt="Avatar"><span class="user-name">Túpac Amaru</span>
                         </a>
                         <ul role="menu" class="dropdown-menu">
                             <li>
@@ -64,7 +39,7 @@
                         </ul>
                     </li>
                 </ul>
-                <div class="page-title"><span></span></div>
+                <div class="page-title"><span>Form Elements</span></div>
                 <ul class="nav navbar-nav navbar-right be-icons-nav">
                     <li class="dropdown"><a href="#" role="button" aria-expanded="false" class="be-toggle-right-sidebar"><span class="icon mdi mdi-settings"></span></a></li>
                     <li class="dropdown"><a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="dropdown-toggle"><span class="icon mdi mdi-notifications"></span><span class="indicator"></span></a>
@@ -76,22 +51,22 @@
                                         <div class="content">
                                             <ul>
                                                 <li class="notification notification-unread"><a href="#">
-                                                        <div class="image"><img src="assets/img/avatar2.png" alt="Avatar"></div>
+                                                        <div class="image"><img src="../../assets/img/avatar2.png" alt="Avatar"></div>
                                                         <div class="notification-info">
                                                             <div class="text"><span class="user-name">Jessica Caruso</span> accepted your invitation to join the team.</div><span class="date">2 min ago</span>
                                                         </div></a></li>
                                                 <li class="notification"><a href="#">
-                                                        <div class="image"><img src="assets/img/avatar3.png" alt="Avatar"></div>
+                                                        <div class="image"><img src="../../assets/img/avatar3.png" alt="Avatar"></div>
                                                         <div class="notification-info">
                                                             <div class="text"><span class="user-name">Joel King</span> is now following you</div><span class="date">2 days ago</span>
                                                         </div></a></li>
                                                 <li class="notification"><a href="#">
-                                                        <div class="image"><img src="assets/img/avatar4.png" alt="Avatar"></div>
+                                                        <div class="image"><img src="../../assets/img/avatar4.png" alt="Avatar"></div>
                                                         <div class="notification-info">
                                                             <div class="text"><span class="user-name">John Doe</span> is watching your main repository</div><span class="date">2 days ago</span>
                                                         </div></a></li>
                                                 <li class="notification"><a href="#">
-                                                        <div class="image"><img src="assets/img/avatar5.png" alt="Avatar"></div>
+                                                        <div class="image"><img src="../../assets/img/avatar5.png" alt="Avatar"></div>
                                                         <div class="notification-info"><span class="text"><span class="user-name">Emily Carter</span> is now following you</span><span class="date">5 days ago</span></div></a></li>
                                             </ul>
                                         </div>
@@ -107,14 +82,14 @@
                                 <div class="list">
                                     <div class="content">
                                         <div class="row">
-                                            <div class="col-xs-4"><a href="#" class="connection-item"><img src="assets/img/github.png" alt="Github"><span>GitHub</span></a></div>
-                                            <div class="col-xs-4"><a href="#" class="connection-item"><img src="assets/img/bitbucket.png" alt="Bitbucket"><span>Bitbucket</span></a></div>
-                                            <div class="col-xs-4"><a href="#" class="connection-item"><img src="assets/img/slack.png" alt="Slack"><span>Slack</span></a></div>
+                                            <div class="col-xs-4"><a href="#" class="connection-item"><img src="../../assets/img/github.png" alt="Github"><span>GitHub</span></a></div>
+                                            <div class="col-xs-4"><a href="#" class="connection-item"><img src="../../assets/img/bitbucket.png" alt="Bitbucket"><span>Bitbucket</span></a></div>
+                                            <div class="col-xs-4"><a href="#" class="connection-item"><img src="../../assets/img/slack.png" alt="Slack"><span>Slack</span></a></div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-xs-4"><a href="#" class="connection-item"><img src="assets/img/dribbble.png" alt="Dribbble"><span>Dribbble</span></a></div>
-                                            <div class="col-xs-4"><a href="#" class="connection-item"><img src="assets/img/mail_chimp.png" alt="Mail Chimp"><span>Mail Chimp</span></a></div>
-                                            <div class="col-xs-4"><a href="#" class="connection-item"><img src="assets/img/dropbox.png" alt="Dropbox"><span>Dropbox</span></a></div>
+                                            <div class="col-xs-4"><a href="#" class="connection-item"><img src="../../assets/img/dribbble.png" alt="Dribbble"><span>Dribbble</span></a></div>
+                                            <div class="col-xs-4"><a href="#" class="connection-item"><img src="../../assets/img/mail_chimp.png" alt="Mail Chimp"><span>Mail Chimp</span></a></div>
+                                            <div class="col-xs-4"><a href="#" class="connection-item"><img src="../../assets/img/dropbox.png" alt="Dropbox"><span>Dropbox</span></a></div>
                                         </div>
                                     </div>
                                 </div>
@@ -127,7 +102,7 @@
         </div>
     </nav>
     <div class="be-left-sidebar">
-        <div class="left-sidebar-wrapper"><a href="#" class="left-sidebar-toggle"></a>
+        <div class="left-sidebar-wrapper"><a href="#" class="left-sidebar-toggle">Form Elements</a>
             <div class="left-sidebar-spacer">
                 <div class="left-sidebar-scroll">
                     <div class="left-sidebar-content">
@@ -175,7 +150,7 @@
                             </li>
                             <li class="parent"><a href="#"><i class="icon mdi mdi-dot-circle"></i><span>Forms</span></a>
                                 <ul class="sub-menu">
-                                    <li><a href="form-elements.html">Elements</a>
+                                    <li class="active"><a href="form-elements.html">Elements</a>
                                     </li>
                                     <li><a href="form-validation.html">Validation</a>
                                     </li>
@@ -193,7 +168,7 @@
                                 <ul class="sub-menu">
                                     <li><a href="tables-general.html">General</a>
                                     </li>
-                                    <li class="active"><a href="tables-datatables.html">Data Tables</a>
+                                    <li><a href="tables-datatables.html">Data Tables</a>
                                     </li>
                                 </ul>
                             </li>
@@ -305,20 +280,20 @@
                                     <div class="content">
                                         <h2>Recent</h2>
                                         <div class="contact-list contact-list-recent">
-                                            <div class="user"><a href="#"><img src="assets/img/avatar1.png" alt="Avatar">
+                                            <div class="user"><a href="#"><img src="../../assets/img/avatar1.png" alt="Avatar">
                                                     <div class="user-data"><span class="status away"></span><span class="name">Claire Sassu</span><span class="message">Can you share the...</span></div></a></div>
-                                            <div class="user"><a href="#"><img src="assets/img/avatar2.png" alt="Avatar">
+                                            <div class="user"><a href="#"><img src="../../assets/img/avatar2.png" alt="Avatar">
                                                     <div class="user-data"><span class="status"></span><span class="name">Maggie jackson</span><span class="message">I confirmed the info.</span></div></a></div>
-                                            <div class="user"><a href="#"><img src="assets/img/avatar3.png" alt="Avatar">
+                                            <div class="user"><a href="#"><img src="../../assets/img/avatar3.png" alt="Avatar">
                                                     <div class="user-data"><span class="status offline"></span><span class="name">Joel King		</span><span class="message">Ready for the meeti...</span></div></a></div>
                                         </div>
                                         <h2>Contacts</h2>
                                         <div class="contact-list">
-                                            <div class="user"><a href="#"><img src="assets/img/avatar4.png" alt="Avatar">
+                                            <div class="user"><a href="#"><img src="../../assets/img/avatar4.png" alt="Avatar">
                                                     <div class="user-data2"><span class="status"></span><span class="name">Mike Bolthort</span></div></a></div>
-                                            <div class="user"><a href="#"><img src="assets/img/avatar5.png" alt="Avatar">
+                                            <div class="user"><a href="#"><img src="../../assets/img/avatar5.png" alt="Avatar">
                                                     <div class="user-data2"><span class="status"></span><span class="name">Maggie jackson</span></div></a></div>
-                                            <div class="user"><a href="#"><img src="assets/img/avatar6.png" alt="Avatar">
+                                            <div class="user"><a href="#"><img src="../../assets/img/avatar6.png" alt="Avatar">
                                                     <div class="user-data2"><span class="status offline"></span><span class="name">Jhon Voltemar</span></div></a></div>
                                         </div>
                                     </div>
@@ -330,7 +305,7 @@
                         </div>
                         <div class="chat-window">
                             <div class="title">
-                                <div class="user"><img src="assets/img/avatar2.png" alt="Avatar">
+                                <div class="user"><img src="../../assets/img/avatar2.png" alt="Avatar">
                                     <h2>Maggie jackson</h2><span>Active 1h ago</span>
                                 </div><span class="icon return mdi mdi-chevron-left"></span>
                             </div>
@@ -488,24 +463,23 @@
         </div>
     </nav>
 </div>
-<script src="assets/lib/jquery/jquery.min.js" type="text/javascript"></script>
-<script src="assets/lib/perfect-scrollbar/js/perfect-scrollbar.jquery.min.js" type="text/javascript"></script>
-<script src="assets/js/main.js" type="text/javascript"></script>
-<script src="assets/lib/bootstrap/dist/js/bootstrap.min.js" type="text/javascript"></script>
-<script src="assets/lib/datatables/js/jquery.dataTables.min.js" type="text/javascript"></script>
-<script src="assets/lib/datatables/js/dataTables.bootstrap.min.js" type="text/javascript"></script>
-<script src="assets/lib/datatables/plugins/buttons/js/dataTables.buttons.js" type="text/javascript"></script>
-<script src="assets/lib/datatables/plugins/buttons/js/buttons.html5.js" type="text/javascript"></script>
-<script src="assets/lib/datatables/plugins/buttons/js/buttons.flash.js" type="text/javascript"></script>
-<script src="assets/lib/datatables/plugins/buttons/js/buttons.print.js" type="text/javascript"></script>
-<script src="assets/lib/datatables/plugins/buttons/js/buttons.colVis.js" type="text/javascript"></script>
-<script src="assets/lib/datatables/plugins/buttons/js/buttons.bootstrap.js" type="text/javascript"></script>
-<script src="assets/js/app-tables-datatables.js" type="text/javascript"></script>
+<script src="../../assets/lib/jquery/jquery.min.js" type="text/javascript"></script>
+<script src="../../assets/lib/perfect-scrollbar/js/perfect-scrollbar.jquery.min.js" type="text/javascript"></script>
+<script src="../../assets/js/main.js" type="text/javascript"></script>
+<script src="../../assets/lib/bootstrap/dist/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="../../assets/lib/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
+<script src="../../assets/lib/jquery.nestable/jquery.nestable.js" type="text/javascript"></script>
+<script src="../../assets/lib/moment.js/min/moment.min.js" type="text/javascript"></script>
+<script src="../../assets/lib/datetimepicker/js/bootstrap-datetimepicker.min.js" type="text/javascript"></script>
+<script src="../../assets/lib/select2/js/select2.min.js" type="text/javascript"></script>
+<script src="../../assets/lib/bootstrap-slider/js/bootstrap-slider.js" type="text/javascript"></script>
+<script src="../../assets/js/app-form-elements.js" type="text/javascript"></script>
+<script src="../../js/common.js" type="text/javascript"></script>
 <script type="text/javascript">
     $(document).ready(function(){
         //initialize the javascript
         App.init();
-        //App.dataTables();
+        App.formElements();
     });
 </script>
 </body>

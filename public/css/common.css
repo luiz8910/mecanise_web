@@ -1,6 +1,10 @@
 @import url(https://fonts.googleapis.com/css?family=Roboto:300,100);
 
-
+.logo-small{
+    max-width: 80px;
+    max-height: 80px;
+    margin-left: 70px;
+}
 
 .content {
     display:flex;

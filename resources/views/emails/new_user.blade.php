@@ -4,7 +4,7 @@
 
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Novo Usuário Itapeseg</title>
+    <title>Novo Usuário Mecanise</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style type="text/css">
         /**
@@ -106,7 +106,7 @@
 
 <!-- start preheader -->
 <div class="preheader" style="display: none; max-width: 0; max-height: 0; overflow: hidden; font-size: 1px; line-height: 1px; color: #fff; opacity: 0;">
-    Você acaba de ser cadastrado no site itapesegdistribuidora.com.br
+    Você acaba de ser cadastrado no site mecanise.com.br
 </div>
 <!-- end preheader -->
 
@@ -121,7 +121,7 @@
                 <tr>
                     <td align="center" valign="top" style="padding: 36px 24px;">
                         <a href="#" target="_blank" style="display: inline-block;">
-                            <img src="http://itapesegdistribuidora.com.br/images/logo.png" alt="logo" width="180" height="70" class="logo-img">
+                            <img src="logo/logo_bw.jpeg" alt="" style="width: 120px;">
                             {{--<img src="./img/paste-logo-light@2x.png" alt="Logo" border="0" width="48" style="display: block; width: 48px; max-width: 48px; min-width: 48px;">--}}
                         </a>
                     </td>
@@ -138,7 +138,7 @@
             <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
                 <tr>
                     <td align="left" bgcolor="#ffffff" style="padding: 36px 24px 0; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; border-top: 3px solid #d4dadf;">
-                        <h1 style="margin: 0; font-size: 32px; font-weight: 700; letter-spacing: -1px; line-height: 48px;">Olá {{ $name }}, sua conta itapeseg foi criada.</h1>
+                        <h1 style="margin: 0; font-size: 32px; font-weight: 700; letter-spacing: -1px; line-height: 48px;">Olá {{ $name }}, sua conta do Mecanise foi criada.</h1>
                     </td>
                 </tr>
             </table>
@@ -198,7 +198,7 @@
                 <!-- start copy -->
                 <tr>
                     <td align="left" bgcolor="#ffffff" style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px; border-bottom: 3px solid #d4dadf">
-                        <p style="margin: 0;">Atenciosamente.<br> Suporte Itapeseg</p>
+                        <p style="margin: 0;">Atenciosamente.<br> Suporte Mecanise</p>
                     </td>
                 </tr>
                 <!-- end copy -->

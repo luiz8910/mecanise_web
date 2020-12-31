@@ -37,6 +37,15 @@
                 <img src="logo/logo_bw.jpeg" alt="" style="width: 120px;">
             </span>
 
+            <div class="wrap-input100 validate-input m-b-20" data-validate="Escolha uma organização">
+                <select name="workshop_id" id="workshop_id" class="form-control input100" required>
+                    <option value="">Selecione uma organização</option>
+                    @foreach($workshops as $w)
+                        <option value="{{ $w->id }}">{{ $w->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+
             <div class="wrap-input100 validate-input m-b-20" data-validate="Digite seu email">
                 <input class="input100{{ $errors->has('email') ? ' is-invalid' : '' }}" type="email" name="email" id="email"
                        placeholder="Email" value="{{ old('email') }}" required>

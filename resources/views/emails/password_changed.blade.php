@@ -121,7 +121,7 @@
                 <tr>
                     <td align="center" valign="top" style="padding: 36px 24px;">
                         <a href="#" target="_blank" style="display: inline-block;">
-                            <img src="http://itapesegdistribuidora.com.br/images/logo.png" alt="logo" width="180" height="70" class="logo-img">
+                            <img src="https://mecanise.com.br/logo/logo_bw.jpeg" alt="logo" width="130" height="130" class="logo-img">
                             {{--<img src="./img/paste-logo-light@2x.png" alt="Logo" border="0" width="48" style="display: block; width: 48px; max-width: 48px; min-width: 48px;">--}}
                         </a>
                     </td>
@@ -195,7 +195,7 @@
                 <!-- start copy -->
                 <tr>
                     <td align="left" bgcolor="#ffffff" style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px; border-bottom: 3px solid #d4dadf">
-                        <p style="margin: 0;">Atenciosamente.<br> Suporte Itapeseg</p>
+                        <p style="margin: 0;">Atenciosamente.<br> Suporte Mecanise</p>
                     </td>
                 </tr>
                 <!-- end copy -->

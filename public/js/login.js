@@ -20,7 +20,12 @@ $(function () {
 
     });
 
+    $("#workshop_id").change(function (){
+        if($(this).val() != '')
+            localStorage.setItem('workshop_id', $(this).val());
+    });
 
+    $("#workshop_id").val(localStorage.getItem('workshop_id'));
 
 });
 
