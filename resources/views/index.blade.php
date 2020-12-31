@@ -488,11 +488,12 @@
         </div>
     </nav>
 </div>
+<input type="hidden" id="list" value="@if(isset($list) && $list) 1 @else 0 @endif">
 <script src="assets/lib/jquery/jquery.min.js" type="text/javascript"></script>
 <script src="assets/lib/perfect-scrollbar/js/perfect-scrollbar.jquery.min.js" type="text/javascript"></script>
 <script src="assets/js/main.js" type="text/javascript"></script>
 <script src="assets/lib/bootstrap/dist/js/bootstrap.min.js" type="text/javascript"></script>
-<script src="assets/lib/datatables/js/jquery.dataTables.min.js" type="text/javascript"></script>
+<script src="assets/lib/datatables/js/jquery.dataTables.js" type="text/javascript"></script>
 <script src="assets/lib/datatables/js/dataTables.bootstrap.min.js" type="text/javascript"></script>
 <script src="assets/lib/datatables/plugins/buttons/js/dataTables.buttons.js" type="text/javascript"></script>
 <script src="assets/lib/datatables/plugins/buttons/js/buttons.html5.js" type="text/javascript"></script>
@@ -505,7 +506,9 @@
     $(document).ready(function(){
         //initialize the javascript
         App.init();
-        //App.dataTables();
+
+        if($("#list").val() == 1)
+            App.dataTables();
     });
 </script>
 </body>

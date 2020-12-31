@@ -43,16 +43,17 @@ class CarController extends Controller
      */
     public function index($orderBy = null)
     {
-        $offset = $this->configRepository->findByField('key', 'pagination')->first() ?
-            $this->configRepository->findByField('key', 'pagination')->first()->value : 10;
+        //$offset = $this->configRepository->findByField('key', 'pagination')->first() ?
+          //  $this->configRepository->findByField('key', 'pagination')->first()->value : 10;
 
-        $cars = $this->repository->orderBy('model')->paginate($offset);
+        $cars = $this->repository->orderBy('model')->all();
 
         $qtde_model = count($this->repository->all());
 
         $route = 'cars.index';
 
         $edit = false;
+        $list = true;
 
         $scripts[] = '../../js/car.js';
 
@@ -69,7 +70,7 @@ class CarController extends Controller
             $cars = $cars->sortBy($orderBy);
 
 
-        return view('index', compact('cars', 'route', 'scripts', 'edit', 'qtde_model', 'offset'));
+        return view('index', compact('cars', 'route', 'scripts', 'edit', 'qtde_model', 'list'));
     }
 
     /**
