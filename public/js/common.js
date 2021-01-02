@@ -1148,4 +1148,9 @@ function verify_email($email)
     });
 }
 
+function logout()
+{
+    $("#logout").submit();
+}
+
 

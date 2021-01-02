@@ -11,7 +11,10 @@
             <div class="col-sm-12">
                 <div class="panel panel-default panel-table">
                     <div class="panel-heading">Lista de Carros disponíveis
-                        <div class="tools"><span class="icon mdi mdi-download"></span><span class="icon mdi mdi-more-vert"></span></div>
+                        <div class="tools">
+                            <span class="icon mdi mdi-download buttons-copy buttons-html5" onclick="copy();"></span>
+                            <span class="icon mdi mdi-print" style="margin-left: 10px;"></span>
+                        </div>
                     </div>
                     <div class="panel-body">
                         <table id="table1" class="table table-striped table-hover table-fw-widget">
