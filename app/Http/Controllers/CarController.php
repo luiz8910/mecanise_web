@@ -82,13 +82,17 @@ class CarController extends Controller
 
         $edit = false;
 
+        $links[] = "../../assets/lib/select2/css/select2.min.css";
+
         $scripts[] = '../../js/car.js';
 
         $fuels = $this->fuelRepository->all();
 
         $brands = $this->brandsRepository->orderBy('name')->all();
 
-        return view('index', compact('route', 'edit', 'scripts', 'fuels', 'brands'));
+        $form = true;
+
+        return view('index', compact('route', 'edit', 'scripts', 'fuels', 'brands', 'links'));
     }
 
     /**
@@ -105,13 +109,17 @@ class CarController extends Controller
 
         $scripts[] = '../../js/car.js';
 
+        $links[] = "../../assets/lib/select2/css/select2.min.css";
+
+        $form = true;
+
         if($car)
         {
             $fuels = $this->fuelRepository->all();
 
             $brands = $this->brandsRepository->orderBy('name')->all();
 
-            return view('index', compact( 'route', 'edit', 'scripts', 'car', 'fuels', 'brands'));
+            return view('index', compact( 'route', 'edit', 'scripts', 'car', 'fuels', 'brands', 'links'));
         }
 
         abort(404);

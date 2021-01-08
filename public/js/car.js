@@ -34,11 +34,18 @@ $(function () {
                     model.addClass('is-valid');
                     spinner_input(0, 'model');
 
-                    if(!e.id)
+                    if(!e.id){
+                        $("#form-group-model").addClass('has-success has-feedback');
+                        $("#feedback-model").css('display', 'none');
+                        $("#feedback-model-success").css('display', 'block');
                         span_valid.css('display', 'block');
+                    }
 
                 }
                 else{
+                    $("#form-group-model").addClass('has-error has-feedback')
+                    $("#feedback-model").css('display', 'block');
+                    $("#feedback-model-success").css('display', 'none');
                     model.addClass('is-invalid');
                     spinner_input(0, 'model');
                     span_invalid.css('display', 'block').text(e.msg);

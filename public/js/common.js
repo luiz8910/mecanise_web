@@ -424,6 +424,10 @@ $(function () {
 
     });
 
+    $(".select2").css('width', '100%').select2();
+
+    $("b[role='presentation']").css('display', 'none');
+
 });
 
 

@@ -371,13 +371,13 @@ td button i{
     font-size: 16px /* Set a font size */
 }
 
-.has-error{
+/*.has-error{
     border: 1px solid red;
-}
+}*/
 
-.has-success{
+/*.has-success{
     border: 1px solid green;
-}
+}*/
 
 .span-error{
     display: none;
