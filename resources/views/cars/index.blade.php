@@ -12,8 +12,19 @@
                 <div class="panel panel-default panel-table">
                     <div class="panel-heading">Lista de Carros disponíveis
                         <div class="tools">
-                            <span class="icon mdi mdi-download buttons-copy buttons-html5" onclick="copy();"></span>
-                            <span class="icon mdi mdi-print" style="margin-left: 10px;"></span>
+                            <div class="btn-group" role="group" aria-label="Basic example">
+                                <button type="button" class="btn btn-secondary" title="Novo Carro" onclick="add_model('car')">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                                <button type="button" class="btn btn-secondary" title="Exportar">
+                                    <i class="fas fa-download"></i>
+                                </button>
+                                <button type="button" class="btn btn-secondary" title="Imprimir">
+                                    <i class="fas fa-print"></i>
+                                </button>
+                            </div>
+<!--                            <span class="icon mdi mdi-download buttons-copy buttons-html5" onclick="copy();"></span>
+                            <span class="icon mdi mdi-print" style="margin-left: 10px;"></span>-->
                         </div>
                     </div>
                     <div class="panel-body">
@@ -25,6 +36,7 @@
                                 <th>Combustível</th>
                                 <th>Fabricação</th>
                                 <th>Fim da Fabricação</th>
+                                <th></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -36,6 +48,9 @@
                                         <td>{{ $car->fuel_name }}</td>
                                         <td class="center"> {{ $car->start_year }}</td>
                                         <td class="center"> {{ $car->end_year }}</td>
+                                        <td>
+                                            <i class="far fa-trash-alt btn-delete" title="Excluir Carro" onclick="delete_car({!! $car->id !!})"></i>
+                                        </td>
                                     </tr>
                                     <?php $i++; ?>
                                 @endforeach

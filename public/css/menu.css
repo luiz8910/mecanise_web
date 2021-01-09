@@ -463,3 +463,8 @@ td button i{
     margin-bottom: 15px;
     width: 370px;
 }
+
+.btn-delete{
+    color: red;
+    cursor: pointer;
+}

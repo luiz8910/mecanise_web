@@ -5,7 +5,12 @@ var menu_item_open = false;
 var v_hide_menu = false;
 var user_option_item = false;
 
+var loading = $('.loader-wrap');
+loading.css('display', 'block');
+
 $(function () {
+
+    loading.css('display', 'none');
 
     $("input").attr('autocomplete', 'off');
     $(".modal_input").attr('autocomplete', 'password');
@@ -426,9 +431,19 @@ $(function () {
 
     $(".select2").css('width', '100%').select2();
 
-    $("b[role='presentation']").css('display', 'none');
+    //$("b[role='presentation']").css('display', 'none');
+    $(".select2-selection__arrow").css('display', 'none');
 
 });
+
+function add_model($model)
+{
+    switch ($model){
+        case 'car':
+            location.href = '/novo-carro';
+            break;
+    }
+}
 
 
 function validateEmail($email)
